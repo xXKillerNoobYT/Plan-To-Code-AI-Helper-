@@ -2,29 +2,49 @@
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 
-# Python cache
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Virtual environments
 venv/
 ENV/
 env/
 
-# IDE files
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Logs
 *.log
@@ -33,14 +53,10 @@ desktop.ini
 *.tmp
 *.temp
 ~$*
+/tmp/
 
 # Node modules (if any JS tooling is added)
 node_modules/
-
-# Build outputs
-dist/
-build/
-*.egg-info/
 
 # Reports and outputs (keep these local)
 reports/
