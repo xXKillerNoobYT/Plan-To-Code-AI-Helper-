@@ -2156,23 +2156,28 @@
       "body": "# Observation: PRD.ipynb contains executable code mixed with documentation\n\n**Type**: Observation / Tech Debt\n**Priority**: Medium\n**Area**: Documentation\n\n## Description\nThe PRD.ipynb file (lines 735-762) contains Python code for GitHub API integration and project path configuration. This mixing of executable code with planning documentation may cause confusion.\n\n## Current State\n- PRD.ipynb has live Python code for status loading\n- Code references GitHub API, project paths, and validation logi"
     },
     {
-      "number": 4,
-      "title": "Enhancement: Implement background agent delegation system",
+      "number": 6,
+      "title": "Documentation: Add example usage for background delegation",
       "state": "open",
       "priority": "MEDIUM",
-      "type": "Feature",
-      "labels": [
-        {
-          "id": 10058755661,
-          "name": "enhancement",
-          "color": "a2eeef",
-          "description": "New feature or request"
-        }
-      ],
-      "created_at": "2026-01-25T01:35:51Z",
-      "updated_at": "2026-01-25T01:35:51Z",
-      "url": "https://github.com/xXKillerNoobYT/Plan-To-Code-AI-Helper-/issues/4",
-      "body": "# Enhancement: Implement background agent delegation system\n\n**Type**: Enhancement\n**Priority**: Medium\n**Area**: Architecture\n\n## Description\nImplement a background agent delegation system to handle long-running tasks asynchronously.\n\n## User Story\nAs a unified agent, I want to delegate time-consuming tasks to background agents so that I can continue orchestrating other work without blocking.\n\n## Proposed Architecture\n1. **Task Queue** - Queue for background work items\n2. **Background Worker** "
+      "type": "Task",
+      "labels": [],
+      "created_at": "2026-01-25T01:50:27Z",
+      "updated_at": "2026-01-25T01:50:27Z",
+      "url": "https://github.com/xXKillerNoobYT/Plan-To-Code-AI-Helper-/issues/6",
+      "body": "# Documentation: Add example usage for background delegation\n\n**Type**: Documentation\n**Priority**: Low\n**Area**: Examples\n\n## Description\nCreate example demonstrating how to use the background worker delegation system.\n\n## Deliverables\n1. **example_background_worker.py**\n   - Basic task delegation example\n   - Error handling demonstration\n   - Status tracking and result retrieval\n   - Multiple concurrent tasks example\n\n2. **Update README.md**\n   - Add Background Delegation section\n   - Link to "
+    },
+    {
+      "number": 7,
+      "title": "Integrate BackgroundWorker with Overseer",
+      "state": "open",
+      "priority": "MEDIUM",
+      "type": "Task",
+      "labels": [],
+      "created_at": "2026-01-25T01:51:23Z",
+      "updated_at": "2026-01-25T01:51:23Z",
+      "url": "https://github.com/xXKillerNoobYT/Plan-To-Code-AI-Helper-/issues/7",
+      "body": "# Integrate BackgroundWorker with Overseer\n\n**Enhancement**: Auto-delegate long tasks in Overseer workflow\n\n## Tasks\n- [ ] Add delegation logic to Overseer\n- [ ] Implement result polling\n- [ ] Add integration tests\n\nRelated: #4 (completed), #6 (docs)\n\n---\n\n**Author:** @xXKillerNoobYT\n**Created:** 2026-01-25T01:51:23Z\n**Updated:** 2026-01-25T01:51:23Z"
     }
   ],
   "execution_timeline": {

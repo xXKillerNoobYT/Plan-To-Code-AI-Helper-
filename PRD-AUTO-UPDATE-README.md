@@ -41,32 +41,68 @@ pip install jupyter nbconvert
 
 ## Automatic Scheduling (Optional)
 
-### Option A: Windows Task Scheduler (Runs in background)
+### Option A: File Watcher (Recommended - No admin needed)
 
-Run this setup script:
+**Simplest approach** - watches issue files and auto-runs on changes:
+
 ```powershell
+.\watch-prd-updates.ps1
+```
+
+Keep this window open. It will:
+- ✅ Watch for changes to `issue-*.md` files
+- ✅ Run PRD update automatically when changes detected
+- ✅ Debounce rapid changes (waits 2 seconds)
+- ✅ No administrator privileges required
+
+Press `Ctrl+C` to stop watching.
+
+---
+
+### Option B: Windows Task Scheduler (Runs in background)
+
+**For unattended operation** - requires administrator:
+
+```powershell
+# Must run PowerShell as Administrator
 .\setup-prd-scheduler.ps1
 ```
 
 This creates a scheduled task that:
-- Runs every 5 minutes
+- Runs every 5 minutes in the background
 - Only when you're logged in
 - Updates PRD if issues changed
 
-### Option B: Manual watching
+**⚠️ Troubleshooting Task Scheduler:**
+
+If you get "The system cannot find the file specified":
+1. Try running PowerShell as Administrator (Right-click → Run as Administrator)
+2. Check Task Scheduler service: `Get-Service -Name Schedule`
+3. Use Option A (File Watcher) or Option C instead
+
+---
+
+### Option C: Manual watching (Original method)
 
 Keep a PowerShell window open:
 ```powershell
 .\auto-update-prd.ps1 -Watch
 ```
 
-### Option C: GitHub Issues sync integration
+Checks every 30 seconds and updates if changes detected.
 
-Add to your GitHub Issues sync script (if you have one):
+---
+
+### Option D: Integrate with GitHub Issues sync
+
+If you have a GitHub Issues sync script, add this at the end:
+
 ```powershell
-# After syncing issues
-.\auto-update-prd.ps1
+# After syncing issues from GitHub
+& "$PSScriptRoot\auto-update-prd.ps1"
 ```
+
+This ensures PRD updates immediately after issues sync completes.
 
 ## Checking Status
 

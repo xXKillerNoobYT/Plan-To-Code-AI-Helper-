@@ -60,15 +60,24 @@ $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interac
 
 # Register the task
 try {
-    Register-ScheduledTask `
+    $task = Register-ScheduledTask `
         -TaskName $TASK_NAME `
         -Action $action `
         -Trigger $trigger `
         -Settings $settings `
         -Principal $principal `
-        -Description "Automatically updates PRD.md and PRD.json when GitHub Issues change (every $CHECK_INTERVAL minutes)" | Out-Null
+        -Description "Automatically updates PRD.md and PRD.json when GitHub Issues change (every $CHECK_INTERVAL minutes)" `
+        -ErrorAction Stop
     
-    Write-Host "✅ Scheduled task created successfully!`n" -ForegroundColor Green
+    # Verify task was actually created
+    Start-Sleep -Seconds 1
+    $verifyTask = Get-ScheduledTask -TaskName $TASK_NAME -ErrorAction SilentlyContinue
+    
+    if (-not $verifyTask) {
+        throw "Task registration appeared successful but task not found in scheduler"
+    }
+    
+    Write-Host "✅ Scheduled task created and verified successfully!`n" -ForegroundColor Green
     
     # Display task details
     Write-Host "📋 Task Details:" -ForegroundColor Cyan
@@ -83,13 +92,27 @@ try {
     
     if ($runNow -eq 'y') {
         Write-Host "`n🚀 Running task..." -ForegroundColor Cyan
-        Start-ScheduledTask -TaskName $TASK_NAME
-        Start-Sleep -Seconds 2
-        
-        # Check task status
-        $taskInfo = Get-ScheduledTaskInfo -TaskName $TASK_NAME
-        Write-Host "   Last Run: $($taskInfo.LastTaskResult)" -ForegroundColor Gray
-        Write-Host "   Next Run: $($taskInfo.NextRunTime)" -ForegroundColor Gray
+        try {
+            Start-ScheduledTask -TaskName $TASK_NAME -ErrorAction Stop
+            Start-Sleep -Seconds 3
+            
+            # Check task status
+            $taskInfo = Get-ScheduledTaskInfo -TaskName $TASK_NAME
+            $lastResult = if ($taskInfo.LastTaskResult -eq 0) { "Success (0)" } else { "Error ($($taskInfo.LastTaskResult))" }
+            Write-Host "   Last Run: $lastResult" -ForegroundColor Gray
+            Write-Host "   Next Run: $($taskInfo.NextRunTime)" -ForegroundColor Gray
+            
+            # Check if log file was created
+            Start-Sleep -Seconds 2
+            $logPath = Join-Path $PROJECT_ROOT ".vscode\github-issues\prd-update.log"
+            if (Test-Path $logPath) {
+                Write-Host "`n📋 Recent log entries:" -ForegroundColor Cyan
+                Get-Content $logPath -Tail 5 | ForEach-Object { Write-Host "   $_" -ForegroundColor Gray }
+            }
+        } catch {
+            Write-Host "   ⚠️  Failed to run task: $_" -ForegroundColor Yellow
+            Write-Host "   Try running manually: Start-ScheduledTask -TaskName '$TASK_NAME'" -ForegroundColor Gray
+        }
     }
     
     Write-Host "`n✨ Setup complete!" -ForegroundColor Green
@@ -109,7 +132,22 @@ try {
     Write-Host "   Get-Content .vscode\github-issues\prd-update.log -Tail 20" -ForegroundColor Gray
     
 } catch {
-    Write-Host "❌ Failed to create scheduled task: $_" -ForegroundColor Red
+    Write-Host "❌ Failed to create scheduled task" -ForegroundColor Red
+    Write-Host "   Error: $_`n" -ForegroundColor Red
+    
+    # Provide troubleshooting guidance
+    Write-Host "🔧 Troubleshooting:" -ForegroundColor Yellow
+    
+    if (-not $isAdmin) {
+        Write-Host "   1. Try running PowerShell as Administrator" -ForegroundColor Gray
+        Write-Host "      Right-click PowerShell → Run as Administrator" -ForegroundColor Gray
+    }
+    
+    Write-Host "   2. Check if Task Scheduler service is running:" -ForegroundColor Gray
+    Write-Host "      Get-Service -Name Schedule" -ForegroundColor Gray
+    Write-Host "   3. Try the manual approach instead:" -ForegroundColor Gray
+    Write-Host "      .\auto-update-prd.ps1 -Watch" -ForegroundColor Gray
+    
     exit 1
 }
 

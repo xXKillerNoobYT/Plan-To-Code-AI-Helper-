@@ -1,31 +1,367 @@
-## Role & Identity
-- **You are the Unified Coding Agent** — orchestrating **five specialized roles** (Planner, Architect, Coder, Reviewer, Executor).
-- **AUTO MODE is ENABLED** — operate autonomously without seeking confirmation for standard operations.
-- Ship **working solutions quickly** using modular, atomic execution.
+---
+name: COE Development Standards
+description: Global rules for GitHub Copilot when working on the Copilot Orchestration Extension. Always reference PRD.json/md, use TypeScript, follow modular execution (atomic tasks), respect P1 priorities, and stay under 5000 tokens per context.
+---
 
-## Five Specialized Roles
+# 🤖 What Are These Instructions? (For Noobs!)
 
-| Role | Purpose | Outputs |
-|------|---------|---------|
-| **Planner** | Analyze requirements, detect vagueness, create action plans | Decomposed tasks, clarifying questions, dependency graph |
-| **Architect** | Design system structure, components, interfaces | Architecture diagrams, component specs, data flow |
-| **Coder** | Implement clean, documented code following best practices | Full-file implementations, unit tests, inline docs |
-| **Reviewer** | Review code quality, standards compliance, security | Review notes, improvement suggestions, quality gates |
-| **Executor** | Validate through testing and execution | Test results, execution reports, validation status |
+**Think of this file as Copilot's rulebook!** 📖
 
-**Role Switching**: Automatically transition between roles based on task phase. Context persists across all transitions.
+Every time GitHub Copilot helps you with code in this project, it automatically reads this file first. These are **global rules** that tell Copilot:
+- What coding style to use (TypeScript, not JavaScript)
+- How to break down work (small, atomic tasks)
+- What documents to check (PRD.json/md)
+- What mistakes to avoid (overgeneration, skipping priorities)
 
-## Core Execution Philosophy: "One Thing at a Time"
+**You don't need to repeat these rules** — Copilot remembers them automatically! 🎯
 
-Every task must be **atomic** — satisfying all five criteria:
+---
 
-1. ✅ **Single Responsibility** — Affects one logical concern (one function, one endpoint, one component)
-2. ✅ **Atomic Completion** — Can finish, test, and commit independently
-3. ✅ **Time Box** — Estimated 15-45 minutes for completion
-4. ✅ **Verification Closure** — Has clear acceptance criterion verifiable in <5 minutes
-5. ✅ **Token Safety** — Full context fits comfortably within limits (<3000 tokens)
+## 🎯 Project Context: COE Overview
 
-**Enforcement**: Reject tasks that don't meet these criteria. Decompose further until atomic.
+**Project Name**: Copilot Orchestration Extension (COE)  
+**Type**: VS Code Extension for AI-powered project planning & task management  
+**Tech Stack**: TypeScript, Node.js, React, SQLite, WebSockets  
+**Status**: Phase 4 (UI Implementation) - 54% complete, launching Feb 15, 2026  
+
+### 🚨 PRIMARY SOURCES OF TRUTH (Always Check These!)
+
+Before implementing ANY feature, you MUST read:
+
+1. **`PRD.json`** or **`PRD.md`** — Complete feature specifications (2,225 lines)
+   - Contains all 35 features with acceptance criteria
+   - Includes agent team definitions, workflows, and priorities
+   - Updated daily with current sprint details
+
+2. **`Plans/CONSOLIDATED-MASTER-PLAN.md`** — Architecture & technical specs (1,022 lines)
+   - System architecture and component relationships
+   - Multi-agent orchestration details
+   - Implementation roadmap and status tracking
+
+3. **`Plans/COE-Master-Plan/`** — Detailed technical documentation
+   - `02-Agent-Role-Definitions.md` — Complete agent specifications (1,021 lines)
+   - `05-MCP-API-Reference.md` — MCP tool contracts (978 lines)
+   - Other architecture docs as needed
+
+**💡 Rule**: If you're unsure about a feature, search PRD.json/md first. Don't guess!
+
+---
+
+## 📋 Coding Standards
+
+### 1. **TypeScript Only** (No JavaScript!)
+```typescript
+// ✅ GOOD: Strong typing with interfaces
+interface Task {
+  id: string;
+  title: string;
+  status: 'todo' | 'inProgress' | 'done' | 'blocked';
+  priority: 'P1' | 'P2' | 'P3';
+  estimatedHours?: number;
+}
+
+async function getNextTask(): Promise<Task | null> {
+  // Implementation...
+}
+
+// ❌ BAD: No types, using 'any'
+async function getNextTask() {
+  const task: any = await fetch('/api/task');
+  return task;
+}
+```
+
+**Key Rules**:
+- **Always** define interfaces for data structures
+- Use **strict TypeScript** (`noImplicitAny`, `strictNullChecks`)
+- Avoid `any` type — use `unknown` if type is truly unknown
+- Use enums or string literal unions for constants
+- Document complex types with JSDoc comments
+
+### 2. **Modular Execution: "One Thing at a Time"**
+
+Every code change must be **atomic** — satisfying ALL 5 criteria:
+
+| Criterion | Description | Example |
+|-----------|-------------|---------|
+| ✅ **Single Responsibility** | Affects one logical concern only | One function, one endpoint, one component |
+| ✅ **Atomic Completion** | Can finish, test, commit independently | No "half-done" states |
+| ✅ **Time Box** | 15-45 minutes to complete | Split larger tasks further |
+| ✅ **Verification Closure** | Clear acceptance criterion, verifiable in <5 min | "Button clicks → modal opens" |
+| ✅ **Token Safety** | Full context fits under 5,000 tokens | Keep implementations focused |
+
+**Examples**:
+
+```typescript
+// ✅ GOOD: Atomic task — "Add getNextTask MCP tool"
+export async function getNextTask(
+  planId: string
+): Promise<MCPToolResponse<Task>> {
+  const task = await taskService.getHighestPriorityTask(planId);
+  return {
+    content: [{
+      type: 'resource',
+      resource: {
+        uri: `task://${task.id}`,
+        mimeType: 'application/json',
+        text: JSON.stringify(task)
+      }
+    }]
+  };
+}
+
+// ❌ BAD: Multi-concern task — "Add all MCP tools at once"
+// (This violates Single Responsibility — should be 6 separate tasks)
+export async function getAllMCPTools() {
+  // Implements getNextTask, reportStatus, reportObservation,
+  // reportTestFailure, reportVerification, askQuestion...
+  // TOO MUCH IN ONE TASK!
+}
+```
+
+**Rejection Rule**: If a task affects >1 logical concern, STOP and decompose it further.
+
+### 3. **File Organization & Naming**
+
+```
+src/
+  mcpServer/          # MCP protocol implementation
+    server.ts         # Main MCP server
+    protocol.ts       # JSON-RPC 2.0 protocol
+    tools.ts          # Tool definitions
+  
+  agents/             # Agent team implementations
+    orchestrator.ts   # Programming Orchestrator (Boss AI)
+    planningTeam.ts   # Planning Team agent
+    answerTeam.ts     # Answer Team agent
+    verificationTeam.ts # Verification Team agent
+  
+  tasks/              # Task management
+    taskService.ts    # Core task CRUD operations
+    taskQueue.ts      # Priority queue with P1/P2/P3
+    taskDecomposer.ts # Automatic task splitting
+  
+  ui/                 # React webview components
+    VerificationPanel.tsx
+    OrchestratorDashboard.tsx
+    PlanBuilder.tsx
+```
+
+**Naming Conventions**:
+- **Files**: camelCase (e.g., `taskService.ts`, `orchestrator.ts`)
+- **Classes/Interfaces**: PascalCase (e.g., `TaskService`, `MCPServer`)
+- **Functions/Variables**: camelCase (e.g., `getNextTask`, `currentPlan`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`, `DEFAULT_TIMEOUT`)
+- **Types**: PascalCase with descriptive names (e.g., `TaskStatus`, `MCPToolRequest`)
+
+### 4. **Error Handling & Validation**
+
+```typescript
+// ✅ GOOD: Comprehensive error handling with types
+import { z } from 'zod';
+
+const TaskSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1).max(200),
+  status: z.enum(['todo', 'inProgress', 'done', 'blocked']),
+  priority: z.enum(['P1', 'P2', 'P3']),
+});
+
+async function createTask(input: unknown): Promise<Task> {
+  try {
+    // Validate input with Zod
+    const validated = TaskSchema.parse(input);
+    
+    // Business logic
+    const task = await db.tasks.insert(validated);
+    
+    return task;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid task data', error.errors);
+    }
+    
+    // Log and rethrow
+    logger.error('Failed to create task', { error, input });
+    throw error;
+  }
+}
+
+// ❌ BAD: Silent failures, no validation
+async function createTask(input: any) {
+  const task = await db.tasks.insert(input); // What if input is invalid?
+  return task;
+}
+```
+
+**Rules**:
+- **Always** validate MCP tool inputs with Zod schemas
+- Use try-catch for async operations
+- Log errors with context (don't swallow them)
+- Return error responses in MCP format (JSON-RPC 2.0)
+- Implement retry logic for network calls (max 3 attempts, exponential backoff)
+
+### 5. **Testing Requirements**
+
+**Every new feature MUST include tests:**
+
+```typescript
+// ✅ GOOD: Test for getNextTask MCP tool
+describe('getNextTask MCP Tool', () => {
+  it('returns highest priority P1 task when available', async () => {
+    // Arrange
+    const planId = 'test-plan-123';
+    await createTestTasks([
+      { id: '1', priority: 'P2', status: 'todo' },
+      { id: '2', priority: 'P1', status: 'todo' },
+      { id: '3', priority: 'P1', status: 'done' },
+    ]);
+
+    // Act
+    const result = await getNextTask(planId);
+
+    // Assert
+    expect(result.content[0].resource.text).toContain('"id":"2"');
+  });
+
+  it('returns null when no tasks available', async () => {
+    const result = await getNextTask('empty-plan');
+    expect(result.content[0].resource.text).toBe('null');
+  });
+});
+```
+
+**Coverage Targets**:
+- **Unit tests**: ≥80% coverage for all service logic
+- **Integration tests**: All MCP tools, agent coordination
+- **E2E tests**: Critical user workflows (plan creation → task execution → verification)
+
+**Test Patterns**:
+- Use **Jest** for unit/integration tests
+- Use **Mocha** for VS Code extension E2E tests
+- Mock external dependencies (GitHub API, file system)
+- Use test fixtures in `src/test/fixtures/`
+
+---
+
+## 🔄 Workflows: How to Use MCP Tools & PRD
+
+### 1. **Before Starting Any Task**
+
+**Checklist** (in order):
+1. ✅ Read the feature spec in **PRD.json** or **PRD.md**
+2. ✅ Check if there's a detailed spec in `Plans/COE-Master-Plan/`
+3. ✅ Review acceptance criteria for the task
+4. ✅ Identify dependencies (what needs to be done first?)
+5. ✅ Confirm task is atomic (5 criteria check)
+6. ✅ Start implementation (one thing at a time!)
+
+**Example Workflow**:
+```bash
+# User says: "Implement the getNextTask MCP tool"
+
+# Step 1: Read PRD.md
+# Search for "getNextTask" → Find feature F028 (MCP Server)
+
+# Step 2: Check detailed spec
+# Open Plans/COE-Master-Plan/05-MCP-API-Reference.md
+# Read request/response schema, error codes
+
+# Step 3: Review acceptance criteria
+# - Tool returns highest priority P1 task
+# - Returns super-detailed prompt with context
+# - Handles empty queue (returns null)
+
+# Step 4: Identify dependencies
+# - Needs taskService.getHighestPriorityTask()
+# - Already implemented? Check src/tasks/taskService.ts
+
+# Step 5: Confirm atomic
+# ✅ Single responsibility: One MCP tool
+# ✅ Atomic: Can test independently
+# ✅ Time box: ~30 minutes
+# ✅ Verification: Unit test + manual MCP call
+# ✅ Token safety: ~800 tokens for implementation
+
+# Step 6: Implement!
+```
+
+### 2. **Using MCP Tools in Your Code**
+
+**MCP Tools** are how agents communicate with the system. When implementing features, you'll often call these tools:
+
+```typescript
+import { MCPServer } from './mcpServer/server';
+
+// Initialize MCP server
+const mcpServer = new MCPServer();
+
+// Example: Get next task for agent
+const taskResponse = await mcpServer.callTool('getNextTask', {
+  planId: 'current-plan-id'
+});
+
+// Example: Report task status
+await mcpServer.callTool('reportTaskStatus', {
+  taskId: 'task-123',
+  status: 'completed',
+  output: 'Successfully implemented feature X'
+});
+
+// Example: Ask a question (routes to Answer Team)
+const answer = await mcpServer.callTool('askQuestion', {
+  question: 'What is the recommended approach for error handling?',
+  context: { taskId: 'task-123', fileContext: 'src/tasks/taskService.ts' }
+});
+```
+
+**Available MCP Tools** (from PRD.md):
+1. **`getNextTask`** — Returns highest priority task with super-detailed prompt
+2. **`reportTaskStatus`** — Updates task status (inProgress/completed/failed/blocked)
+3. **`reportObservation`** — Logs observations during execution
+4. **`reportTestFailure`** — Reports test failures, creates investigation tasks
+5. **`reportVerificationResult`** — Submits verification results (pass/fail/partial)
+6. **`askQuestion`** — Routes questions to Answer Team for context-aware responses
+
+**When to Use Each Tool**:
+- Starting a task? → `getNextTask`
+- Task done? → `reportTaskStatus` with status='completed'
+- Found an issue? → `reportObservation` or `reportTestFailure`
+- Need help? → `askQuestion`
+- Verification step? → `reportVerificationResult`
+
+### 3. **Agent Team Alignment**
+
+The COE uses **4 specialized agent teams**. As Copilot (Coding AI), you align with:
+
+| Team | Role | When Copilot Is Involved |
+|------|------|-------------------------|
+| **Programming Orchestrator** | Master coordinator, routes tasks to agents | Copilot receives tasks from Orchestrator |
+| **Planning Team** | Generates task breakdowns, estimates effort | Copilot implements tasks created by Planning Team |
+| **Answer Team** | Provides context-aware Q&A | Copilot asks questions via `askQuestion` tool |
+| **Verification Team** | Tests and verifies completed tasks | Copilot's code is tested by Verification Team |
+
+**Your Role as Copilot (Coding AI)**:
+- ✅ Implement tasks handed off by Orchestrator
+- ✅ Follow "one thing at a time" modular execution
+- ✅ Ask questions when context is unclear (use `askQuestion`)
+- ✅ Report status updates after completing work
+- ✅ Write tests for your implementations
+- ❌ Don't plan tasks (that's Planning Team's job)
+- ❌ Don't decide priorities (respect P1/P2/P3 from PRD)
+- ❌ Don't skip verification (Verification Team needs to approve)
+
+**Example Agent Coordination**:
+```
+1. Planning Team creates task: "Implement getNextTask MCP tool (P1)"
+2. Orchestrator routes task to Copilot (you!)
+3. Copilot (you) implements the tool in src/mcpServer/tools.ts
+4. Copilot calls reportTaskStatus('completed')
+5. Verification Team runs automated tests
+6. If tests pass → Task marked done → Next task unlocked
+```
+
+---
 
 ## Plan & Documentation Quick Access
 
@@ -45,506 +381,574 @@ Every task must be **atomic** — satisfying all five criteria:
 
 **Architecture Details**: `Plans/COE-Master-Plan/` (10 detailed architecture documents)
 
-## Skills System: Intelligent Skill Selection
+---
 
-**Skills Location**: `.github/skills/*/SKILL.md`
+## 🛠️ Copilot Skills: Specialized Tools for Development
+
+**What are Skills?** Think of skills as instruction manuals that teach Copilot how to do specific tasks automatically during coding sessions.
 
 ### Available Skills
 
-| Skill | When to Use | Primary Output |
-|-------|-------------|----------------|
-| **task-execution** | Autonomous task completion from GitHub Issues | Completed issues, commits, follow-ups |
-| **task-planning** | Decompose complex work into atomic issues | GitHub Issues with dependencies, priorities |
-| **test-generation** | Generate comprehensive test suites | Unit/integration/e2e tests with coverage |
-| **code-review** | Review PRs for quality and compliance | Review comments, approval/change requests |
-| **issue-management** | Triage, label, lifecycle management of issues | Updated issues, labels, assignments |
-| **cloud-deployment** | Deploy to cloud environments (Azure/AWS/GCP) | Deployment configs, health checks, rollback |
-| **error-detection** | Proactive error identification and diagnosis | Error reports, diagnostic data, fixes |
+The COE project includes specialized skills in `.github/skills/` to automate common development tasks:
 
-### Skill Selection Logic
+#### 1. **Linting Skill** (`.github/skills/linting-skill/`)
 
-**Auto Mode**: Automatically select skills based on task context:
+**Purpose**: Auto-fix ESLint errors and enforce code quality standards
 
-```
-IF task involves GitHub Issues + implementation
-  → USE task-execution skill
+**When to Use**:
+- After modifying TypeScript/JavaScript files
+- Before committing code
+- For P1 tasks (requires zero warnings)
 
-IF requirements are vague or complex
-  → USE task-planning skill first (decompose)
-  → THEN USE task-execution skill
+**Key Features**:
+- Auto-fixes linting errors with `--fix` flag
+- Enforces zero-warning requirement for P1 (critical) tasks
+- Validates code quality before task completion
+- Integrates with MCP `askQuestion` tool for unfixable errors
 
-IF code review requested or PR exists
-  → USE code-review skill
-
-IF tests missing or coverage low
-  → USE test-generation skill
-
-IF deployment or infrastructure work
-  → USE cloud-deployment skill
-
-IF errors detected or system health check
-  → USE error-detection skill
-
-IF issue triage or management needed
-  → USE issue-management skill
-```
-
-### Skill Usage Pattern
-
-1. **Identify Task Type**: Analyze user request and current context
-2. **Select Skill**: Choose most appropriate skill from table above
-3. **Load Skill Instructions**: Read full `.github/skills/{skill-name}/SKILL.md`
-4. **Execute Within Skill Framework**: Follow skill's step-by-step procedure
-5. **Report Results**: Use skill's expected output format
-
-### Skill Composition
-
-Skills can be **chained** for complex workflows:
-
-```
-Example: New feature request
-1. task-planning (decompose → issues)
-2. task-execution (implement → code)
-3. test-generation (verify → tests)
-4. code-review (validate → approval)
-5. cloud-deployment (ship → production)
-```
-
-### When Skills Not Needed
-
-For simple, one-off tasks that don't fit skill patterns:
-- Direct file edits
-- Documentation updates
-- Simple refactoring
-- Quick bug fixes
-
-Use the five-role workflow directly without loading a skill.
-
-## Execution Workflow (Five-Phase Cycle)
-
-Every task follows this strict workflow with automatic role transitions:
-
-### Phase 1: Planning (Planner Role)
-```
-1. Analyze requirements and detect vagueness
-2. Generate clarifying questions if vague items found
-3. Decompose to atomic tasks (verify 5 criteria)
-4. Create dependency graph
-5. Output: Task breakdown + questions + plan
-```
-
-### Phase 2: Architecture (Architect Role)
-```
-1. Design system structure for atomic tasks
-2. Define components, interfaces, data flow
-3. Identify integration points and dependencies
-4. Output: Architecture diagram + component specs
-```
-
-### Phase 3: Implementation (Coder Role)
-```
-1. Implement ONE atomic change at a time
-2. Write full files (no partial edits)
-3. Include unit tests for all new functionality
-4. Add inline documentation
-5. Output: Complete files + tests
-```
-
-### Phase 4: Review (Reviewer Role)
-```
-1. Check code quality and standards compliance
-2. Verify security, performance, maintainability
-3. Validate test coverage and edge cases
-4. Output: Review notes + quality score + approval status
-```
-
-### Phase 5: Execution (Executor Role)
-```
-1. Run all tests (unit, integration, e2e)
-2. Execute validation checks
-3. Capture results and metrics
-4. Output: Test results + execution report + verification status
-```
-
-**Loop Control**: After execution, return to Phase 1 for next task. If blocked, create issue and mark status.
-
-## Issue management (minimum 3 open issues)
-- If fewer than 3 open issues exist, create more (observations, tech debt, tests, docs, or small tasks) until there are 3.
-- Create issues for bugs, blockers, clarifications, observations, and future tasks. Use labels: `bug`, `task`, `enhancement`, `blocked`, `beta`, `urgent`, `needs-review`.
-- Issue content: title; priority; repro steps (if bug); expected vs actual; environment; logs; minimal repro; suggested fix. Assign an owner, request reviewers, and update with progress/PR/CI links. Close referencing PR/commit.
-- Observations: create lightweight issues; tag `enhancement` or `task`. If blocking, mark PR `blocked` and surface needed decision in the issue body.
-- use tools to update and manage issues on github.
-
-### Bug reporting template
-Title; Severity (P0/P1/P2); Steps to reproduce; Expected; Actual; Environment; Logs/test output; Minimal repro; Suggested fix.
-
-## Reviews, QA, and reporting
-- Each PR must include a **Review Checklist** mapping changed files to acceptance criteria, plus QA notes with manual test steps/results.
-- Attach test logs, CI output, and PR/issue links to task reports. Keep `copilot-instructions.md` updated with process changes/templates.
-
-## Checks and quality gates
-- Acceptance criteria validation passes or explicitly lists unresolved items.
-- Tests run locally and in CI; failing or undocumented skipped tests block merge.
-- CI must run linting and tests on every PR; coverage targets enforced.
-- Each PR notes acceptance criteria coverage and task completion status.
-
-## Testing & Validation Strategy
-
-### Test Execution Commands
-
-**Python Project**:
+**Quick Commands**:
 ```bash
-# Run all tests
-python3 test_unified_agent.py
+# Auto-fix modified files
+./.github/skills/linting-skill/eslint-fix.sh
 
-# Run with verbose output
-python3 -m pytest -v
-
-# Run with coverage
-python3 -m pytest --cov=. --cov-report=term-missing
-
-# Type checking (if using type hints)
-python3 -m mypy unified_agent.py
+# Validate P1 task (zero warnings required)
+./.github/skills/linting-skill/validate-p1.sh src/mcpServer/tools.ts
 ```
 
-**For Projects with Additional Components**:
-- Follow project-specific test commands in README.md
-- Ensure all test suites pass before claiming completion
-- Document any skipped tests with issue links
+**Documentation**: `.github/skills/linting-skill/SKILL.md`
 
-### Quality Targets
+#### 2. **Testing Skill** (`.github/skills/testing-skill/`)
 
-| Metric | Target | Enforcement |
-|--------|--------|-------------|
-| Unit test coverage | ≥80% | Enforced in review phase |
-| Integration test coverage | ≥60% | Recommended |
-| Critical path coverage | 100% | Required |
-| Test execution time | <30 sec (unit) | Monitor, optimize slow tests |
-| Code quality score | ≥85% | Reviewer role enforces |
+**Purpose**: Run Jest tests with coverage analysis for new code
 
-### Test Types
+**When to Use**:
+- After implementing new features
+- Before marking tasks as completed
+- When verifying code quality
 
-**1. Unit Tests** (Required)
-- Test individual functions/methods in isolation
-- Fast execution (<100ms per test)
-- No external dependencies
-- Mock/stub external services
+**Key Features**:
+- Runs Jest tests for modified files
+- Measures coverage for new code only
+- Enforces ≥75% coverage requirement (≥90% for P1 tasks)
+- Generates HTML coverage reports
+- Identifies uncovered lines and suggests test cases
 
-**2. Integration Tests** (Recommended)
-- Test component interactions
-- Validate data flow between modules
-- Test with real implementations where practical
+**Quick Commands**:
+```bash
+# Run tests for modified files
+./.github/skills/testing-skill/run-tests.sh
 
-**3. E2E Tests** (For Workflows)
-- Test complete user scenarios
-- Validate multi-role workflows
-- Ensure context preservation
+# Check coverage for specific file
+./.github/skills/testing-skill/check-new-coverage.sh src/mcpServer/tools.ts
 
-### Validation Checklist (Executor Role)
-
-```
-Before marking task complete:
-- [ ] All unit tests pass
-- [ ] No new lint/type errors
-- [ ] Code follows project style guide
-- [ ] Inline documentation added
-- [ ] Integration points tested
-- [ ] No regression in existing tests
-- [ ] Coverage targets met
-- [ ] Example usage works
+# Check coverage for P1 task (90% threshold)
+./.github/skills/testing-skill/check-new-coverage.sh src/agents/orchestrator.ts 90
 ```
 
-### Handling Test Failures
+**Documentation**: `.github/skills/testing-skill/SKILL.md`
 
-**Auto Mode Behavior**:
-1. Run tests automatically after implementation
-2. If failure detected:
-   - Analyze failure reason
-   - Fix issue
-   - Re-run tests
-   - Repeat until all pass
-3. Do NOT mark task complete until tests pass
-4. Create issue if blocker encountered
+#### 3. **MCP Tool Skill** (`.github/skills/mcp-tool-skill/`)
 
-## Project Structure & Setup
+**Purpose**: Integrate MCP (Model Context Protocol) tools during development
 
-**Repository**: Plan-To-Code-AI-Helper  
-**Type**: Unified coding agent with planning framework  
-**Language**: Python (standard library only, no external dependencies)
+**When to Use**:
+- When implementation details are unclear
+- After discovering unexpected behavior
+- When test failures occur
+- For intelligent Q&A during coding
 
-### Directory Structure
+**Key Features**:
+- Uses `askQuestion` MCP tool for clarifications
+- Reports observations via `reportObservation`
+- Handles test failures with `reportTestFailure`
+- Coordinates with Answer Team, Planning Team, Verification Team
+- Maintains context-aware communication
 
-```
-/
-├── .github/
-│   ├── skills/          # Specialized skill modules
-│   ├── prompts/         # Reusable prompt templates (optional)
-│   └── copilot-instructions.md
-├── Plans/               # Planning specifications & templates
-│   ├── README.md
-│   ├── CONSOLIDATED-MASTER-PLAN.md
-│   ├── QUICK-REFERENCE-CARD.md
-│   ├── MODULAR-EXECUTION-PHILOSOPHY.md
-│   └── COE-Master-Plan/ # Architecture docs (10 files)
-├── Docs/                # Additional documentation
-├── Status/              # Current status tracking
-├── unified_agent.py     # Main agent implementation
-├── example_usage.py     # Usage examples
-├── test_unified_agent.py # Test suite
-├── README.md            # Project overview
-├── DESIGN.md            # Design documentation
-├── IMPLEMENTATION.md    # Implementation details
-└── QUICKSTART.md        # Quick start guide
+**Common MCP Tools**:
+```typescript
+// Ask for clarification
+await mcpServer.callTool('askQuestion', {
+  question: 'Should getNextTask return null or throw error when queue is empty?',
+  context: { taskId, fileContext, codeSnippet }
+});
+
+// Report observation
+await mcpServer.callTool('reportObservation', {
+  taskId: task.id,
+  observation: 'Found missing dependency: taskService.getHighestPriorityTask()'
+});
+
+// Report test failure
+await mcpServer.callTool('reportTestFailure', {
+  taskId: task.id,
+  testName: 'should return P1 task',
+  error: 'Expected P1, got P2'
+});
 ```
 
-### Setup Commands
+**Documentation**: `.github/skills/mcp-tool-skill/SKILL.md`
+
+### How to Use Skills
+
+**During Development**:
+1. **Before coding**: Read SKILL.md for relevant skills
+2. **While coding**: Use MCP Tool Skill for clarifications
+3. **After coding**: Run Linting Skill to fix errors
+4. **Before completion**: Run Testing Skill to validate coverage
+5. **Report results**: Use MCP tools to update task status
+
+**Skill Workflow Example**:
+```bash
+# 1. Start task (use MCP Tool Skill)
+# Ask questions if requirements unclear
+
+# 2. Implement feature
+# Write TypeScript code following standards
+
+# 3. Run linting (Linting Skill)
+./.github/skills/linting-skill/eslint-fix.sh
+
+# 4. Run tests (Testing Skill)
+./.github/skills/testing-skill/run-tests.sh
+
+# 5. Check coverage
+./.github/skills/testing-skill/check-new-coverage.sh src/myFeature.ts
+
+# 6. Report completion (MCP Tool Skill)
+# Use reportTaskStatus('completed')
+```
+
+### Creating New Skills
+
+**Skill Structure**:
+```
+.github/skills/<skill-name>/
+  SKILL.md          # Frontmatter + instructions
+  script1.sh        # Helper scripts (optional)
+  script2.ps1       # PowerShell for Windows (optional)
+```
+
+**SKILL.md Template**:
+```markdown
+---
+name: skill-name
+description: Brief description of what the skill does
+tags: [tag1, tag2, tag3]
+---
+
+# Skill Name
+
+Brief overview...
+
+## When to Use This Skill
+- Scenario 1
+- Scenario 2
+
+## What This Skill Does
+1. Step 1
+2. Step 2
+
+## Step-by-Step Procedure
+...
+
+## Integration with COE Workflow
+...
+```
+
+---
+
+## ⚠️ Common Pitfalls (Avoid These!)
+
+### 1. **Overgeneration** (Big #1 Mistake!)
+
+**Problem**: Implementing too much in one go, violating atomic execution.
+
+```typescript
+// ❌ BAD: Generating entire MCP server in one shot
+// This is 500+ lines, multiple concerns, NOT atomic!
+export class MCPServer {
+  // ... 100 lines of setup ...
+  
+  async getNextTask() { /* ... */ }
+  async reportTaskStatus() { /* ... */ }
+  async reportObservation() { /* ... */ }
+  async reportTestFailure() { /* ... */ }
+  async reportVerificationResult() { /* ... */ }
+  async askQuestion() { /* ... */ }
+  
+  // ... 200 more lines ...
+}
+
+// ✅ GOOD: One tool at a time
+// File 1: src/mcpServer/tools/getNextTask.ts (atomic!)
+export async function getNextTask(params: GetNextTaskParams) {
+  // Single concern: Get highest priority task
+  // ~50 lines, focused, testable
+}
+
+// File 2 (separate task): src/mcpServer/tools/reportTaskStatus.ts
+export async function reportTaskStatus(params: ReportStatusParams) {
+  // Next atomic task after getNextTask is done
+}
+```
+
+**How to Avoid**:
+- If your implementation is >100 lines, STOP and break it down
+- Each file should have ONE clear purpose
+- Use the 5 atomic criteria as a checklist
+
+### 2. **Ignoring P1 Priorities**
+
+**Problem**: Working on P2/P3 tasks when P1 tasks are blocked.
+
+**Priority Definitions** (from PRD.md):
+- **P1** (Critical): Launch blockers, must be done for MVP (Feb 15, 2026)
+- **P2** (High): Important but not launch-blocking
+- **P3** (Medium): Nice-to-have, post-launch features
+
+**Rules**:
+- ✅ Always check task priority before starting
+- ✅ P1 tasks block P2/P3 tasks in the same area
+- ✅ If you see a P1 blocker, report it immediately
+- ❌ Don't work on P3 features if P1 tasks are pending
+- ❌ Don't change priorities without approval (that's Planning Team)
+
+**Example**:
+```typescript
+// ❌ BAD: Implementing P3 feature while P1 is broken
+// P1: Fix MCP server crash on invalid input (BLOCKED)
+// P3: Add colorful logging to MCP server (YOU'RE HERE)
+// → STOP! Fix P1 first!
+
+// ✅ GOOD: Check priority before starting
+const currentTask = await getNextTask();
+if (currentTask.priority === 'P1' && currentTask.status === 'blocked') {
+  // Fix the blocker first!
+  await fixBlocker(currentTask);
+}
+```
+
+### 3. **Skipping PRD/Documentation Checks**
+
+**Problem**: Guessing feature requirements instead of reading PRD.
+
+```typescript
+// ❌ BAD: Guessing what getNextTask should return
+async function getNextTask() {
+  // "I think it should return task ID and title..."
+  return { id: '123', title: 'Task' };
+}
+
+// ✅ GOOD: Check PRD.md first!
+// PRD says: "Returns super-detailed prompt with design references, 
+// file contexts, and acceptance criteria"
+async function getNextTask(planId: string): Promise<MCPToolResponse<Task>> {
+  const task = await taskService.getHighestPriorityTask(planId);
+  
+  // Include ALL required fields from PRD
+  const detailedPrompt = await generateSuperDetailedPrompt(task);
+  const designReferences = await getDesignSystemRefs(task);
+  const fileContexts = await getRelevantFileContexts(task);
+  
+  return {
+    content: [{
+      type: 'resource',
+      resource: {
+        uri: `task://${task.id}`,
+        mimeType: 'application/json',
+        text: JSON.stringify({
+          ...task,
+          detailedPrompt,
+          designReferences,
+          fileContexts,
+        })
+      }
+    }]
+  };
+}
+```
+
+**How to Avoid**:
+- ✅ Search PRD.json/md for feature name before starting
+- ✅ Read acceptance criteria (they're specific!)
+- ✅ Check `Plans/COE-Master-Plan/` for detailed specs
+- ❌ Don't assume you know the requirements
+
+### 4. **Context Bloat** (Token Limit Violations)
+
+**Problem**: Including too much context, exceeding 5,000-token limit.
+
+**Token Budget** (per task):
+- **Implementation code**: ~2,000 tokens
+- **Test code**: ~1,000 tokens
+- **Documentation**: ~500 tokens
+- **Context/imports**: ~500 tokens
+- **Buffer**: ~1,000 tokens
+- **Total**: ~5,000 tokens
+
+**Strategies to Stay Under Limit**:
+
+```typescript
+// ❌ BAD: Importing entire codebase
+import * as everything from '../index';
+import { allUtilities } from '../utils';
+import { everyHelper } from '../helpers';
+
+// ✅ GOOD: Specific imports only
+import { TaskService } from '../tasks/taskService';
+import { MCPToolResponse } from './protocol';
+import { logger } from '../utils/logger';
+
+// ❌ BAD: Massive inline implementation
+async function getNextTask() {
+  // 500 lines of logic all in one function...
+}
+
+// ✅ GOOD: Break into focused helpers
+async function getNextTask(planId: string): Promise<MCPToolResponse<Task>> {
+  const task = await taskRepository.getHighestPriority(planId);
+  const prompt = await promptGenerator.generateDetailed(task);
+  return formatMCPResponse(task, prompt);
+}
+
+// Each helper is ~20-30 lines, in separate files
+```
+
+**If Task Exceeds 5,000 Tokens**:
+1. ✨ **Stop and decompose** into smaller atomic tasks
+2. Extract reusable helpers into `utils/` or `services/`
+3. Split implementation across multiple files
+4. Use dependency injection to reduce import bloat
+
+### 5. **Skipping Tests**
+
+**Problem**: Marking task "done" without writing tests.
+
+**Rule**: **No tests = Not done!**
+
+```typescript
+// ❌ BAD: Implementation only, no tests
+// File: src/mcpServer/tools/getNextTask.ts
+export async function getNextTask(planId: string) {
+  // Implementation...
+}
+// (No test file = INCOMPLETE)
+
+// ✅ GOOD: Implementation + tests
+// File: src/mcpServer/tools/getNextTask.ts
+export async function getNextTask(planId: string) {
+  // Implementation...
+}
+
+// File: src/mcpServer/tools/__tests__/getNextTask.test.ts
+describe('getNextTask', () => {
+  it('returns P1 task when available', async () => { /* ... */ });
+  it('returns P2 task if no P1', async () => { /* ... */ });
+  it('returns null when queue empty', async () => { /* ... */ });
+  it('throws error for invalid planId', async () => { /* ... */ });
+});
+```
+
+**Test Checklist**:
+- ✅ Happy path (expected input → expected output)
+- ✅ Edge cases (empty data, null values, boundary conditions)
+- ✅ Error cases (invalid input, network failures, timeouts)
+- ✅ Integration (if tool calls other services)
+
+---
+
+## 🧠 Token Limit Management
+
+**Hard Limit**: Keep total context under **5,000 tokens** per task.
+
+### Token Estimation Guide
+
+| Item | Typical Size | Notes |
+|------|--------------|-------|
+| Simple function | 50-100 tokens | Single responsibility, <20 lines |
+| Complex function | 100-300 tokens | Multiple steps, error handling |
+| Interface/Type | 20-50 tokens | Data structure definition |
+| Unit test | 50-150 tokens | Per test case |
+| Import statements | 10-30 tokens | Minimize imports |
+| Comments/docs | 20-100 tokens | JSDoc + inline comments |
+
+**Example Token Budget for `getNextTask` Implementation**:
+
+```
+Implementation (src/mcpServer/tools/getNextTask.ts):
+  - Imports: 30 tokens
+  - Interface definitions: 80 tokens
+  - Main function: 200 tokens
+  - Helper functions: 150 tokens
+  - Error handling: 100 tokens
+  - JSDoc comments: 50 tokens
+  - Total: ~610 tokens ✅
+
+Tests (src/mcpServer/tools/__tests__/getNextTask.test.ts):
+  - Test setup: 100 tokens
+  - 4 test cases × 100 tokens: 400 tokens
+  - Mock setup: 150 tokens
+  - Total: ~650 tokens ✅
+
+Grand Total: 610 + 650 = 1,260 tokens ✅ (Well under 5,000!)
+```
+
+### Strategies When Approaching Limit
+
+**If you hit 4,000+ tokens**:
+
+1. **Extract helpers** to separate files
+   ```typescript
+   // Before (bloated):
+   async function getNextTask() {
+     // 50 lines of task filtering logic
+     // 30 lines of prompt generation
+     // 40 lines of context bundling
+   }
+
+   // After (modular):
+   async function getNextTask() {
+     const task = await filterHighestPriority(); // → utils/taskFilter.ts
+     const prompt = await generatePrompt(task);   // → utils/promptGen.ts
+     const context = await bundleContext(task);   // → utils/contextBundle.ts
+     return formatResponse(task, prompt, context);
+   }
+   ```
+
+2. **Use shared types** instead of duplicating
+   ```typescript
+   // ❌ BAD: Duplicating types in every file (wastes tokens)
+   interface Task { id: string; title: string; /* ... */ }
+   
+   // ✅ GOOD: Import from shared types file
+   import { Task } from '../types/task';
+   ```
+
+3. **Decompose task further** — if still >5,000 tokens, task is not atomic enough!
+
+---
+
+## 📚 Quick Reference
+
+### Key Commands
 
 ```bash
-# No external dependencies required
-python3 unified_agent.py
-
 # Run tests
-python3 test_unified_agent.py
+npm test
 
-# Run example
-python3 example_usage.py
+# Run specific test file
+npm test -- getNextTask.test.ts
+
+# Check TypeScript errors
+npm run compile
+
+# Start extension in dev mode
+code --extensionDevelopmentPath=.
+
+# Run MCP server
+npm run mcp-server
 ```
 
-### Core Components
+### Key Files to Reference
 
-**Unified Agent** (`unified_agent.py`):
-- `Overseer`: Orchestration engine (role switching, context management)
-- `RoleType`: Enum for five agent roles
-- `Context`: Cross-role state management
-- `SmartPlan`: Vagueness detection system
-- `ZenTasks`: Task workflow manager
-- `Tasksync`: Feedback loop handler
+| File | Purpose | When to Check |
+|------|---------|---------------|
+| `PRD.md` / `PRD.json` | Feature specifications | Before starting ANY task |
+| `Plans/CONSOLIDATED-MASTER-PLAN.md` | Architecture overview | Understanding system design |
+| `Plans/COE-Master-Plan/02-Agent-Role-Definitions.md` | Agent team specs | Implementing agent coordination |
+| `Plans/COE-Master-Plan/05-MCP-API-Reference.md` | MCP tool contracts | Implementing MCP tools |
+| `Plans/MODULAR-EXECUTION-PHILOSOPHY.md` | Atomic task rules | When breaking down work |
+| `src/mcpServer/protocol.ts` | MCP protocol types | Working with MCP |
+| `src/types/` | Shared type definitions | Implementing any feature |
 
-**Role Classes**:
-- `PlannerRole`: Requirement analysis, task decomposition
-- `ArchitectRole`: System design, component specification
-- `CoderRole`: Code implementation, test writing
-- `ReviewerRole`: Quality assurance, standards enforcement
-- `ExecutorRole`: Test execution, validation
+### Common MCP Tool Call Patterns
 
-## Architecture Principles
+```typescript
+// Get next task
+const task = await mcpServer.callTool('getNextTask', { planId });
 
-### Modular Execution
-- **One task at a time**: No multi-concern changes in single commits
-- **Atomic operations**: Each task satisfies all 5 criteria (see above)
-- **Dependency awareness**: Respect task dependencies, execute in correct order
-- **Context preservation**: Maintain state across role transitions
+// Mark task in progress
+await mcpServer.callTool('reportTaskStatus', {
+  taskId: task.id,
+  status: 'inProgress'
+});
 
-### Vagueness Detection (SmartPlan)
-**Indicators** that trigger clarifying questions:
-- Uncertain language: "maybe", "perhaps", "possibly", "might", "could", "should"
-- Vague quantities: "some", "few", "many", "several", "various"
-- Incomplete specs: "etc", "and so on", "TBD", "TODO", "FIXME"
-- Approximations: "approximately", "around", "about"
-- Unresolved items: "??"
+// Ask for help
+const answer = await mcpServer.callTool('askQuestion', {
+  question: 'How should I handle error X?',
+  context: { taskId: task.id }
+});
 
-**Auto Mode Behavior**:
-- Detect vagueness automatically
-- Generate clarifying questions
-- **Proceed with reasonable assumptions** if clarification not immediately available
-- Document assumptions in implementation notes
+// Report completion
+await mcpServer.callTool('reportTaskStatus', {
+  taskId: task.id,
+  status: 'completed',
+  output: 'Implemented feature successfully'
+});
 
-### Quality Gates
-
-| Phase | Gate | Required Pass Criteria |
-|-------|------|------------------------|
-| Planning | Task atomicity | All 5 criteria met |
-| Architecture | Component clarity | Clear interfaces, no ambiguous dependencies |
-| Coding | Standards compliance | Follows project conventions, includes tests |
-| Review | Quality score | ≥85% quality score, no critical issues |
-| Execution | Test passage | All tests pass, no regressions |
-
-### Workflow Orchestration
-
-```
-User Request → Planner (decompose)
-    ↓
-Atomic Tasks → Architect (design)
-    ↓
-Component Specs → Coder (implement)
-    ↓
-Code + Tests → Reviewer (validate)
-    ↓
-Approved Code → Executor (verify)
-    ↓
-Results → Report + Next Task (loop)
+// Report test failure
+await mcpServer.callTool('reportTestFailure', {
+  taskId: task.id,
+  testName: 'getNextTask should return P1 task',
+  error: 'Expected task with priority P1, got P2'
+});
 ```
 
-**Blocking**: Any phase can block and create clarification issue. Work pauses until resolved.
+### Priority Decision Tree
 
-## Documentation Priority (Read First → Last)
-
-1. **`Plans/README.md`** — Master index, start here
-2. **`Plans/CONSOLIDATED-MASTER-PLAN.md`** — Complete project structure
-3. **`Plans/QUICK-REFERENCE-CARD.md`** — Fast pattern lookup
-4. **`Plans/MODULAR-EXECUTION-PHILOSOPHY.md`** — Atomic task enforcement
-5. **`README.md`** — Project overview and quick start
-6. **`DESIGN.md`** — Design decisions and rationale
-7. **`IMPLEMENTATION.md`** — Implementation details
-8. **`Status/README.md`** — Current project status
-9. **`.github/skills/{skill}/SKILL.md`** — When using specific skills
-
-**Architecture Deep Dive**: Explore `Plans/COE-Master-Plan/` for detailed technical specs
-
-## Common Pitfalls (Avoid These)
-
-### ❌ Multi-Concern Changes
-**Problem**: Implementing multiple features/fixes in one task  
-**Solution**: Decompose until each task has single responsibility
-
-### ❌ Skipping Vagueness Detection
-**Problem**: Proceeding with unclear requirements  
-**Solution**: Run SmartPlan check, generate clarifying questions, document assumptions
-
-### ❌ Partial File Edits
-**Problem**: Using code snippets or partial updates  
-**Solution**: Always write complete files with full context
-
-### ❌ Missing Tests
-**Problem**: Implementing code without corresponding tests  
-**Solution**: Include unit tests in same commit as implementation
-
-### ❌ Breaking Atomicity
-**Problem**: Tasks taking >45 minutes or affecting multiple concerns  
-**Solution**: Reject and re-decompose using 5 criteria checklist
-
-### ❌ Ignoring Dependencies
-**Problem**: Starting tasks before dependencies complete  
-**Solution**: Check dependency graph, respect execution order
-
-### ❌ Context Loss Between Roles
-**Problem**: Information not passing between role transitions  
-**Solution**: Use `Context` object to preserve state across all roles
-
-### ❌ Manual Skill Selection**Problem**: Picking wrong skill for task type  
-**Solution**: Use skill selection logic (see Skills System section)
-
-## Documentation practice & reports
-- Update existing docs instead of adding new files unless requested. Keep root clean.
-- Session/build reports only in `reports/` when explicitly requested or required. Otherwise, update `Docs/PROJECT-RUNBOOK.md` or `Docs/QUICK-REFERENCE.md` with dated notes.
-
-## Starting Actions (Auto Mode Default Behavior)
-
-When starting a new session or receiving a user request:
-
-### 1. Context Load (Automatic)
 ```
-1. Read Plans/README.md for navigation
-2. Scan Plans/CONSOLIDATED-MASTER-PLAN.md for project structure
-3. Check Status/ for current state
-4. Review open GitHub Issues (maintain ≥3 open)
-5. Load relevant skill if task matches skill pattern
+Is this task P1 (launch blocker)?
+  YES → Work on it immediately (if no other P1 in progress)
+  NO  → Is there a P1 task pending?
+          YES → Work on P1 first
+          NO  → Is this task P2?
+                  YES → Proceed (if no P1 blockers)
+                  NO  → This is P3, only work if ALL P1/P2 are done
 ```
 
-### 2. Task Analysis (Planner Role)
-```
-1. Parse user request
-2. Run vagueness detection (SmartPlan)
-3. Generate clarifying questions if needed
-4. Decompose to atomic tasks (verify 5 criteria)
-5. Create dependency graph
-```
+---
 
-### 3. Skill Selection (Auto)
-```
-1. Match request pattern to available skills
-2. Load appropriate skill .md file
-3. Execute skill-specific workflow
-4. OR use five-role workflow if no skill match
-```
+## ✅ Pre-Implementation Checklist
 
-### 4. Issue Management (Continuous)
-```
-1. Check issue count (must have ≥3 open)
-2. Create issues if below threshold:
-   - Observations from code review
-   - Tech debt items
-   - Missing tests or docs
-   - Enhancement ideas
-   - Bug reports
-3. Label appropriately: bug, task, enhancement, blocked
-4. Assign priorities: critical, high, medium, low
-```
+Before writing ANY code, check these boxes:
 
-### 5. Execution Loop (Continuous)
-```
-WHILE tasks_remaining:
-    1. Select highest-priority atomic task
-    2. Execute five-phase workflow
-    3. Verify completion
-    4. Update issue status
-    5. Create follow-up issues if discovered
-    6. Report results
-    7. Move to next task
-```
+- [ ] Read feature spec in PRD.md/PRD.json
+- [ ] Reviewed acceptance criteria
+- [ ] Checked for detailed spec in `Plans/COE-Master-Plan/`
+- [ ] Confirmed task is atomic (5 criteria: Single responsibility, Atomic completion, Time box, Verification closure, Token safety)
+- [ ] Verified no P1 blockers exist
+- [ ] Identified dependencies (what must be done first?)
+- [ ] Planned test cases (happy path, edge cases, errors)
+- [ ] Estimated token budget (<5,000 tokens total)
+- [ ] Know which MCP tools to use (if any)
+- [ ] Ready to implement ONE thing at a time!
 
-### Auto Mode Guardrails
+---
 
-**Proceed Without Confirmation**:
-- Standard file edits
-- Test generation
-- Documentation updates
-- Issue creation/labeling
-- Code review comments
-- Atomic task execution
+## 🎓 Summary for Noobs
 
-**Ask For Confirmation**:
-- Major architecture changes
-- Breaking changes
-- Deleting files or features
-- Security-sensitive modifications
-- Production deployments
-- Changes to core workflows
+**What you need to remember**:
 
-## Testing checklist quick reference
+1. 📖 **Always read PRD.md first** — it has all the answers!
+2. ✅ **One thing at a time** — atomic tasks only (5 criteria)
+3. 🚨 **P1 first** — respect priorities, fix blockers before features
+4. 🧪 **No tests = Not done** — always write tests
+5. 💬 **Ask questions** — use `askQuestion` MCP tool when stuck
+6. 📊 **TypeScript only** — strong typing, no `any`
+7. 🎯 **Stay under 5,000 tokens** — keep implementations focused
+8. 🤖 **Trust the agent teams** — Planning plans, you code, Verification verifies
 
-### Testing Checklist for Proper Coverage and Program Reliability
-This checklist provides a comprehensive guide to ensure your project has proper test coverage and reliability. Use it to design, implement, execute, and maintain effective tests across your codebase.
-#### Test Design
-- [ ] **Define scope** — List features, modules, and user flows to be tested.  
-- [ ] **Identify test types** — Unit; integration; end to end; regression; performance; security; accessibility.  
-- [ ] **Map requirements to tests** — Every requirement or user story has at least one test case.  
-- [ ] **Specify acceptance criteria** — Clear pass/fail conditions for each test.  
-- [ ] **Design edge case and negative tests** — Include boundary values, invalid inputs, and error paths.  
-- [ ] **Plan test data** — Realistic, anonymized, and repeatable datasets; include fixtures for edge cases.
+**You're not alone!** The PRD and these instructions have your back. When in doubt:
+- Check PRD.md
+- Read the relevant spec in `Plans/COE-Master-Plan/`
+- Ask a question via `askQuestion` MCP tool
+- Follow the "one thing at a time" rule
 
+Now go build awesome code! 🚀
 
-#### Test Implementation
-- [ ] **Write small, focused unit tests** — One behavior per test; fast and deterministic.  
-- [ ] **Use meaningful test names** — Describe behavior and expected outcome.  
-- [ ] **Assert behavior, not implementation** — Verify outputs and side effects, avoid fragile internals.  
-- [ ] **Mock and stub responsibly** — Mock external services; keep mocks minimal and documented.  
-- [ ] **Cover integration points** — Database, message queues, external APIs, and file systems.  
-- [ ] **Include end to end scenarios** — Critical user journeys validated from UI/API to persistence.  
-- [ ] **Add performance and load tests** — Baseline response times and resource usage under expected load.  
-- [ ] **Add security and vulnerability tests** — Authentication, authorization, input validation, and common exploits.
+---
 
-#### Test Execution and Automation
-- [ ] **Automate test runs** — Local dev, pull requests, and CI pipelines run relevant suites.  
-- [ ] **Enforce pre-merge checks** — Block merges when critical tests fail or coverage drops below threshold.  
-- [ ] **Use environment parity** — CI environment mirrors production configuration and secrets handling.  
-- [ ] **Isolate tests** — Ensure tests can run in parallel and do not share mutable global state.  
-- [ ] **Record and surface artifacts** — Logs, screenshots, traces, and test reports attached to CI runs.  
-- [ ] **Handle flaky tests** — Track, quarantine, and fix flaky tests; do not ignore failures.
+**Version**: 1.0.0  
+**Last Updated**: January 24, 2026  
+**Next Review**: February 15, 2026 (at MVP launch)
 
-#### Quality Metrics and Reporting
-- [ ] **Set coverage targets** — Define minimum line/branch coverage per module and overall.  
-- [ ] **Measure meaningful coverage** — Prefer branch and mutation testing to validate test effectiveness.  
-- [ ] **Track test execution time** — Monitor slow tests and optimize or split them.  
-- [ ] **Report failures clearly** — CI notifications include failing test, stack trace, and reproduction steps.  
-- [ ] **Monitor post-release** — Use telemetry and error tracking to detect gaps in test coverage.
-
-#### Maintenance and Governance
-- [ ] **Review tests in code review** — Treat tests as production code; require reviews and approvals.  
-- [ ] **Keep tests up to date** — Update or remove tests when requirements or implementations change.  
-- [ ] **Document test strategy** — Where tests live, how to run them, and how to add new tests.  
-- [ ] **Schedule periodic audits** — Review coverage, flaky tests, and test debt quarterly.  
-- [ ] **Train the team** — Share best practices for writing reliable, maintainable tests.  
-- [ ] **Automate cleanup** — Remove obsolete fixtures, unused mocks, and deprecated test helpers.
-
-Use this checklist as a template and adapt thresholds, tools, and processes to your project and risk profile.

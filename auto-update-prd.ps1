@@ -95,17 +95,23 @@ function Write-Log {
 function Invoke-NotebookExecution {
     Write-Log "🚀 Starting PRD notebook execution..."
     
-    # Check if jupyter is installed
-    $jupyterCheck = Get-Command jupyter -ErrorAction SilentlyContinue
-    if (-not $jupyterCheck) {
-        Write-Log "❌ Jupyter not found. Install with: pip install jupyter nbconvert"
+    # Check if nbconvert is available via Python
+    try {
+        $test = & python -m nbconvert --version 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Log "❌ nbconvert not found. Install with: python -m pip install nbconvert"
+            return $false
+        }
+    } catch {
+        Write-Log "❌ nbconvert not available. Install with: python -m pip install nbconvert"
         return $false
     }
     
     # Execute notebook (overwrites in place)
     try {
-        Write-Host "   Running: jupyter nbconvert --execute --to notebook --inplace PRD.ipynb" -ForegroundColor Cyan
-        $output = & jupyter nbconvert --execute --to notebook --inplace $NOTEBOOK_PATH 2>&1
+        # Use python -m nbconvert directly (more reliable than jupyter nbconvert)
+        Write-Host "   Running: python -m nbconvert --execute --to notebook --inplace PRD.ipynb" -ForegroundColor Cyan
+        $output = & python -m nbconvert --execute --to notebook --inplace $NOTEBOOK_PATH 2>&1
         
         if ($LASTEXITCODE -eq 0) {
             Write-Log "✅ Notebook executed successfully"
@@ -141,7 +147,8 @@ function Update-PRD {
     
     # Compare hashes
     if (-not $ForceUpdate -and $cache.lastHash -eq $currentHash) {
-        Write-Host "✅ No changes detected (hash: $($currentHash.Substring(0, 8))...)" -ForegroundColor Green
+        $hashPreview = if ($currentHash.Length -ge 8) { $currentHash.Substring(0, 8) } else { $currentHash }
+        Write-Host "✅ No changes detected (hash: ${hashPreview}...)" -ForegroundColor Green
         Write-Host "   Last update: $($cache.lastUpdateTime)" -ForegroundColor Gray
         return $false
     }
@@ -151,8 +158,10 @@ function Update-PRD {
         Write-Log "🔄 Force update requested"
     } else {
         Write-Log "⚡ Issue changes detected!"
-        Write-Log "   Old hash: $($cache.lastHash.Substring(0, 8))..."
-        Write-Log "   New hash: $($currentHash.Substring(0, 8))..."
+        $oldHashPreview = if ($cache.lastHash.Length -ge 8) { $cache.lastHash.Substring(0, 8) } else { $cache.lastHash }
+        $newHashPreview = if ($currentHash.Length -ge 8) { $currentHash.Substring(0, 8) } else { $currentHash }
+        Write-Log "   Old hash: ${oldHashPreview}..."
+        Write-Log "   New hash: ${newHashPreview}..."
     }
     
     # Run notebook

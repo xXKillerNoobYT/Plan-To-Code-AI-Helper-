@@ -1,0 +1,23 @@
+# Files to exclude from the extension package
+.vscode/**
+.vscode-test/**
+src/**
+.gitignore
+.yarnrc
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/.eslintrc.json
+**/*.map
+**/*.ts
+node_modules/**
+htmlcov/**
+__pycache__/**
+*.pyc
+.pytest_cache/**
+.coverage
+coverage.xml
+PRD*.ipynb
+PRD*.json
+PRD*.md
+test_*.py
+*.ps1

@@ -1,0 +1,40 @@
+# Coverage.py configuration
+# =========================
+
+[run]
+source = .
+omit =
+    */tests/*
+    */test_*.py
+    *_test.py
+    */venv/*
+    */.venv/*
+    */site-packages/*
+    setup.py
+    */Scripts/*
+    */Lib/*
+
+branch = True
+parallel = False
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+exclude_lines =
+    # Standard exclusion patterns
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+    @abc.abstractmethod
+
+[html]
+directory = htmlcov
+title = Unified Coding Agent Coverage Report
+
+[xml]
+output = coverage.xml
