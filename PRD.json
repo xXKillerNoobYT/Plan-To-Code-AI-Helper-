@@ -2129,7 +2129,52 @@
     "Custom AI model training (using existing Copilot)",
     "Enterprise SSO and advanced security features"
   ],
-  "github_issues": [],
+  "github_issues": [
+    {
+      "number": 3,
+      "title": "Observation: PRD.ipynb contains executable code mixed with documentation",
+      "state": "open",
+      "priority": "MEDIUM",
+      "type": "Feature",
+      "labels": [
+        {
+          "id": 10058755656,
+          "name": "documentation",
+          "color": "0075ca",
+          "description": "Improvements or additions to documentation"
+        },
+        {
+          "id": 10058755661,
+          "name": "enhancement",
+          "color": "a2eeef",
+          "description": "New feature or request"
+        }
+      ],
+      "created_at": "2026-01-25T01:34:53Z",
+      "updated_at": "2026-01-25T01:34:53Z",
+      "url": "https://github.com/xXKillerNoobYT/Plan-To-Code-AI-Helper-/issues/3",
+      "body": "# Observation: PRD.ipynb contains executable code mixed with documentation\n\n**Type**: Observation / Tech Debt\n**Priority**: Medium\n**Area**: Documentation\n\n## Description\nThe PRD.ipynb file (lines 735-762) contains Python code for GitHub API integration and project path configuration. This mixing of executable code with planning documentation may cause confusion.\n\n## Current State\n- PRD.ipynb has live Python code for status loading\n- Code references GitHub API, project paths, and validation logi"
+    },
+    {
+      "number": 4,
+      "title": "Enhancement: Implement background agent delegation system",
+      "state": "open",
+      "priority": "MEDIUM",
+      "type": "Feature",
+      "labels": [
+        {
+          "id": 10058755661,
+          "name": "enhancement",
+          "color": "a2eeef",
+          "description": "New feature or request"
+        }
+      ],
+      "created_at": "2026-01-25T01:35:51Z",
+      "updated_at": "2026-01-25T01:35:51Z",
+      "url": "https://github.com/xXKillerNoobYT/Plan-To-Code-AI-Helper-/issues/4",
+      "body": "# Enhancement: Implement background agent delegation system\n\n**Type**: Enhancement\n**Priority**: Medium\n**Area**: Architecture\n\n## Description\nImplement a background agent delegation system to handle long-running tasks asynchronously.\n\n## User Story\nAs a unified agent, I want to delegate time-consuming tasks to background agents so that I can continue orchestrating other work without blocking.\n\n## Proposed Architecture\n1. **Task Queue** - Queue for background work items\n2. **Background Worker** "
+    }
+  ],
   "execution_timeline": {
     "sprint": "Week 1-2 (Jan 11-21, 2026)",
     "total_estimated_hours": "20-28 hours",
