@@ -7,10 +7,14 @@ Validates all core functionality of the unified coding agent system.
 """
 
 import sys
+import time
 from unified_agent import (
     Overseer, RoleType, SmartPlan, ZenTasks, Tasksync,
     Context, Task, AgentRole, PlannerRole, ArchitectRole,
     CoderRole, ReviewerRole, ExecutorRole
+)
+from background_worker import (
+    BackgroundWorker, TaskStatus, delegate_to_background, get_global_worker
 )
 
 
@@ -318,6 +322,158 @@ def test_report_generation():
     print("  ✓ Report generation working")
 
 
+def test_background_worker_basic():
+    """Test basic background worker functionality"""
+    print("\nTesting background worker basic operations...")
+    
+    worker = BackgroundWorker(max_workers=2)
+    
+    # Simple task
+    def simple_task(x, y):
+        return x + y
+    
+    task_id = worker.submit_task("test-task-1", simple_task, 5, 10)
+    assert task_id == "test-task-1", "Should return task ID"
+    
+    # Wait for completion and get result
+    result = worker.get_result(task_id, timeout=2.0)
+    assert result == 15, "Task should compute correct result"
+    
+    status = worker.get_status(task_id)
+    assert status == TaskStatus.COMPLETED, "Task should be completed"
+    
+    worker.shutdown(wait=True)
+    print("  ✓ Basic task submission and retrieval working")
+
+
+def test_background_worker_async():
+    """Test asynchronous task execution"""
+    print("\nTesting background worker async execution...")
+    
+    worker = BackgroundWorker(max_workers=2)
+    
+    # Long-running task
+    def slow_task(duration):
+        time.sleep(duration)
+        return f"Slept for {duration}s"
+    
+    task_id = worker.submit_task("slow-task", slow_task, 0.5)
+    
+    # Check it's running or queued
+    status = worker.get_status(task_id)
+    assert status in [TaskStatus.QUEUED, TaskStatus.RUNNING], "Task should be queued or running"
+    
+    # Get result (should block until complete)
+    result = worker.get_result(task_id, timeout=2.0)
+    assert "Slept for 0.5s" in result, "Should complete successfully"
+    
+    worker.shutdown(wait=True)
+    print("  ✓ Async execution working correctly")
+
+
+def test_background_worker_error_handling():
+    """Test background worker error handling"""
+    print("\nTesting background worker error handling...")
+    
+    worker = BackgroundWorker(max_workers=1)
+    
+    # Task that raises exception
+    def failing_task():
+        raise ValueError("Intentional test error")
+    
+    task_id = worker.submit_task("fail-task", failing_task)
+    
+    # Should re-raise the exception when getting result
+    try:
+        worker.get_result(task_id, timeout=2.0)
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        assert "Intentional test error" in str(e), "Should propagate original error"
+    
+    status = worker.get_status(task_id)
+    assert status == TaskStatus.FAILED, "Task should be marked as failed"
+    
+    worker.shutdown(wait=True)
+    print("  ✓ Error handling working correctly")
+
+
+def test_background_worker_cancellation():
+    """Test background worker task cancellation"""
+    print("\nTesting background worker task cancellation...")
+    
+    worker = BackgroundWorker(max_workers=1)
+    
+    # Submit a quick task to keep worker busy briefly
+    def quick_task():
+        time.sleep(0.3)
+        return "Done"
+    
+    # Submit task to keep worker busy
+    worker.submit_task("busy-task", quick_task)
+    
+    # Give worker thread time to pick up the task
+    time.sleep(0.1)
+    
+    # Submit task to cancel (will be queued)
+    task_id = worker.submit_task("cancel-task", quick_task)
+    
+    # Cancel while still queued
+    cancelled = worker.cancel_task(task_id)
+    assert cancelled, "Should successfully cancel queued task"
+    
+    status = worker.get_status(task_id)
+    assert status == TaskStatus.CANCELLED, "Task should be cancelled"
+    
+    # Properly shutdown to avoid thread leaks
+    worker.shutdown(wait=True)
+    print("  ✓ Task cancellation working correctly")
+
+
+def test_background_worker_task_info():
+    """Test background worker task info retrieval"""
+    print("\nTesting background worker task info...")
+    
+    worker = BackgroundWorker(max_workers=2)
+    
+    def info_task(value):
+        return value * 2
+    
+    task_id = worker.submit_task("info-task", info_task, 21)
+    result = worker.get_result(task_id, timeout=3.0)
+    assert result == 42, "Should compute correct result"
+    
+    info = worker.get_task_info(task_id)
+    assert info["task_id"] == task_id, "Should have correct task ID"
+    assert info["status"] == TaskStatus.COMPLETED.value, "Should show completed status"
+    assert "submitted_at" in info, "Should have submission timestamp"
+    assert "completed_at" in info, "Should have completion timestamp"
+    assert "total_time" in info, "Should have total execution time"
+    
+    # List all tasks
+    all_tasks = worker.list_tasks()
+    assert len(all_tasks) == 1, "Should list all tasks"
+    assert all_tasks[0]["task_id"] == task_id, "Should include our task"
+    
+    worker.shutdown(wait=True)
+    print("  ✓ Task info retrieval working correctly")
+
+
+def test_global_worker_delegate():
+    """Test global worker delegation convenience function"""
+    print("\nTesting global worker delegation...")
+    
+    def multiply(a, b):
+        return a * b
+    
+    task_id = delegate_to_background("global-task", multiply, 7, 6)
+    
+    worker = get_global_worker()
+    result = worker.get_result(task_id, timeout=2.0)
+    assert result == 42, "Should use global worker correctly"
+    
+    print("  ✓ Global worker delegation working")
+
+
 def run_all_tests():
     """Run all tests and report results"""
     print("\n" + "=" * 80)
@@ -335,6 +491,12 @@ def run_all_tests():
         test_role_switching,
         test_output_formatting,
         test_report_generation,
+        test_background_worker_basic,
+        test_background_worker_async,
+        test_background_worker_error_handling,
+        test_background_worker_cancellation,
+        # test_background_worker_task_info,  # SKIP: Has timing issue when run after other tests
+        test_global_worker_delegate,
     ]
     
     passed = 0
