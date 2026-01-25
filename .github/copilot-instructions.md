@@ -242,6 +242,258 @@ describe('getNextTask MCP Tool', () => {
 - Mock external dependencies (GitHub API, file system)
 - Use test fixtures in `src/test/fixtures/`
 
+### 6. **Auto-Documentation Requirements** 📚
+
+**Documentation is mandatory!** Every piece of code must be explained. Think of documentation as "leaving breadcrumbs for the next developer" (or future you!).
+
+#### A. JSDoc Comments for All Functions (Required!)
+
+```typescript
+// ❌ BAD: No documentation
+function getNextTask(planId: string): Promise<Task | null> {
+  // Implementation...
+}
+
+// ✅ GOOD: Complete JSDoc comment
+/**
+ * 🔍 Retrieves the highest priority task from the queue
+ * 
+ * This function finds the P1 (critical), then P2, then P3 tasks in order.
+ * It excludes tasks that are already done or blocked.
+ * 
+ * @param {string} planId - The plan ID to fetch tasks for (e.g., "plan-123")
+ * @returns {Promise<Task | null>} The next highest priority task, or null if queue is empty
+ * @throws {Error} If planId is invalid or database query fails
+ * 
+ * @example
+ * const task = await getNextTask('plan-123');
+ * if (task) {
+ *   console.log(`Working on: ${task.title}`);
+ * } else {
+ *   console.log('All tasks complete!');
+ * }
+ */
+export async function getNextTask(planId: string): Promise<Task | null> {
+  // Implementation...
+}
+
+// For React components:
+/**
+ * 🎨 Renders the Verification Panel UI
+ * 
+ * Displays a task with a checklist, design system references, and approve/reject buttons.
+ * Used when a task is ready for human verification before marking it complete.
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {Task} props.task - The task to verify
+ * @param {Function} props.onApprove - Callback when user approves
+ * @param {Function} props.onReject - Callback when user rejects
+ * @returns {JSX.Element} The rendered verification panel
+ * 
+ * @example
+ * <VerificationPanel 
+ *   task={currentTask} 
+ *   onApprove={handleApprove}
+ *   onReject={handleReject}
+ * />
+ */
+export function VerificationPanel({ task, onApprove, onReject }: Props): JSX.Element {
+  // Implementation...
+}
+```
+
+**JSDoc Requirements**:
+- ✅ **Description**: What does this function do? (1-2 sentences)
+- ✅ **Parameters**: `@param {type} name - description`
+- ✅ **Returns**: `@returns {type} description`
+- ✅ **Throws**: `@throws {Error} when/why` (if applicable)
+- ✅ **Examples**: `@example` showing typical usage
+- ✅ **Emoji prefix**: Use 🔍/🎨/🚀 etc. for quick visual scanning
+
+#### B. Auto-Generate Usage Documentation
+
+**When creating a new file or feature**, ALWAYS generate corresponding documentation:
+
+```
+Rule: For every src/ file, create docs/ equivalent
+======================================================
+
+src/mcpServer/tools.ts          → docs/mcp-tools.md
+  (MCP tool implementations)      (How to use each MCP tool)
+
+src/agents/orchestrator.ts      → docs/orchestrator-guide.md
+  (Orchestrator logic)            (How orchestrator routes tasks)
+
+src/ui/VerificationPanel.tsx    → docs/verification-panel-guide.md
+  (React component)               (How to use VerificationPanel)
+
+src/tasks/queue.ts              → docs/task-queue-guide.md
+  (Task queue logic)              (How task queue prioritizes tasks)
+```
+
+**Documentation File Template**:
+
+```markdown
+# [Feature Name] Usage Guide
+
+## Overview
+[1-2 sentence description of what this feature does]
+
+## Quick Start
+[How to use it in 5 lines of code]
+
+## API Reference
+- **Function**: `functionName(param: type): ReturnType`
+  - Description
+  - Parameters
+  - Returns
+
+## Examples
+[2-3 realistic examples]
+
+## Common Mistakes
+- ❌ Mistake 1: [description]
+- ✅ Fix: [solution]
+
+## Troubleshooting
+[Common issues and how to solve them]
+
+## Related Docs
+- [Link to related documentation]
+```
+
+#### C. Update Existing Guide Documents
+
+When modifying testing or debugging features:
+
+```
+1. If you modify tests → Update docs/testing-guide.md
+   - Add new test patterns
+   - Update coverage requirements
+   - Add troubleshooting for new test failures
+
+2. If you modify debugger → Update docs/debug-guide.md
+   - Add new debug configurations
+   - Update debug scenarios
+   - Add breakpoint strategies
+
+3. If you add MCP tool → Update docs/mcp-tools.md
+   - Document new tool
+   - Add request/response examples
+   - Add error handling notes
+```
+
+#### D. PRD Updates from GitHub Issues (CRITICAL!)
+
+⚠️ **IMPORTANT**: PRD is the source of truth. Keep it current!
+
+```
+Rule: If issues indicate PRD needs updates, update PRD.md immediately
+======================================================================
+
+When to update PRD.md:
+- New feature requested in issue
+- Bug fix changes expected behavior
+- Design system updated in issue
+- Task requirements clarified in issue comments
+
+Update Format:
+```markdown
+### Updated from Issue #X: [Brief Description]
+
+**Date**: ISO-8601 date (e.g., 2026-01-24)
+**Issue**: #X - [Issue Title]
+**Change Type**: Feature/Bug Fix/Clarification
+
+**What Changed**:
+- Detail 1
+- Detail 2
+
+**Why**: Brief explanation from issue
+
+**Files Affected**:
+- src/file1.ts
+- src/file2.ts
+
+**Testing**: How this change was verified
+```
+
+**Example**:
+```markdown
+### Updated from Issue #42: Add "Draft" Status to Tasks
+
+**Date**: 2026-01-24
+**Issue**: #42 - Need draft state before publishing  
+**Change Type**: Feature
+
+**What Changed**:
+- Added 'draft' status to Task type  
+- Updated task status flow (Draft → Ready → Done)
+- Modified getNextTask() to exclude draft tasks
+
+**Why**: Users need time to prepare tasks before execution
+
+**Files Affected**:
+- src/types/task.ts
+- src/mcpServer/tools.ts
+- PRD.md (this section)
+
+**Testing**: Tests updated in src/tasks/__tests__/queue.test.ts
+```
+```
+
+⚠️ **NOTE**: PRD updates should ALSO be made to `PRD.ipynb` (the source notebook) since it auto-generates PRD.json and PRD.md!
+
+**Operational Rule**: After you finish tests or debugging, run `npm run update-prd` to pull open GitHub issues into PRD.md (bugs → Testing notes, features → Plans) and log the same entries to `Status/status-log.md`. If you manually edit PRD content, mirror the change in PRD.ipynb first so the generated PRD.md/PRD.json stay consistent.
+
+#### E. Folder Organization Rules (MANDATORY!)
+
+**Files MUST go in correct folders:**
+
+```
+📁 Root
+├── 📁 Plans/           ← Architecture & technical specifications
+│   ├── *.md            (Project plans, master plans, roadmaps)
+│   └── COE-Master-Plan/ (Detailed technical specs)
+│
+├── 📁 docs/            ← Usage guides & tutorials
+│   ├── debug-guide.md  (Debugging tutorial)
+│   ├── testing-guide.md (Testing tutorial)
+│   ├── [feature]-guide.md (For each major feature)
+│   └── *.md            (All user documentation)
+│
+├── 📁 Status/          ← Project status & change logs
+│   ├── status-log.md   (Chronological log of all changes)
+│   ├── *.md            (Status reports)
+│   └── (Never put docs or plans here!)
+│
+├── 📁 src/             ← Source code
+│   └── (Code files + JSDoc comments)
+│
+└── PRD.md, PRD.json    ← Product Requirements (top level only!)
+```
+
+**Enforcement**:
+- ❌ **DON'T** put documentation in `src/` (except JSDoc comments)
+- ❌ **DON'T** put architecture specs in `Status/`
+- ❌ **DON'T** put docs in `Plans/` (unless technical reference like API-Reference.md)
+- ✅ **DO** keep folders clean and organized
+- ✅ **DO** update `Status/status-log.md` when major docs are created/updated
+
+#### F. Auto-Documentation Checklist
+
+**Before marking ANY task complete**, verify:
+
+- [ ] **All functions have JSDoc comments** (with @param, @returns, @example)
+- [ ] **New feature has usage guide** in `docs/[feature]-guide.md`
+- [ ] **Updated related guides** (testing-guide.md, debug-guide.md if applicable)
+- [ ] **PRD.md updated** if behavior changed (with "Updated from issue #X")
+- [ ] **Status/status-log.md updated** with what was documented
+- [ ] **Files in correct folders** (Plans/, docs/, Status/, src/)
+- [ ] **JSDoc examples are realistic** (copy-pasteable code)
+- [ ] **No broken links** in markdown files
+
 ---
 
 ## 🔄 Workflows: How to Use MCP Tools & PRD

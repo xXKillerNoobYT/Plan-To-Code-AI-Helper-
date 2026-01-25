@@ -1,59 +1,36 @@
 /**
- * MCP Tools Implementation
- * Implements the three core MCP tools as per architecture specs
+ * MCP Tools Implementation (DEPRECATED)
+ * 
+ * ⚠️ This file is deprecated. Individual tools are now implemented in src/mcpServer/tools/
+ * 
+ * Use the following imports instead:
+ * - import { getNextTask } from './tools/getNextTask';
+ * - import { reportTaskStatus } from './tools/reportTaskStatus';
+ * 
+ * Or use the index:
+ * - import { getNextTask, reportTaskStatus } from './tools';
  */
 
+// This file is kept for backwards compatibility but is no longer used.
+// All tool implementations have been moved to individual files in tools/ directory.
+
 /**
- * Tool 1: getNextTask
- * Retrieve the next available task from the queue
+ * @deprecated Use import { getNextTask } from './tools/getNextTask' instead
  */
 export async function getNextTask(params: any): Promise<any> {
-    console.log('MCP Tool: getNextTask called', params);
-
-    // TODO: Connect to TaskQueue
-    // TODO: Apply filters (priority, status)
-    // TODO: Return task with full context
-
-    return {
-        success: false,
-        task: null,
-        queueLength: 0,
-        message: 'Not implemented yet'
-    };
+    throw new Error('This function is deprecated. Import from ./tools/getNextTask instead.');
 }
 
 /**
- * Tool 2: reportTaskDone
- * Mark a task as complete and trigger verification
+ * @deprecated Use import { reportTaskStatus } from './tools/reportTaskStatus' instead
  */
 export async function reportTaskDone(params: any): Promise<any> {
-    console.log('MCP Tool: reportTaskDone called', params);
-
-    // TODO: Validate task completion
-    // TODO: Update task status
-    // TODO: Trigger verification team
-    // TODO: Update GitHub Issue if synced
-
-    return {
-        success: false,
-        message: 'Not implemented yet'
-    };
+    throw new Error('This function is deprecated. Import from ./tools/reportTaskStatus instead.');
 }
 
 /**
- * Tool 3: askQuestion
- * Query the Answer Team for context and clarifications
+ * @deprecated Tool not yet implemented
  */
 export async function askQuestion(params: any): Promise<any> {
-    console.log('MCP Tool: askQuestion called', params);
-
-    // TODO: Route to Answer Team
-    // TODO: Search plan.json for context
-    // TODO: Return relevant information
-
-    return {
-        success: false,
-        answer: null,
-        message: 'Not implemented yet'
-    };
+    throw new Error('askQuestion tool not yet implemented. Coming soon!');
 }

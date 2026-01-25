@@ -1,0 +1,2143 @@
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Shutting down...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Shutdown complete
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-a2ox2tcqp (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Shutting down...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Shutdown complete
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-h87l45tnx (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Failed to add task: Error: Orchestrator only accepts tasks from Planning Team. Set fromPlanningTeam=true.
+        at ProgrammingOrchestrator.addTask (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:325:23)
+        at C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:169:39
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\expect\build\toThrowMatchers.js:74:11)
+        at Object.throwingMatcher [as toThrow] (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\expect\build\index.js:320:21)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:169:54)
+        at Promise.then.completed (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:336:25)
+      at src/orchestrator/__tests__/programmingOrchestrator.test.ts:169:39
+      at Object.<anonymous> (node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:169:54)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p2-task (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p3-task (P3)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ugcyo85bs (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å ≡ƒÄ» Next task: task-ugcyo85bs (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-pjlmojpxo (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å No ready tasks in queue
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.getNextTask (src/orchestrator/programmingOrchestrator.ts:364:29)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:202:43)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-fj8wvcbjt (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ffwo4lz5o (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-pls4c2wji (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-pls4c2wji-1769318442491): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ibo0iv7e5 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-ibo0iv7e5-1769318442496): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ndn3rkjhf (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-ndn3rkjhf-1769318442500): Implement getNextTask [192 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Failed to add task: Error: Orchestrator only accepts tasks from Planning Team. Set fromPlanningTeam=true.
+        at ProgrammingOrchestrator.addTask (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:325:23)
+        at C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:275:45
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\expect\build\toThrowMatchers.js:74:11)
+        at Object.throwingMatcher [as toThrow] (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\expect\build\index.js:320:21)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:275:60)
+        at Promise.then.completed (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:336:25)
+      at src/orchestrator/__tests__/programmingOrchestrator.test.ts:275:45
+      at Object.<anonymous> (node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:275:60)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-1 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-2 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-1-1769318442512): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Failed to route task: Error: Cannot route new task while already executing: task-1. One thing at a time!
+        at ProgrammingOrchestrator.routeTask (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:454:23)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:291:39)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.routeTask (src/orchestrator/programmingOrchestrator.ts:533:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:291:39)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-vf1njxjgr (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Failed to route task: Error: Cannot route task: unmet dependencies: unmet-dep-123 
+        at ProgrammingOrchestrator.routeTask (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:478:23)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:302:39)
+        at Promise.then.completed (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.routeTask (src/orchestrator/programmingOrchestrator.ts:533:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:302:39)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-tt5buv053 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-tt5buv053-1769318442551): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ew4mycdfn (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-ew4mycdfn-1769318442555): Test Task Implementation [229 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-wo08o00eh (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-wo08o00eh-1769318442559): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task completed: task-wo08o00eh
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-bwbqgns62 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Error handling task completion: Error: Cannot complete task not in progress. Current status: pending
+        at ProgrammingOrchestrator.onTaskComplete (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:565:23)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:363:39)
+        at Promise.then.completed (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskComplete (src/orchestrator/programmingOrchestrator.ts:591:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:363:39)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-ly597cxuj (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-ly597cxuj-1769318442572): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Task failed: task-ly597cxuj: Dependency error
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskFailed (src/orchestrator/programmingOrchestrator.ts:629:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:375:13)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-0z02q3d0o (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-0z02q3d0o-1769318442581): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task completed: task-0z02q3d0o
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-n3daa92s1 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-n3daa92s1-1769318442585): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Task failed: task-n3daa92s1: Test failure
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskFailed (src/orchestrator/programmingOrchestrator.ts:629:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:402:13)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-x4she6o1g (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-x4she6o1g-1769318442593): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-x4she6o1g: What design system should I use?
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:426:30)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-eu1119guz (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-eu1119guz-1769318442603): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-eu1119guz: Question for Answer Team
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:446:47)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-208tb8mlq (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-208tb8mlq-1769318442610): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-208tb8mlq: Blocked
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:459:32)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-tezavu211 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-tezavu211-1769318442619): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-tezavu211: Unclear requirement
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:472:32)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p2-id (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-id (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å ≡ƒÄ» Next task: p1-id (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p3-id (P3)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p2-id (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å ≡ƒÄ» Next task: p2-id (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p3-1 (P3)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-1 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p2-1 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-2 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p2-2 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å ≡ƒÄ» Next task: p1-1 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-pnan1wvco (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-pnan1wvco-1769318442664): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-54ezmieb7 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-54ezmieb7-1769318442668): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-5x9voyefs (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-5x9voyefs-1769318442672): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task completed: task-5x9voyefs
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-08kq5bnix (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-08kq5bnix-1769318442677): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Task failed: task-08kq5bnix: Test error
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskFailed (src/orchestrator/programmingOrchestrator.ts:629:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:631:13)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-715fgh6si (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-715fgh6si-1769318442685): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-715fgh6si: Test block
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:644:32)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-0 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-1 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-2 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-3 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-4 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-5 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-6 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-7 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-8 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-9 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-10 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-11 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-12 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-13 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-14 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-15 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-16 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-17 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-18 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-19 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-20 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-21 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-22 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-23 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-24 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-25 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-26 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-27 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-28 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-29 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-30 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-31 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-32 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-33 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-34 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-35 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-36 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-37 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-38 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-39 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-40 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-41 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-42 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-43 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-44 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-45 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-46 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-47 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-48 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-49 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-50 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-51 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-52 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-53 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-54 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-55 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-56 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-57 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-58 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-59 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-60 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-61 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-62 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-63 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-64 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-65 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-66 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-67 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-68 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-69 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-70 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-71 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-72 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-73 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-74 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-75 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-76 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-77 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-78 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-79 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-80 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-81 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-82 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-83 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-84 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-85 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-86 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-87 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-88 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-89 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-90 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-91 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-92 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-93 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-94 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-95 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-96 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-97 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-98 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-99 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-0 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-1 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-2 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-3 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-4 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-5 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-6 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-7 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-8 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-9 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-10 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-11 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-12 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-13 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-14 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-15 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-16 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-17 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-18 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-19 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-20 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-21 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-22 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-23 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-24 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-25 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-26 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-27 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-28 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-29 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-30 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-31 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-32 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-33 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-34 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-35 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-36 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-37 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-38 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-39 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-40 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-41 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-42 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-43 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-44 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-45 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-46 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-47 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-48 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: p1-task-49 (P1)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-qd0hxu44c (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-8hitx6b54 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Error handling task completion: Error: Task not found: nonexistent-task-123
+        at ProgrammingOrchestrator.onTaskComplete (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:560:23)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:703:30)
+        at Promise.then.completed (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskComplete (src/orchestrator/programmingOrchestrator.ts:591:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:703:30)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-4hpjw87m1 (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-4hpjw87m1-1769318442833): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task completed: task-4hpjw87m1
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-5l8k5pb3l (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-5l8k5pb3l-1769318442836): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.warn
+    [ProgrammingOrchestratorTest] ΓÜá∩╕Å ΓÜá∩╕Å Task blocked: task-5l8k5pb3l: Clarification needed
+
+    [0m [90m 874 |[39m
+     [90m 875 |[39m     warn(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 876 |[39m         console[33m.[39mwarn([32m`[${this.name}] ΓÜá∩╕Å ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 877 |[39m     }
+     [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.warn (src/orchestrator/programmingOrchestrator.ts:876:17)
+      at ProgrammingOrchestrator.onTaskBlocked (src/orchestrator/programmingOrchestrator.ts:658:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:736:32)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Answer Team response received: Mock response
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Error handling task completion: Error: Cannot complete task not in progress. Current status: blocked
+        at ProgrammingOrchestrator.onTaskComplete (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts:565:23)
+        at Object.<anonymous> (C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts:742:32)
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskComplete (src/orchestrator/programmingOrchestrator.ts:591:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:742:32)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-z91z5yo0k (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-z91z5yo0k-1769318442850): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.error
+    [ProgrammingOrchestratorTest] Γ¥î Γ¥î Task failed: task-z91z5yo0k: Initial failure
+
+    [0m [90m 878 |[39m
+     [90m 879 |[39m     error(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {
+    [31m[1m>[22m[39m[90m 880 |[39m         console[33m.[39merror([32m`[${this.name}] Γ¥î ${message}`[39m[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 881 |[39m     }
+     [90m 882 |[39m
+     [90m 883 |[39m     debug(message[33m:[39m string[33m,[39m [33m...[39margs[33m:[39m unknown[])[33m:[39m [36mvoid[39m {[0m
+
+      at SimpleLogger.error (src/orchestrator/programmingOrchestrator.ts:880:17)
+      at ProgrammingOrchestrator.onTaskFailed (src/orchestrator/programmingOrchestrator.ts:629:25)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:755:13)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task routed to Copilot (session-task-z91z5yo0k-1769318442858): Test Task Implementation [189 tokens]
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task completed: task-z91z5yo0k
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-a (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-b (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å Γ£à Task added to queue: task-c (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+  console.log
+    [ProgrammingOrchestratorTest] Γä╣∩╕Å ≡ƒÄ» Next task: task-a (P2)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:872:17)
+
+FAIL src/orchestrator/__tests__/programmingOrchestrator.test.ts
+  Programming Orchestrator
+    Initialization & Lifecycle
+      ΓêÜ should initialize successfully (34 ms)
+      ΓêÜ should be ready after initialization (3 ms)
+      ΓêÜ should shutdown gracefully (5 ms)
+      ΓêÜ should clear queue on shutdown (6 ms)
+    Task Queue Management
+      ΓêÜ should add task to queue (4 ms)
+      ΓêÜ should reject task not from Planning Team (35 ms)
+      ΓêÜ should order tasks by priority (P1 > P2 > P3) (7 ms)
+      ΓêÜ should get next ready task (5 ms)
+      ΓêÜ should return null when no ready tasks (9 ms)
+      ΓêÜ should track queue statistics (4 ms)
+    Task Routing to Copilot
+      ΓêÜ should route task to Copilot successfully (5 ms)
+      ΓêÜ should report task status as IN_PROGRESS on routing (4 ms)
+      ΓêÜ should include super-detailed prompt in directive (4 ms)
+      ΓêÜ should reject task not from Planning Team (7 ms)
+      ΓêÜ should enforce one-thing-at-a-time (no parallel routing) (10 ms)
+      ΓêÜ should fail if dependencies not met (30 ms)
+      ΓêÜ should generate prompt under token limit (4 ms)
+      ΓêÜ should include design references in directive (4 ms)
+    Task Completion & Status Updates
+      ΓêÜ should handle task completion (5 ms)
+      ΓêÜ should fail completing task not in progress (8 ms)
+      ΓêÜ should handle task failure (8 ms)
+      ΓêÜ should clear current task after completion (5 ms)
+      ΓêÜ should track failed tasks in status (8 ms)
+    Task Blocking & Clarifications
+      ΓêÜ should handle blocked task via Answer Team (10 ms)
+      ΓêÜ should route clarification to Answer Team (7 ms)
+      ΓêÜ should update task status to BLOCKED (9 ms)
+      ΓêÜ should report block reason via MCP (7 ms)
+    Priority & Task Ordering
+      ΓêÜ should prioritize P1 tasks over P2 (3 ms)
+      ΓêÜ should prioritize P2 tasks over P3 (5 ms)
+      ΓêÜ should handle mixed priority queue correctly (6 ms)
+    Input Validation
+      ΓêÜ should reject task with missing taskId (6 ms)
+      ΓêÜ should reject task with missing title (5 ms)
+      ΓêÜ should reject task with missing description (4 ms)
+      ΓêÜ should reject task with no acceptance criteria (3 ms)
+      ΓêÜ should reject task with invalid priority (4 ms)
+    Integration with MCP Tools
+      ΓêÜ should track MCP tool calls (4 ms)
+      ΓêÜ should call reportTaskStatus on route (4 ms)
+      ΓêÜ should call reportTaskStatus on completion (4 ms)
+      ΓêÜ should call reportObservation on failure (9 ms)
+      ΓêÜ should call askQuestion on block (19 ms)
+    Edge Cases & Stress Tests
+      ΓêÜ should handle large queue (80 ms)
+      ΓêÜ should handle many P1 tasks (35 ms)
+      ΓêÜ should handle task with very long description (3 ms)
+      ΓêÜ should handle task with many dependencies (3 ms)
+      ΓêÜ should handle task not found gracefully (6 ms)
+    Complex Workflow Scenarios
+      ΓêÜ should handle full workflow: add -> route -> complete (5 ms)
+      ├ù should handle workflow: add -> route -> block -> complete (11 ms)
+      ΓêÜ should handle workflow: add -> route -> fail -> retry (14 ms)
+      ΓêÜ should handle dependencies chain: A->B->C (6 ms)
+
+  ΓùÅ Programming Orchestrator ΓÇ║ Complex Workflow Scenarios ΓÇ║ should handle workflow: add -> route -> block -> complete
+
+    Cannot complete task not in progress. Current status: blocked
+
+      563 |             // Verify task is in progress
+      564 |             if (task.status !== TaskStatus.IN_PROGRESS) {
+    > 565 |                 throw new Error(
+          |                       ^
+      566 |                     `Cannot complete task not in progress. Current status: ${task.status}`,
+      567 |                 );
+      568 |             }
+
+      at ProgrammingOrchestrator.onTaskComplete (src/orchestrator/programmingOrchestrator.ts:565:23)
+      at Object.<anonymous> (src/orchestrator/__tests__/programmingOrchestrator.test.ts:742:32)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 48 passed, 49 total
+Snapshots:   0 total
+Time:        2.963 s, estimated 3 s
+Ran all test suites matching /src\\orchestrator\\__tests__\\programmingOrchestrator.test.ts/i.

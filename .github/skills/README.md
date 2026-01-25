@@ -55,7 +55,126 @@ Skills are instruction manuals that teach GitHub Copilot how to perform speciali
 
 ---
 
-### 3. **MCP Tool Skill** (`mcp-tool-skill/`)
+### 3. **Auto Test Generator Skill** (`auto-test-skill/`) 🆕
+
+**Purpose**: AI-powered automatic test generation for COE TypeScript code (like q4test but general-purpose)
+
+**Key Features**:
+- 🤖 **AI-Powered Test Generation** - Automatically creates comprehensive Jest tests
+- 🎯 **Smart Scenario Detection** - Identifies critical paths, edge cases, error handling
+- 🎭 **Automatic Mocking** - Generates mocks for VS Code, file system, dependencies
+- 🔗 **MCP Integration** - Uses `askQuestion` when requirements are unclear
+- 📊 **Coverage Focus** - Ensures ≥75% coverage (≥90% for P1 tasks)
+- 💬 **Beginner-Friendly** - Generated tests include explanatory comments
+
+**Quick Start**:
+```bash
+# Option 1: Use script to generate tests
+npx ts-node .github/skills/auto-test-skill/generate-tests.ts src/mcpServer/tools.ts
+
+# Option 2: Ask Copilot
+"Generate tests for src/mcpServer/tools.ts with critical and edge cases"
+```
+
+**What It Does**:
+1. Analyzes source code (functions, parameters, control flow)
+2. Generates test scenarios (Critical P1, High P2, Medium P3)
+3. Creates complete Jest test file with mocks and comments
+4. Runs tests and measures coverage
+
+**Example Output**:
+```typescript
+describe('getNextTask', () => {
+  /**
+   * ✅ should return highest priority P1 task
+   * Priority: P1 | Category: critical
+   */
+  it('should return highest priority P1 task', async () => {
+    // Arrange: Set up test data
+    const queue = new TaskQueue();
+    queue.addTask({ id: '1', priority: 'P1' });
+    
+    // Act: Call the function
+    const result = await getNextTask('plan-1');
+    
+    // Assert: Check expectations
+    expect(result.task.id).toBe('1');
+  });
+});
+```
+
+📖 [Full Documentation](auto-test-skill/SKILL.md)
+
+---
+
+### 4. **Debug Skill** (`debug-skill/`) 🆕
+
+**Purpose**: AI-powered debugging assistance - analyzes errors, suggests breakpoints, and guides you through fixing bugs
+
+**Key Features**:
+- 🔍 **Error Analysis** - Examines error messages and stack traces to identify root causes
+- 🎯 **Strategic Breakpoints** - Suggests where to set breakpoints for maximum debugging efficiency
+- 📋 **Step-by-Step Guidance** - Provides structured debugging workflow (reproduce → inspect → fix)
+- 🐛 **Common Bug Patterns** - Recognizes null references, type mismatches, async issues
+- 🔗 **MCP Integration** - Uses `askQuestion` for AI debugging assistance
+- 💬 **Beginner-Friendly** - Explains debugging concepts for noobs
+
+**Quick Start**:
+```bash
+# 1. Set breakpoint (click line number gutter)
+# 2. Press F5 to start debugging
+# 3. Use debug toolbar:
+#    - F10: Step Over
+#    - F11: Step Into
+#    - Shift+F11: Step Out
+#    - F5: Continue
+
+# Or ask Copilot:
+"I'm getting TypeError in getNextTask. Where should I set breakpoints?"
+```
+
+**Debug Configurations** (in `.vscode/launch.json`):
+- 🚀 **Run Extension** - Debug extension code (MCP server, commands, UI)
+- 🧪 **Debug Jest Tests** - Debug all unit tests
+- 🎯 **Debug Current File** - Debug single test file (faster)
+- 🧩 **Extension Tests** - Debug E2E Mocha tests
+- 🔗 **Attach to Process** - Debug running Node.js process
+
+**Common Scenarios**:
+```typescript
+// Scenario 1: Test failing
+it('should return P1 task', () => {
+  const result = getNextTask('plan-1');  // 🔴 Set breakpoint
+  expect(result.priority).toBe('P1');    // ❌ Fails - why?
+});
+
+// Scenario 2: Function returns wrong value
+function calculatePriority(task: Task) {
+  let priority = 0;  // 🔴 Breakpoint 1
+  if (task.priority === 'P1') {
+    priority = 1;
+  }
+  return priority;   // 🔴 Breakpoint 2 - inspect value
+}
+
+// Scenario 3: Extension won't activate
+export function activate(context: vscode.ExtensionContext) {
+  console.log('🚀 COE Activated');  // 🔴 Does this run?
+  // If not hit → check package.json activationEvents
+}
+```
+
+**Advanced Techniques**:
+- ⚡ **Conditional Breakpoints**: Pause only when `task.priority === 'P1'`
+- 📝 **Logpoints**: Log without pausing execution
+- 👁️ **Watch Expressions**: Monitor values as you step through
+- 💻 **Debug Console**: Evaluate expressions while paused
+
+📖 [Full Documentation](debug-skill/SKILL.md) | 📘 [Debug Tutorial](../docs/debug-guide.md)
+
+---
+
+### 5. **MCP Tool Skill** (`mcp-tool-skill/`)
 
 **Purpose**: Integrate MCP (Model Context Protocol) tools during development for intelligent assistance
 
@@ -146,6 +265,13 @@ await mcpServer.callTool('reportTestFailure', {
 | Scenario | Skill to Use |
 |----------|--------------|
 | 🤔 Unclear requirements or implementation approach | **MCP Tool Skill** → `askQuestion` |
+| 🐛 Test failing or code has bugs | **Debug Skill** → Set breakpoints, F5 to debug |
+| 🧪 Need tests for new code | **Auto Test Generator Skill** → Generate tests automatically |
+| ✅ Want to run tests with coverage | **Testing Skill** → Run tests, check coverage |
+| 🔧 Code has linting errors | **Linting Skill** → Auto-fix with `--fix` flag |
+| 📝 Want to log observation during coding | **MCP Tool Skill** → `reportObservation` |
+| ❌ Tests failed and need investigation | **MCP Tool Skill** → `reportTestFailure` |
+| 🎯 Need to debug specific functionality | **Debug Skill** → Use appropriate debug config |
 | 📝 After modifying TypeScript/JavaScript files | **Linting Skill** → `eslint-fix.sh` |
 | ✅ Before marking task as completed | **Testing Skill** → `run-tests.sh` |
 | 🧪 Verifying code coverage | **Testing Skill** → `check-new-coverage.sh` |
