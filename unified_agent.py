@@ -362,8 +362,9 @@ class CoderRole(AgentRole):
         # Generate sample code based on architecture
         code_output = "## Code Implementation\n\n"
         
-        # Main module
-        main_code = '''"""
+        # Main module - using f-string for cleaner template
+        project_name = context.project_name
+        main_code = f'''"""
 Main entry point for {project_name}
 """
 
@@ -375,7 +376,7 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
-'''.format(project_name=context.project_name)
+'''
         
         context.code_files["main.py"] = main_code
         
