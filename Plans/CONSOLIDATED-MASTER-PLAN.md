@@ -1,29 +1,254 @@
 # Copilot Orchestration Extension (COE)
-# CONSOLIDATED MASTER PLAN
-**Version**: 3.0  
-**Date**: January 24, 2026  
-**Status**: Planning Specification (Status tracking removed for fresh start)
+# CONSOLIDATED MASTER PLAN - **PLANNING & TRACKING LAYER**
+**Version**: 4.0 — **Scope-Shifted to Planning & Tracking Layer**  
+**Date**: January 25, 2026  
+**Status**: Planning + Tracking Focus (3rd Party Coding Agent Integration)
 
-> **📖 Critical Reference**: All AI systems must consult **PRD.json** and **PRD.md** at every step of the programming cycle. These documents are the primary source of truth for features, requirements, and implementation details.
+<!-- Last major update: Jan 25, 2026 - Scope shift from "COE does coding" to "COE prepares context for 3rd party coding agents" -->
+
+> **📖 Critical Reference**: All AI systems must consult **PRD.json** and **PRD.md** at every step. These documents are the primary source of truth for features, requirements, and implementation details.
 
 ---
 
 ## 📋 Executive Summary
 
-The **Copilot Orchestration Extension (COE)** is an AI-powered project planning and task management system built as a VS Code extension that transforms how development teams plan, decompose, and execute complex software projects through intelligent automation and multi-agent coordination.
+The **Copilot Orchestration Extension (COE)** is a **planning, orchestration, and tracking layer** built as a VS Code extension that prepares comprehensive, up-to-date context and task breakdowns specifically for 3rd party coding agents (like GitHub Copilot) to execute. 
+
+COE **does NOT implement code itself**. Instead, it:
+- 🧠 **Plans**: Decomposes complex requirements into atomic, actionable tasks
+- 📋 **Tracks**: Monitors progress and marks tasks complete/incomplete
+- 🔍 **Detects Problems**: Identifies issues, stale tasks, missing dependencies
+- 📤 **Prepares Context**: Generates detailed PRD/plan files for coding agents to read
+- ✅ **Verifies**: Tracks verification status (checked/unchecked/needs re-check)
+- 🛠️ **Self-Heals**: Auto-creates maintenance tasks when plans drift or become outdated
 
 ---
 
-## 🎯 Project Objectives (8 Core Goals)
+## 🔄 Current Role & Philosophy
 
-1. **Enable intuitive requirement capture** through interactive planning workflows
-2. **Provide atomic task decomposition** with dependency mapping and critical path analysis
-3. **Deliver visual timeline and resource planning** with Gantt charts and workload visualization
-4. **Implement comprehensive plan validation** with quality gates and automated checks
-5. **Support multi-format export** (JSON, Markdown, GitHub Issues) with bi-directional sync
-6. **Offer template-driven planning** with customizable workflows and best practices
-7. **Integrate AI-powered assistance** through multi-agent orchestration system
-8. **Ensure extensibility** through plugin architecture and open API
+### What COE IS (Planning & Tracking)
+
+✅ **We prepare perfect context for coding agents**
+- Generate detailed, up-to-date PRD.md files with requirements
+- Decompose complex features into atomic tasks (15-45 min each)
+- Track which tasks are done vs. still pending
+- Flag outdated information when plans change
+- Auto-create follow-up tasks for incomplete work
+
+✅ **We coordinate and track across teams**
+- Route questions to Answer Team for context
+- Notify Verification Team when tasks are ready
+- Collect and report verification results (passed/failed/needs re-check)
+- Maintain audit log of all decisions and changes
+
+✅ **We import and sync with coding agents**
+- Accept file updates from coding agents (pull new implementations)
+- Compare file content against planned acceptance criteria
+- Detect missing pieces and auto-create follow-up tasks
+- Support fresh restart (clear state, reload everything from scratch)
+
+### What COE IS NOT (Removed Scope)
+
+❌ **We do NOT implement code** — that's the coding agent's job  
+❌ **We do NOT run unit tests ourselves** — we trigger and report on them  
+❌ **We do NOT make final verification decisions** — Verification Team + user do  
+❌ **We do NOT manage credentials/deployment** — integration partners handle that  
+
+---
+
+## 🛠️ Core Responsibilities
+
+| Responsibility | What It Means | Example |
+|---|---|---|
+| **Planning** | Break down requirements into atomic tasks | "Implement getNextTask MCP tool" → 3 subtasks (type defs, logic, tests) |
+| **Problem Detection** | Flag issues before coding agent hits them | "Missing dependency: TaskService not exported" |
+| **Question Answering** | Route clarifications to Answer Team | Coding agent asks: "Should this be async?" → Answer Team responds |
+| **Progress Tracking** | Keep real-time view of task completion | Task status: todo → inProgress → verification → done |
+| **Out-of-Date Flagging** | Detect when plans become stale | "Plan changed 2 hours ago, task still references old design" |
+| **Self-Tasking** | Auto-create maintenance work | "Verification tests failed → Auto-create investigation task" |
+| **Context Preparation** | Generate files for coding agents | PRD.md, plan breakdown, design references, code context |
+| **Verification Tracking** | Track checked/unchecked/re-check status | Task marked "needs re-check" after plan update |
+
+---
+
+## 📋 PRD & Plan File Generation
+
+### When & How PRD is Updated
+
+**Automatically Updated When**:
+- New GitHub Issue created → Merged into PRD.md with date stamp
+- Planning Team adds new task → Added to "Tasks" section with acceptance criteria
+- User modifies a requirement → PRD flagged as "out-of-date", timestamped
+- Verification Team reports gap → PRD updated with discovered missing piece
+
+**Manual Update Triggers**:
+- User edits PRD.md directly in VS Code → Auto-reloads on save
+- User runs "Refresh PRD" command → Re-reads all GitHub Issues, regenerates sections
+- User imports plan from another project → Merges into current PRD
+
+**Output Format**:
+```markdown
+# PRD.md (Auto-Generated)
+- Executive Summary
+- Feature List (with acceptance criteria)
+- Tasks Breakdown (atomic, prioritized)  
+- Design System References
+- Known Issues & Dependencies
+- Verification Checklist
+- Last Updated: [timestamp]
+```
+
+### Plan Breakdown Structure
+
+**Every task receives**:
+- ✅ Clear acceptance criteria (testable)
+- ✅ Estimated effort (in minutes)
+- ✅ Dependencies (what must be done first)
+- ✅ File references (what files to modify)
+- ✅ Design system notes (if UI task)
+- ✅ Verification strategy (how to check it's done)
+
+---
+
+## 🔄 Fresh Restart Mechanism
+
+### When Fresh Restart is Needed
+- User clears VS Code workspace and reloads project
+- Workspace state becomes inconsistent (corrupted DB, missing files)
+- User explicitly requests "Reset COE State"
+- New developer joins project and clones repo
+
+### Fresh Restart Workflow
+
+```
+1. User clicks "Fresh Restart" command
+   ↓
+2. COE clears in-memory task queue, verification cache
+   ↓
+3. COE re-reads from disk:
+   - PRD.md → Parse into features/tasks
+   - GitHub Issues → Add open issues as tasks
+   - Existing plan.json → Load plan structure
+   ↓
+4. COE verifies:
+   - All dependencies available
+   - No orphaned tasks (parent deleted but child remains)
+   - Verification status consistent with file timestamps
+   ↓
+5. COE displays:
+   - "Fresh restart complete. [N] tasks ready."
+   - Shows highest priority P1 tasks
+   - Prompts coding agent: "Ready for next task?"
+```
+
+---
+
+## 📤 Import & Sync from Coding Agent Files
+
+### File Import Triggers
+
+**Automatic Trigger**:
+- Coding agent updates file → File watcher detects change
+- COE waits 2 seconds (debounce)
+- COE reads new file content
+- COE compares against acceptance criteria for active task
+
+**Manual Trigger**:
+- User right-clicks task → "Import Files"
+- User selects file(s) to import
+- COE analyzes content, matches to task
+
+### Import & Verification Process
+
+```typescript
+interface FileImport {
+  taskId: string;
+  filePath: string;
+  fileContent: string;
+  timestamp: Date;
+  codingAgentName: string; // e.g., "GitHub Copilot"
+}
+
+// COE compares file content against acceptance criteria
+const matches = {
+  completed: ["Function implemented", "Tests written"],
+  remaining: ["Export statement missing", "Error handling incomplete"]
+};
+
+if (matches.remaining.length > 0) {
+  // Auto-create follow-up task for remaining items
+  createFollowUpTask({
+    parent: taskId,
+    title: `Complete: ${matches.remaining[0]}`,
+    priority: 'high'
+  });
+}
+```
+
+---
+
+## ✅ Verification & Re-Check Tracking
+
+### Verification Status States
+
+| Status | Meaning | Next Step |
+|---|---|---|
+| **Not Started** | Waiting for coding agent to complete | Monitor progress |
+| **In Progress** | Coding agent working on task | Let them finish |
+| **Pending Verification** | Code done, waiting for checks | Trigger tests + visual review |
+| **Verified ✓** | Passed all tests + visual review | Mark complete, unlock next tasks |
+| **Needs Re-Check** | Plan changed, must verify again | Re-run tests with updated context |
+| **Failed** | Tests/verification failed | Create investigation task |
+
+### Re-Check Trigger Events
+
+**Automatically Flag as "Needs Re-Check" When**:
+- PRD.md updated (acceptance criteria changed)
+- Acceptance criteria in task edited
+- Dependency task failed → This task now affected
+- Verification test suite updated
+- Design system reference changed (UI task)
+
+**User Can Also Manually Flag**:
+- Right-click task → "Mark for Re-Check"
+- Reason: "Requirements clarified", "Found edge case", etc.
+
+### Verification Result Tracking
+
+```json
+{
+  "taskId": "task-123",
+  "verificationResult": {
+    "automated": {
+      "tests": { "passed": 8, "failed": 0, "skipped": 0 },
+      "coverage": 87,
+      "passed": true
+    },
+    "visual": {
+      "status": "pending",
+      "items_checked": ["Button styling", "Form validation"],
+      "items_unchecked": ["Mobile responsive"],
+      "userResult": null
+    },
+    "lastVerificationDate": "2026-01-25T14:30:00Z",
+    "markedForReCheck": false,
+    "reCheckReason": null
+  }
+}
+```
+
+---
+
+## 🎯 Project Objectives (8 Core Goals - Updated)
+
+1. **Prepare perfect context for coding agents** — Generate up-to-date PRD/plan files they can read and act on
+2. **Decompose intelligently** — Break requirements into atomic (15-45 min) tasks with clear acceptance criteria
+3. **Track comprehensively** — Maintain real-time view of task status, verification results, and blockers
+4. **Detect problems automatically** — Flag outdated info, missing dependencies, incomplete work before agent hits them
+5. **Enable fresh restarts** — Support project-wide state reset and reload from scratch
+6. **Sync with coding agents** — Import completed files, compare against plan, auto-create follow-ups
+7. **Track verification states** — Mark tasks checked/unchecked/needs-re-check, trigger re-validation when plan changes
+8. **Self-maintain** — Auto-create maintenance tasks for stale plans, incomplete verification, discovered issues
 
 ---
 
@@ -429,15 +654,16 @@ log_all_invocations: true           # NEW: Audit all askQuestion calls
 - Updated dependency map
 - Parent task marked as "container task"
 
-### 5. Verification Team (Independent Post-Execution Checker)
+### 5. Verification Team (Independent Post-Execution Checker) — SUPPORTS COE
 
 **Role**: Post-execution checker with deliberate stability delay—**waits ~60s after file updates** before verifying
 
-**Key Clarification (v2.1)**:
-- **Independent from coding**: Completely separate from Planning/Orchestrator
+**Key Clarification (v4.0)**:
+- **Independent from coding agents**: Completely separate from Planning/Orchestrator
 - **Stability delay**: Waits 60 seconds after file changes to prevent false positives
 - **Match detection**: Identifies completed items AND remaining work
 - **Auto-follow-ups**: Creates investigation tasks for gaps
+- **Sends results to COE**: All findings reported to COE for tracking/re-check marking
 
 **Responsibilities**:
 1. **Wait for file stability** (60-second delay after Coding AI updates)
@@ -952,6 +1178,32 @@ LOG_LEVEL=info
 
 ---
 
+## 🎁 Already-Implemented Foundation
+
+### Features That Already Work (Keep Intact)
+
+The following parts of COE are already implemented and working. We keep them as-is:
+
+| Feature | Status | What It Does |
+|---------|--------|----------------|
+| **Task Queue** | ✅ Complete | In-memory + persisted task list, P1/P2/P3 priority |
+| **Sidebar Display** | ✅ Complete | VS Code sidebar showing next task, status, priority |
+| **LLM Config** | ✅ Complete | Settings panel for configuring coding agent endpoint |
+| **Status Bar** | ✅ Complete | Bottom status bar showing current task + progress |
+| **Basic Processing Loop** | ✅ Complete | "Get task → Show to agent → Await response → Mark done" cycle |
+| **GitHub Issues Sync** | ✅ Complete | Bi-directional sync: Issue ↔ Task, 99%+ accuracy |
+| **Extension Settings** | ✅ Complete | VS Code settings for WebSocket, sync interval, verification options |
+| **MCP Server (6 Tools)** | ✅ Complete | getNextTask, reportTaskStatus, ask questions, report results |
+
+**How These Feed the New Philosophy**:
+- Sidebar + Status Bar = Clear view of what coding agent should work on next
+- Task Queue = What we track for the agent
+- MCP Tools = How agent communicates progress back to COE
+- GitHub Issues Sync = How new work enters our system
+- LLM Config = Where we specify which coding agent to prepare context for
+
+---
+
 ## 📚 Integration Points
 
 ### GitHub Issues Bi-Directional Sync
@@ -1011,11 +1263,120 @@ LOG_LEVEL=info
 - **GitHub Issues Plan**: `Docs/GITHUB-ISSUES-PLAN.md`
 - **Project Runbook**: `Docs/PROJECT-RUNBOOK.md`
 
-### In Notion
-- **Master Page**: https://www.notion.so/VS-Code-Exestuation-Plan-Master-2eca776a198d80d3a465d197415e9323
-- **Features Database**: https://www.notion.so/2eca776a198d818d9b85f722acbc1b93
-- **GitHub Issues**: https://www.notion.so/2eca776a198d81a2b84ad45a10154a94
 ---
 
-**Last Updated**: January 24, 2026  
-**Status**: Planning Specification (cleaned for fresh start)
+## 🚀 Next Atomic Tasks (Self-Maintenance, P1 First)
+
+### Self-Task List for COE Itself
+
+These are maintenance tasks COE should create for itself based on the new direction:
+
+### **TASK-001 (P1)**: Update "Current Role" language throughout codebase
+**Why**: Current code comments still say "we implement", confuses maintainers  
+**What**: Search for "implement code" / "execute code" in codebase docs, replace with "prepare context"  
+**Acceptance Criteria**:
+- [ ] All mentions of "COE implements" changed to "COE prepares"
+- [ ] Code comments reference "coding agent" not "AI assistant"
+- [ ] Extension README clarifies planning-only role
+- [ ] No broken links in updated files
+
+**Est. Time**: 45 min  
+**Depends On**: None  
+**Verification**: Grep search for old language, grep verify new language exists
+
+---
+
+### **TASK-002 (P1)**: Implement Fresh Restart command in VS Code extension
+**Why**: Users need clean slate on load or after workspace corruption  
+**What**: Add command "COE: Fresh Restart" that clears cache, re-reads PRD.md, GitHub Issues, resets state  
+**Acceptance Criteria**:
+- [ ] Command appears in VS Code command palette
+- [ ] Command clears in-memory task queue
+- [ ] Command re-parses PRD.md from disk
+- [ ] Command re-syncs GitHub Issues
+- [ ] User sees success message with task count
+- [ ] Sidebar re-displays highest P1 task
+
+**Est. Time**: 60 min  
+**Depends On**: TASK-001  
+**Verification**: Manual: Fresh Restart → check sidebar updated, task count correct
+
+---
+
+### **TASK-003 (P1)**: Add file import & comparison logic (matches vs. remaining)
+**Why**: When coding agent updates files, we need to detect what's done vs. what's pending  
+**What**: Implement FileImportAnalyzer that reads file, compares against acceptance criteria, detects gaps, auto-creates follow-up tasks  
+**Acceptance Criteria**:
+- [ ] File watcher detects new/modified files in src/ folder
+- [ ] FileImportAnalyzer reads file content
+- [ ] Compares against active task's acceptance criteria
+- [ ] Returns { completed: [...], remaining: [...] }
+- [ ] Auto-creates follow-up task for each remaining item
+- [ ] Logs import with timestamp and agent name
+- [ ] Tests cover: happy path, empty file, missing acceptance criteria
+
+**Est. Time**: 75 min  
+**Depends On**: TASK-001  
+**Verification**: Unit tests (jest), manual test: create file → verify follow-up task created
+
+---
+
+### **TASK-004 (P2)**: Implement "Needs Re-Check" tracking in verification results
+**Why**: When plan changes, old verification becomes stale; need to flag for re-validation  
+**What**: Add re-check trigger logic: when PRD changes OR acceptance criteria edited, mark all related task verifications as "Needs Re-Check"  
+**Acceptance Criteria**:
+- [ ] When PRD.md edited → all verification results marked needsReCheck=true
+- [ ] When acceptance criteria field edited → related task verification flagged
+- [ ] When dependency task fails → dependent task verification flagged
+- [ ] UI shows re-check indicator (🔄 icon) in task list
+- [ ] User can click re-check → re-run verification
+- [ ] Verification history preserved (don't delete old results)
+- [ ] Tests cover all trigger events
+
+**Est. Time**: 60 min  
+**Depends On**: TASK-003  
+**Verification**: Unit tests for each trigger event, manual: edit PRD → observe flags
+
+---
+
+### **TASK-005 (P2)**: Add PRD auto-generation from GitHub Issues + plan breakdown
+**Why**: Coding agents need up-to-date PRD.md to read; should auto-generate from live data  
+**What**: Implement PRDGenerator that combines GitHub Issues + current plan structure + acceptance criteria into clean PRD.md file, auto-saves to workspace root  
+**Acceptance Criteria**:
+- [ ] On "Refresh PRD" command → reads all open GitHub Issues
+- [ ] Merges with existing plan tasks
+- [ ] Generates sections: Summary, Features, Tasks, Dependencies, Design Refs, Verification Checklist
+- [ ] Includes "Last Updated" timestamp
+- [ ] Flags outdated sections with ⚠️ marker
+- [ ] Saves to ./PRD.md with git-friendly formatting
+- [ ] Tests cover: empty issues, duplicate issues, dependency ordering
+
+**Est. Time**: 90 min  
+**Depends On**: TASK-002, TASK-003  
+**Verification**: Unit tests for generation logic, manual: Refresh PRD → check ./PRD.md exists and is readable
+
+---
+
+## 🧪 Manual Verification Checklist (For Human Testers)
+
+Before marking this plan update complete, verify:
+
+- [ ] Plan file opens in VS Code without errors
+- [ ] All section headers render properly
+- [ ] Links and references are not broken
+- [ ] Markdown tables format correctly
+- [ ] New "Current Role & Philosophy" section clearly explains planning-only scope
+- [ ] Fresh Restart section is concrete and actionable
+- [ ] Import & Sync section explains file comparison process
+- [ ] Verification & Re-Check section shows status states clearly
+- [ ] All self-tasks are atomic (can finish in 45-90 min) and independent
+- [ ] P1 tasks have no circular dependencies
+- [ ] Old feature descriptions (task queue, sidebar, etc.) still reference working code
+- [ ] No "we implement code" language remains (only "we prepare context")
+- [ ] Total new content is 400-800 words (+ task breakdown)
+
+---
+
+**Last Updated**: January 25, 2026  
+**Status**: Planning + Tracking Focus (4.0) — Ready for fresh start  
+**Version**: 4.0 — Scope-shifted to planning layer for 3rd party coding agents

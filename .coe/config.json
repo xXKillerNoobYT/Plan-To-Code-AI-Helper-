@@ -1,0 +1,14 @@
+{
+    "llm": {
+        "url": "http://192.168.1.205:1234/v1/chat/completions",
+        "model": "mistralai/ministral-3-14b-reasoning",
+        "inputTokenLimit": 4000,
+        "maxOutputTokens": 2000,
+        "timeoutSeconds": 300,
+        "temperature": 0.3
+    },
+    "extension": {
+        "autoRegeneratePRD": true,
+        "debugMode": false
+    }
+}
