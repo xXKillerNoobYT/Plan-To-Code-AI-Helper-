@@ -10,6 +10,9 @@ import { ProgrammingOrchestrator, SimpleLogger, TaskPriority, TaskStatus, Task }
 import { loadTasksFromPlanFile } from './plans/planningStub';
 import { setupMissingFiles } from './utils/setupFiles';
 import { CoeTaskTreeProvider } from './tree/CoeTaskTreeProvider';
+import { FileConfigManager, LLMConfig as FileLLMConfig } from './utils/fileConfig';
+import { PRDGenerator } from './services/prdGenerator';
+import { PlansFileWatcher } from './services/plansWatcher';
 
 // ============================================================================
 // Global State
@@ -76,6 +79,14 @@ export function getStatusBarItem(): vscode.StatusBarItem | null {
     return statusBarItem;
 }
 
+/**
+ * 🔧 Get the current LLM configuration
+ * Reads from .coe/config.json (tool-agnostic, no VS Code dependency)
+ */
+export function getLLMConfig(): LLMConfig {
+    return { ...llmConfig };
+}
+
 // ============================================================================
 // Helper Functions
 // ============================================================================
@@ -128,8 +139,8 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('🚀 COE Activated');
 
     try {
-    let treeDataProvider: CoeTaskTreeProvider | null = null;
-    let planWatcher: vscode.FileSystemWatcher | null = null;
+        let treeDataProvider: CoeTaskTreeProvider | null = null;
+        let planWatcher: vscode.FileSystemWatcher | null = null;
 
         // ====================================================================
         // 1. Create Output Channel for COE logging
@@ -156,75 +167,34 @@ export async function activate(context: vscode.ExtensionContext) {
         orchestratorOutputChannel.appendLine('📊 Status Bar Item created');
 
         // ====================================================================
-        // 2.5 Read LLM configuration settings with safe defaults
+        // 2.5 Initialize File Configuration Manager (.coe/config.json)
         // ====================================================================
-        const config = vscode.workspace.getConfiguration('coe');
-        // Initialize global llmConfig with defaults
-        llmConfig = {
-            url: 'http://192.168.1.205:1234/v1/chat/completions',
-            model: 'mistralai/ministral-3-14b-reasoning',
-            inputTokenLimit: 4000,
-            maxOutputTokens: 2000,
-            timeoutSeconds: 300,
-        };
-
-        orchestratorOutputChannel.appendLine('📋 Loading LLM configuration...');
-
-        // ====================================================================
-        // 2.75 Setup missing workspace files (plans, config, etc.)
-        // ====================================================================
-        orchestratorOutputChannel.appendLine('⚙️  Setting up missing workspace files...');
+        orchestratorOutputChannel.appendLine('⚙️  Initializing File Configuration Manager...');
         try {
-            await setupMissingFiles();
-            orchestratorOutputChannel.appendLine('✅ Workspace files setup complete');
-        } catch (setupError) {
-            const errorMsg = setupError instanceof Error ? setupError.message : String(setupError);
-            orchestratorOutputChannel.appendLine(`❌ Error setting up workspace files: ${errorMsg}`);
-            console.error(`❌ setupMissingFiles error: ${errorMsg}`);
-        }
-        orchestratorOutputChannel.appendLine('');
-
-        // ====================================================================
-        // 2.8 Read LLM config from .coe/config.json (if exists)
-        // ====================================================================
-        const ws = vscode.workspace.workspaceFolders?.[0]?.uri;
-        let configSource = 'defaults';
-        if (ws) {
-            const configUri = vscode.Uri.joinPath(ws, '.coe', 'config.json');
-            try {
-                const bytes = await vscode.workspace.fs.readFile(configUri);
-                const text = new TextDecoder().decode(bytes);
-                const userConfig = JSON.parse(text) as { llm?: Partial<LLMConfig> };
-
-                if (userConfig.llm) {
-                    if (userConfig.llm.url) llmConfig.url = userConfig.llm.url;
-                    if (userConfig.llm.model) llmConfig.model = userConfig.llm.model;
-                    if (userConfig.llm.inputTokenLimit !== undefined) llmConfig.inputTokenLimit = userConfig.llm.inputTokenLimit;
-                    if (userConfig.llm.maxOutputTokens !== undefined) llmConfig.maxOutputTokens = userConfig.llm.maxOutputTokens;
-                    if (userConfig.llm.timeoutSeconds !== undefined) llmConfig.timeoutSeconds = userConfig.llm.timeoutSeconds;
-                    configSource = '.coe/config.json (workspace)';
-                }
-            } catch (configError) {
-                llmConfig.url = config.get<string>('llm.url') ?? llmConfig.url;
-                llmConfig.model = config.get<string>('llm.model') ?? llmConfig.model;
-                llmConfig.inputTokenLimit = config.get<number>('llm.inputTokenLimit') ?? llmConfig.inputTokenLimit;
-                llmConfig.maxOutputTokens = config.get<number>('llm.maxOutputTokens') ?? llmConfig.maxOutputTokens;
-                llmConfig.timeoutSeconds = config.get<number>('llm.timeoutSeconds') ?? llmConfig.timeoutSeconds;
-                configSource = 'VS Code settings or defaults';
-            }
-        } else {
-            llmConfig.url = config.get<string>('llm.url') ?? llmConfig.url;
-            llmConfig.model = config.get<string>('llm.model') ?? llmConfig.model;
-            llmConfig.inputTokenLimit = config.get<number>('llm.inputTokenLimit') ?? llmConfig.inputTokenLimit;
-            llmConfig.maxOutputTokens = config.get<number>('llm.maxOutputTokens') ?? llmConfig.maxOutputTokens;
-            llmConfig.timeoutSeconds = config.get<number>('llm.timeoutSeconds') ?? llmConfig.timeoutSeconds;
-            configSource = 'VS Code settings or defaults (no workspace)';
+            await FileConfigManager.initialize();
+            const configPath = FileConfigManager.getConfigPath();
+            orchestratorOutputChannel.appendLine(`✅ Config manager initialized (file: ${configPath})`);
+        } catch (configError) {
+            const errorMsg = configError instanceof Error ? configError.message : String(configError);
+            orchestratorOutputChannel.appendLine(`⚠️  Could not initialize config manager: ${errorMsg}`);
         }
 
-        orchestratorOutputChannel.appendLine(`🔧 LLM config source: ${configSource}`);
+        // ====================================================================
+        // 2.6 Load LLM configuration from .coe/config.json
+        // ====================================================================
+        llmConfig = FileConfigManager.getLLMConfig();
+        orchestratorOutputChannel.appendLine(`🔧 LLM config loaded from .coe/config.json`);
         orchestratorOutputChannel.appendLine(
             `Using LLM: ${llmConfig.model} @ ${llmConfig.url} (input limit ${llmConfig.inputTokenLimit} tokens, output max ${llmConfig.maxOutputTokens}, timeout ${llmConfig.timeoutSeconds}s)`
         );
+
+        // Subscribe to config changes - update llmConfig when file changes
+        const configUnsubscribe = FileConfigManager.onConfigChange((config) => {
+            llmConfig = config.llm;
+            orchestratorOutputChannel?.appendLine('📝 Config file changed - LLM config reloaded');
+        });
+        context.subscriptions.push({ dispose: configUnsubscribe });
+
         orchestratorOutputChannel.appendLine('');
 
         // ====================================================================
@@ -265,7 +235,7 @@ export async function activate(context: vscode.ExtensionContext) {
         updateStatusBar();
         console.log('🔄 Calling treeDataProvider.refresh() after loading tasks');
         treeDataProvider.refresh();
-        
+
         // ====================================================================
         // 3.3.5 Debug Summary: Tree View Status
         // ====================================================================
@@ -446,41 +416,117 @@ export async function activate(context: vscode.ExtensionContext) {
                         statusBarItem.show();
                     }
 
+                    let partialLine = '';
+                    const collectedContent: string[] = [];
+                    const fallbackChunks: string[] = [];
+                    let sawDoneSignal = false;
+
+                    const tryAppendDeltaContent = (dataStr: string): boolean => {
+                        try {
+                            const parsed = JSON.parse(dataStr) as {
+                                choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
+                            };
+                            const delta = parsed.choices?.[0]?.delta?.content;
+                            if (typeof delta === 'string' && delta.length > 0) {
+                                collectedContent.push(delta);
+                                return true;
+                            }
+
+                            // Treat finish_reason stop as a clean end signal without content
+                            const finishReason = parsed.choices?.[0]?.finish_reason;
+                            if (finishReason === 'stop') {
+                                sawDoneSignal = true;
+                            }
+                        } catch {
+                            // Parsing failed; handled by caller
+                        }
+                        return false;
+                    };
+
+                    const sanitizeFallbackReply = (fallbackRaw: string): string => {
+                        if (!fallbackRaw) {
+                            return '';
+                        }
+
+                        const noDone = fallbackRaw.replace(/\s*\[DONE\]\s*$/i, '').trim();
+                        if (!noDone) {
+                            return '';
+                        }
+
+                        // Remove trailing metadata objects (e.g., `{ "id": ... }`)
+                        const lastBrace = noDone.lastIndexOf('{');
+                        if (lastBrace !== -1) {
+                            return noDone.slice(0, lastBrace).trim();
+                        }
+
+                        return noDone;
+                    };
+
                     // eslint-disable-next-line no-constant-condition
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) break;
-                        const chunk = decoder.decode(value);
-                        const lines = chunk.split('\n');
-                        for (const line of lines) {
-                            if (!line.startsWith('data: ')) continue;
-                            const dataStr = line.slice(6).trim();
+
+                        const chunk = decoder.decode(value, { stream: true });
+                        const combined = partialLine + chunk;
+                        const lines = combined.split('\n');
+                        partialLine = lines.pop() ?? '';
+
+                        for (const rawLine of lines) {
+                            const line = rawLine.trim();
+                            if (!line.startsWith('data:')) continue;
+
+                            const dataStr = line.slice(5).trim();
+                            if (!dataStr) continue;
                             if (dataStr === '[DONE]') {
+                                sawDoneSignal = true;
                                 break;
                             }
-                            try {
-                                const parsed = JSON.parse(dataStr) as {
-                                    choices?: Array<{ delta?: { content?: string } }>;
-                                };
 
-                                const delta = parsed.choices?.[0]?.delta?.content ?? '';
-                                if (delta) {
-                                    fullReply += delta;
-                                }
-                            } catch (error) {
-                                orchestratorOutputChannel?.appendLine(`⚠️ Stream parse error: ${String(error)}`);
+                            const appended = tryAppendDeltaContent(dataStr);
+                            if (!appended) {
+                                fallbackChunks.push(dataStr);
+                            }
+                        }
+
+                        if (sawDoneSignal) {
+                            break;
+                        }
+                    }
+
+                    // Process any remaining partial line (in case stream ended mid-line)
+                    const trimmedPartial = partialLine.trim();
+                    if (!sawDoneSignal && trimmedPartial.startsWith('data:')) {
+                        const dataStr = trimmedPartial.slice(5).trim();
+                        if (dataStr && dataStr !== '[DONE]') {
+                            const appended = tryAppendDeltaContent(dataStr);
+                            if (!appended) {
+                                fallbackChunks.push(dataStr);
                             }
                         }
                     }
+
+                    const primaryReply = collectedContent.join('');
+                    const fallbackReply = sanitizeFallbackReply(fallbackChunks.join(' '));
+
+                    fullReply = primaryReply || fallbackReply || 'Model returned no text content (metadata-only response).';
                 } else {
                     const json = (await response.json()) as { choices?: Array<{ message?: { content?: string } }>; };
                     fullReply = json.choices?.[0]?.message?.content ?? '';
                 }
 
+                // Validate we received content
+                const trimmedReply = fullReply.trim();
+                if (!trimmedReply) {
+                    throw new Error('No content received from model');
+                }
+
                 orchestratorOutputChannel?.appendLine(`✅ Received response in ${elapsedMs}ms`);
+                orchestratorOutputChannel?.appendLine('─'.repeat(60));
                 orchestratorOutputChannel?.appendLine('🧠 Model Reply:');
-                orchestratorOutputChannel?.appendLine(fullReply || '(empty)');
-                orchestratorOutputChannel?.appendLine(`LLM response: ${fullReply || '(empty)'}`);
+                orchestratorOutputChannel?.appendLine('─'.repeat(60));
+                orchestratorOutputChannel?.appendLine(fullReply);
+                orchestratorOutputChannel?.appendLine('─'.repeat(60));
 
                 await completeTaskAndNotify(`Task completed via ${llmConfig.model}`);
             } catch (error) {
@@ -534,7 +580,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         const processTaskCommand = vscode.commands.registerCommand('coe.processTask', async (taskId: string) => {
             console.log(`🎯 coe.processTask command triggered for taskId: ${taskId}`);
-            
+
             if (!programmingOrchestrator || !orchestratorOutputChannel) {
                 console.log('❌ Orchestrator not initialized');
                 vscode.window.showErrorMessage('❌ COE Orchestrator not initialized');
@@ -553,9 +599,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 vscode.window.showWarningMessage(`Task not found: ${taskId}`);
                 return;
             }
-            
+
             console.log(`✅ Found task: ${target.title} - Status: ${target.status}`);
-            
+
             if (target.status !== TaskStatus.READY) {
                 console.log(`⚠️ Task not ready - status: ${target.status}`);
                 vscode.window.showWarningMessage(`Task ${taskId} is not ready (status: ${target.status})`);
@@ -568,7 +614,83 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(processTaskCommand);
 
         // ====================================================================
-        // 7. Register test command for quick verification (backward compat)
+        // 7. Register PRD Generation Command
+        // ====================================================================
+        const regeneratePRDCommand = vscode.commands.registerCommand('coe.regeneratePRD', async () => {
+            orchestratorOutputChannel?.appendLine('');
+            orchestratorOutputChannel?.appendLine('═══════════════════════════════════════════════════════════');
+            orchestratorOutputChannel?.appendLine('🚀 PRD Generation Started');
+            orchestratorOutputChannel?.appendLine('═══════════════════════════════════════════════════════════');
+
+            try {
+                // Show progress notification
+                await vscode.window.withProgress(
+                    {
+                        location: vscode.ProgressLocation.Notification,
+                        title: 'Generating PRD from Plans/',
+                        cancellable: false,
+                    },
+                    async (progress) => {
+                        progress.report({ message: 'Reading Plans/ folder...' });
+
+                        const llmConfigCopy = {
+                            url: llmConfig.url,
+                            model: llmConfig.model,
+                            maxOutputTokens: llmConfig.maxOutputTokens,
+                            timeoutSeconds: llmConfig.timeoutSeconds,
+                        };
+
+                        const result = await PRDGenerator.generate(
+                            {
+                                tokenLimit: llmConfig.inputTokenLimit,
+                                retryOnFailure: true,
+                                showPreview: false,
+                                llmConfig: llmConfigCopy,
+                            },
+                            (status) => {
+                                orchestratorOutputChannel?.appendLine(status);
+                                progress.report({ message: status });
+                            }
+                        );
+
+                        if (result.success) {
+                            orchestratorOutputChannel?.appendLine('');
+                            orchestratorOutputChannel?.appendLine(result.message);
+                            if (result.warning) {
+                                orchestratorOutputChannel?.appendLine(`⚠️  ${result.warning}`);
+                            }
+                            if (result.duration) {
+                                orchestratorOutputChannel?.appendLine(
+                                    `⏱️  Duration: ${(result.duration / 1000).toFixed(2)}s`
+                                );
+                            }
+
+                            vscode.window.showInformationMessage(result.message);
+                        } else {
+                            orchestratorOutputChannel?.appendLine(result.message);
+                            vscode.window.showErrorMessage(result.message);
+                        }
+
+                        orchestratorOutputChannel?.appendLine('═══════════════════════════════════════════════════════════');
+                        orchestratorOutputChannel?.appendLine('');
+                    }
+                );
+            } catch (error) {
+                const errMsg = error instanceof Error ? error.message : String(error);
+                orchestratorOutputChannel?.appendLine(`❌ Error: ${errMsg}`);
+                vscode.window.showErrorMessage(`❌ PRD Generation failed: ${errMsg}`);
+            }
+        });
+        context.subscriptions.push(regeneratePRDCommand);
+
+        // ====================================================================
+        // 7.5 Start PRD Auto-Regeneration Watcher
+        // ====================================================================
+        orchestratorOutputChannel.appendLine('🔧 Setting up Plans/ folder watcher...');
+        PlansFileWatcher.startWatching(context, true, orchestratorOutputChannel);
+
+        // ====================================================================
+        // 8. Register test command for quick verification (backward compat)
         // ====================================================================
         const testCommand = vscode.commands.registerCommand('coe.testOrchestrator', async () => {
             if (!programmingOrchestrator || !orchestratorOutputChannel) {
@@ -663,6 +785,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         orchestratorOutputChannel.appendLine('📋 Commands Registered:');
         orchestratorOutputChannel.appendLine('  • coe.activate - Activate orchestration');
+        orchestratorOutputChannel.appendLine('  • coe.regeneratePRD - Regenerate PRD from Plans/ (Command Palette)');
         orchestratorOutputChannel.appendLine('  • coe.testOrchestrator - Test orchestrator (click status bar or use Command Palette)');
         orchestratorOutputChannel.appendLine('');
         orchestratorOutputChannel.appendLine('Start using COE by running "coe.testOrchestrator" from Command Palette or clicking the status bar!');
@@ -695,6 +818,14 @@ export async function activate(context: vscode.ExtensionContext) {
 export async function deactivate() {
     try {
         console.log('COE: Extension deactivating...');
+
+        // Stop PRD watcher
+        PlansFileWatcher.stopWatching();
+        console.log('✅ Plans Watcher stopped');
+
+        // Dispose File Config Manager
+        FileConfigManager.dispose();
+        console.log('✅ File Config Manager disposed');
 
         // Dispose status bar item
         if (statusBarItem) {

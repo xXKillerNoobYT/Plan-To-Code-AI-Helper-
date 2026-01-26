@@ -22,6 +22,10 @@
                 "title": "COE: Activate Orchestration"
             },
             {
+                "command": "coe.regeneratePRD",
+                "title": "COE: Regenerate PRD from Plans"
+            },
+            {
                 "command": "coe.testOrchestrator",
                 "title": "COE: Test Orchestrator"
             },
