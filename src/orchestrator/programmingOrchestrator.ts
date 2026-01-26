@@ -317,6 +317,9 @@ export class ProgrammingOrchestrator {
      */
     addTask(task: Task): void {
         try {
+            console.log(`➕ addTask() called for: ${task.title} [${task.taskId}]`);
+            console.log(`   Status: ${task.status}, Priority: ${task.priority}, Dependencies: ${task.dependencies?.length || 0}`);
+            
             // Validate task structure
             const validatedTask = TaskSchema.parse(task);
 
@@ -331,8 +334,10 @@ export class ProgrammingOrchestrator {
             // Insert task maintaining priority order (P1, P2, P3)
             this.insertByPriority(validatedTask);
 
+            console.log(`✅ Task successfully added to queue at index ${this.taskQueue.length - 1}`);
             this.logger.info(`✅ Task added to queue: ${validatedTask.taskId} (${validatedTask.priority})`);
         } catch (error) {
+            console.log(`❌ Failed to add task: ${error}`);
             this.logger.error('❌ Failed to add task:', error);
             throw error;
         }
@@ -375,12 +380,24 @@ export class ProgrammingOrchestrator {
      * @returns Ready tasks ordered by priority (P1 → P2 → P3)
      */
     getReadyTasks(): Task[] {
+        console.log(`🔍 getReadyTasks() called - Total queue size: ${this.taskQueue.length}`);
+        
         const readyTasks = this.taskQueue.filter((t) => {
-            return (
-                t.status === TaskStatus.READY &&
-                (!t.blockedBy || t.blockedBy.length === 0) &&
-                this.areDependenciesMet(t)
-            );
+            const isReady = t.status === TaskStatus.READY;
+            const notBlocked = !t.blockedBy || t.blockedBy.length === 0;
+            const dependenciesMet = this.areDependenciesMet(t);
+            
+            if (!isReady) {
+                console.log(`  ❌ Task ${t.taskId} (${t.title}): status=${t.status} (not READY)`);
+            } else if (!notBlocked) {
+                console.log(`  ⛔ Task ${t.taskId} (${t.title}): blocked by ${t.blockedBy?.join(', ')}`);
+            } else if (!dependenciesMet) {
+                console.log(`  🔗 Task ${t.taskId} (${t.title}): dependencies not met`);
+            } else {
+                console.log(`  ✅ Task ${t.taskId} (${t.title}): READY (priority: ${t.priority})`);
+            }
+            
+            return isReady && notBlocked && dependenciesMet;
         });
 
         const priorityRank: Record<TaskPriority, number> = {
@@ -389,7 +406,11 @@ export class ProgrammingOrchestrator {
             [TaskPriority.P3]: 3,
         };
 
-        return readyTasks.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
+        const sorted = readyTasks.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
+        
+        console.log(`📊 getReadyTasks() returning ${sorted.length} tasks`);
+        
+        return sorted;
     }
 
     /**

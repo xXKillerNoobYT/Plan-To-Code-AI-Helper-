@@ -243,8 +243,79 @@ export async function activate(context: vscode.ExtensionContext) {
         // 3.2 Initialize Tasks Tree View
         // ====================================================================
         treeDataProvider = new CoeTaskTreeProvider(programmingOrchestrator);
-        const treeView = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
-        context.subscriptions.push(treeView);
+        const explorerTree = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
+        const sidebarTree = vscode.window.createTreeView('coe-tasks', { treeDataProvider });
+        context.subscriptions.push(explorerTree, sidebarTree);
+
+        // ====================================================================
+        // 3.3 Load tasks from plan file
+        // ====================================================================
+        orchestratorOutputChannel.appendLine('📂 Loading tasks from plan file...');
+        const planTasks = await loadTasksFromPlanFile();
+        if (planTasks.length > 0) {
+            planTasks.forEach((task) => programmingOrchestrator?.addTask(task));
+            orchestratorOutputChannel.appendLine(`✅ Loaded and added ${planTasks.length} tasks from plan file`);
+            console.log(`✅ Added ${planTasks.length} tasks to orchestrator`);
+            console.log(`📊 Queue status after load:`, programmingOrchestrator?.getQueueStatus());
+        } else {
+            orchestratorOutputChannel.appendLine('ℹ️  No tasks loaded from plan file – using test mode only');
+            console.log('ℹ️  No tasks loaded from plan file');
+        }
+        orchestratorOutputChannel.appendLine('');
+        updateStatusBar();
+        console.log('🔄 Calling treeDataProvider.refresh() after loading tasks');
+        treeDataProvider.refresh();
+        
+        // ====================================================================
+        // 3.3.5 Debug Summary: Tree View Status
+        // ====================================================================
+        console.log('═══════════════════════════════════════════════════════════');
+        console.log('🔍 TREE VIEW DEBUG SUMMARY');
+        console.log('═══════════════════════════════════════════════════════════');
+        console.log(`📊 Total tasks in orchestrator: ${programmingOrchestrator?.getQueueStatus()?.totalTasks || 0}`);
+        console.log(`✅ Ready tasks: ${programmingOrchestrator?.getReadyTasks()?.length || 0}`);
+        console.log(`🌳 Tree provider initialized: ${treeDataProvider !== null}`);
+        console.log(`📺 Tree views created: ${explorerTree !== undefined && sidebarTree !== undefined}`);
+        if (programmingOrchestrator) {
+            const readyTasks = programmingOrchestrator.getReadyTasks();
+            if (readyTasks.length > 0) {
+                console.log('📋 Ready task details:');
+                readyTasks.forEach(t => {
+                    console.log(`   - ${t.taskId}: "${t.title}" [${t.priority}] status=${t.status}`);
+                });
+            } else {
+                console.log('⚠️  No ready tasks found! Check task status in orchestrator.');
+            }
+        }
+        console.log('═══════════════════════════════════════════════════════════');
+        console.log('');
+
+        // ====================================================================
+        // 3.4 Watch plan file for changes and refresh queue/tree
+        // ====================================================================
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        if (workspaceFolder) {
+            planWatcher = vscode.workspace.createFileSystemWatcher('**/Docs/Plans/current-plan.md');
+            const reloadTasks = async () => {
+                orchestratorOutputChannel?.appendLine('🔄 Plan file changed — reloading tasks...');
+                const tasks = await loadTasksFromPlanFile();
+                programmingOrchestrator?.setTasks(tasks);
+                treeDataProvider?.refresh();
+                updateStatusBar();
+            };
+            planWatcher.onDidChange(reloadTasks, null, context.subscriptions);
+            planWatcher.onDidCreate(reloadTasks, null, context.subscriptions);
+            planWatcher.onDidDelete(reloadTasks, null, context.subscriptions);
+            context.subscriptions.push(planWatcher);
+
+            const planSaveListener = vscode.workspace.onDidSaveTextDocument((doc) => {
+                const normalizedPath = doc.uri.fsPath.replace(/\\/g, '/');
+                if (normalizedPath.endsWith('Docs/Plans/current-plan.md')) {
+                    reloadTasks();
+                }
+            });
+            context.subscriptions.push(planSaveListener);
+        }
 
         // ====================================================================
         // 5. Register existing commands
@@ -409,25 +480,26 @@ export async function activate(context: vscode.ExtensionContext) {
                 orchestratorOutputChannel?.appendLine(`✅ Received response in ${elapsedMs}ms`);
                 orchestratorOutputChannel?.appendLine('🧠 Model Reply:');
                 orchestratorOutputChannel?.appendLine(fullReply || '(empty)');
+                orchestratorOutputChannel?.appendLine(`LLM response: ${fullReply || '(empty)'}`);
 
                 await completeTaskAndNotify(`Task completed via ${llmConfig.model}`);
             } catch (error) {
                 clearTimeout(timeoutId);
                 const isAbort = error instanceof Error && error.name === 'AbortError';
-                orchestratorOutputChannel?.appendLine(
-                    isAbort
-                        ? `⏱️ Request timed out after ${llmConfig.timeoutSeconds}s`
-                        : `❌ Error while calling model: ${error instanceof Error ? error.message : String(error)}`
-                );
-                if (isAbort) {
-                    vscode.window.showErrorMessage(
-                        `Request timed out after ${llmConfig.timeoutSeconds}s — model may still be thinking at ${llmConfig.url}`
-                    );
+                const message = isAbort
+                    ? `Request timed out after ${llmConfig.timeoutSeconds}s`
+                    : `Error while calling model: ${error instanceof Error ? error.message : String(error)}`;
+                orchestratorOutputChannel?.appendLine(`❌ ${message}`);
+                vscode.window.showErrorMessage(`LLM not responding — ${message}`);
+                // Return task to ready state so it can be retried
+                nextTask.status = TaskStatus.READY;
+                if (programmingOrchestrator) {
+                    (programmingOrchestrator as unknown as { currentTask: Task | null }).currentTask = null;
                 }
                 currentProcessingTask = null;
                 updateStatusBar();
                 treeDataProvider?.refresh();
-                throw error;
+                return;
             }
         };
 
@@ -461,26 +533,36 @@ export async function activate(context: vscode.ExtensionContext) {
         // 6.1 Register processTask command for specific task execution
         // ====================================================================
         const processTaskCommand = vscode.commands.registerCommand('coe.processTask', async (taskId: string) => {
+            console.log(`🎯 coe.processTask command triggered for taskId: ${taskId}`);
+            
             if (!programmingOrchestrator || !orchestratorOutputChannel) {
+                console.log('❌ Orchestrator not initialized');
                 vscode.window.showErrorMessage('❌ COE Orchestrator not initialized');
                 return;
             }
 
             if (programmingOrchestrator.isBusy()) {
+                console.log('⏳ Orchestrator is busy');
                 vscode.window.showInformationMessage('⏳ Busy processing current task — try again in a few seconds');
                 return;
             }
 
             const target = programmingOrchestrator.getTaskById(taskId);
             if (!target) {
+                console.log(`❌ Task not found: ${taskId}`);
                 vscode.window.showWarningMessage(`Task not found: ${taskId}`);
                 return;
             }
+            
+            console.log(`✅ Found task: ${target.title} - Status: ${target.status}`);
+            
             if (target.status !== TaskStatus.READY) {
+                console.log(`⚠️ Task not ready - status: ${target.status}`);
                 vscode.window.showWarningMessage(`Task ${taskId} is not ready (status: ${target.status})`);
                 return;
             }
 
+            console.log(`🚀 Executing task from tree: ${target.title}`);
             await executeTask(target);
         });
         context.subscriptions.push(processTaskCommand);
@@ -584,6 +666,9 @@ export async function activate(context: vscode.ExtensionContext) {
         orchestratorOutputChannel.appendLine('  • coe.testOrchestrator - Test orchestrator (click status bar or use Command Palette)');
         orchestratorOutputChannel.appendLine('');
         orchestratorOutputChannel.appendLine('Start using COE by running "coe.testOrchestrator" from Command Palette or clicking the status bar!');
+
+        // User-facing success toast
+        vscode.window.showInformationMessage('COE: Orchestrator started');
 
         // ====================================================================
         // 7. Log successful initialization
