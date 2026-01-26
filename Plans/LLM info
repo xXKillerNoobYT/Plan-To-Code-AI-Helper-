@@ -1,0 +1,41 @@
+LLM 3rd party setup
+
+LLM Platform: LM Studio
+
+LLM Adress: https://192.168.1.205:1234
+
+LLM Default Model: mistralai/ministral-3-14b-reasoning
+
+Accesses type: v1 
+
+
+
+Note: need to be chasable in settings
+
+
+
+
+
+More Information
+
+https://lmstudio.ai/docs/app/mcp/deeplink
+
+https://lmstudio.ai/docs/app/mcp
+
+https://lmstudio.ai/docs/app/modelyaml
+
+https://lmstudio.ai/docs/app/modelyaml/publish
+
+
+
+CLS Information: https://lmstudio.ai/docs/cli
+
+
+
+Jave Script Information:
+
+https://lmstudio.ai/docs/typescript
+
+
+
+Python Script: https://lmstudio.ai/docs/python

@@ -20,6 +20,14 @@
             {
                 "command": "coe.activate",
                 "title": "COE: Activate Orchestration"
+            },
+            {
+                "command": "coe.testOrchestrator",
+                "title": "COE: Test Orchestrator"
+            },
+            {
+                "command": "coe.processTask",
+                "title": "COE: Process Specific Task"
             }
         ],
         "viewsContainers": {
@@ -40,6 +48,12 @@
                 {
                     "id": "coe-plans",
                     "name": "Plans & Status"
+                }
+            ],
+            "explorer": [
+                {
+                    "id": "coe.tasksQueue",
+                    "name": "COE Tasks Queue"
                 }
             ]
         }
@@ -113,6 +127,36 @@
                 "type": "boolean",
                 "default": true,
                 "description": "Show COE status in status bar"
+            },
+            "coe.llm.url": {
+                "type": "string",
+                "default": "http://192.168.1.205:1234/v1/chat/completions",
+                "description": "Full OpenAI-compatible endpoint URL"
+            },
+            "coe.llm.model": {
+                "type": "string",
+                "default": "mistralai/ministral-3-14b-reasoning",
+                "description": "Model name"
+            },
+            "coe.llm.maxOutputTokens": {
+                "type": "integer",
+                "default": 2000,
+                "minimum": 512,
+                "maximum": 8192,
+                "description": "Max tokens the model is allowed to generate in reply"
+            },
+            "coe.llm.inputTokenLimit": {
+                "type": "integer",
+                "default": 4000,
+                "minimum": 1000,
+                "maximum": 32000,
+                "description": "Maximum tokens allowed in the prompt we send (input context limit)"
+            },
+            "coe.llm.timeoutSeconds": {
+                "type": "integer",
+                "default": 300,
+                "minimum": 60,
+                "description": "How long to wait for response before timeout (seconds)"
             }
         }
     }

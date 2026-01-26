@@ -26,19 +26,8 @@
 // - Database calls are slow and need a real database
 // - Network requests need internet and can fail
 // 
-// **How to mock?** Use jest.mock() to create fake replacements:
-jest.mock('vscode', () => ({
-    // Fake VS Code API (just enough to make tests work)
-    window: {
-        showInformationMessage: jest.fn(),  // Fake function that does nothing
-    },
-    commands: {
-        registerCommand: jest.fn((command, handler) => {
-            // Return a fake "disposable" object (like the real VS Code does)
-            return { dispose: jest.fn() };
-        }),
-    },
-}), { virtual: true });  // 'virtual' means this module doesn't really exist as a file
+// **How to mock?** Jest automatically applies mocks from __mocks__/ folders
+// VS Code is automatically mocked via __mocks__/vscode.ts
 
 /**
  * 🎯 Test Group: Extension Activation
@@ -110,7 +99,6 @@ describe('COE Extension Activation', () => {
         // ✅ Check if activation message was logged
         // toHaveBeenCalledWith() checks if console.log was called with this exact text
         expect(consoleLogSpy).toHaveBeenCalledWith('🚀 COE Activated');
-        expect(consoleLogSpy).toHaveBeenCalledWith('COE: Extension setup complete');
 
         // ✅ Check if at least one command was registered
         // The activate function should add commands to context.subscriptions

@@ -1,0 +1,12 @@
+
+> copilot-orchestration-extension@0.1.0 pretest
+> npm run compile && npm run lint
+
+
+> copilot-orchestration-extension@0.1.0 compile
+> tsc -p ./
+
+
+> copilot-orchestration-extension@0.1.0 lint
+> eslint src --ext ts
+

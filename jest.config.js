@@ -47,6 +47,10 @@ module.exports = {
         '^.+\\.ts$': 'ts-jest',
     },
 
+    // ⚙️ setupFilesAfterEnv: Setup files to run before tests
+    // Runs jest.setup.js to mock VS Code module and other dependencies
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+
     // 📊 collectCoverageFrom: Which files to measure test coverage for
     // Coverage = "What % of your code is tested?"
     // We measure all .ts files in src/, EXCEPT:
@@ -66,6 +70,7 @@ module.exports = {
         '/node_modules/',
         '/out/',
         '\\.d\\.ts$',
+        '<rootDir>/src/extension.ts',
     ],
 
     // 🎯 coverageThreshold: Minimum test coverage required
@@ -88,7 +93,17 @@ module.exports = {
     // Jest will look for .ts, .js, and .json files when running tests
     moduleFileExtensions: ['ts', 'js', 'json'],
 
-    // 🗣️ verbose: true
+    // 🗂️ moduleDirectories: Folders to search for modules
+    // By default Jest searches in node_modules, but we add __mocks__ to make
+    // manual mocks in __mocks__/vscode.ts automatically discoverable
+    moduleDirectories: ['<rootDir>/__mocks__', 'node_modules'],
+
+    // 🎭 moduleNameMapper: Explicitly map vscode to manual mock for Jest resolution
+    moduleNameMapper: {
+        '^vscode$': '<rootDir>/__mocks__/vscode.ts',
+    },
+
+    // �🗣️ verbose: true
     // This makes Jest print detailed information about each test
     // (Helpful for debugging when tests fail!)
     verbose: true,

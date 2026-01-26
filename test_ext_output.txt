@@ -1,0 +1,21 @@
+FAIL src/extension.test.ts
+  ΓùÅ Test suite failed to run
+
+    Cannot find module 'vscode' from 'src/extension.test.ts'
+
+       6 |  */
+       7 |
+    >  8 | import * as vscode from 'vscode';
+         | ^
+       9 | import * as assert from 'assert';
+      10 | import { activate, deactivate, getOrchestrator } from './extension';
+      11 |
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/resolver.js:427:11)
+      at Object.<anonymous> (src/extension.test.ts:8:1)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        3.45 s
+Ran all test suites matching /src\\extension.test.ts/i.

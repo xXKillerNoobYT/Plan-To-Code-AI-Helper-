@@ -352,13 +352,7 @@ export class ProgrammingOrchestrator {
     getNextTask(): Task | null {
         try {
             // Filter ready tasks (no blockers, all dependencies met)
-            const readyTasks = this.taskQueue.filter((t) => {
-                return (
-                    t.status === TaskStatus.READY &&
-                    (!t.blockedBy || t.blockedBy.length === 0) &&
-                    this.areDependenciesMet(t)
-                );
-            });
+            const readyTasks = this.getReadyTasks();
 
             if (readyTasks.length === 0) {
                 this.logger.warn('⚠️ No ready tasks in queue');
@@ -374,6 +368,54 @@ export class ProgrammingOrchestrator {
             this.logger.error('❌ Error getting next task:', error);
             throw error;
         }
+    }
+
+    /**
+     * 📋 Get all ready tasks sorted by priority
+     * @returns Ready tasks ordered by priority (P1 → P2 → P3)
+     */
+    getReadyTasks(): Task[] {
+        const readyTasks = this.taskQueue.filter((t) => {
+            return (
+                t.status === TaskStatus.READY &&
+                (!t.blockedBy || t.blockedBy.length === 0) &&
+                this.areDependenciesMet(t)
+            );
+        });
+
+        const priorityRank: Record<TaskPriority, number> = {
+            [TaskPriority.P1]: 1,
+            [TaskPriority.P2]: 2,
+            [TaskPriority.P3]: 3,
+        };
+
+        return readyTasks.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
+    }
+
+    /**
+     * 🗑️ Clear all tasks from the queue
+     */
+    clearQueue(): void {
+        this.taskQueue = [];
+        this.currentTask = null;
+    }
+
+    /**
+     * ♻️ Replace the entire queue with new tasks
+     * @param tasks New tasks to set
+     */
+    setTasks(tasks: Task[]): void {
+        this.clearQueue();
+        tasks.forEach((task) => this.addTask(task));
+    }
+
+    /**
+     * 🔎 Find a task by id
+     * @param taskId Task identifier
+     * @returns Task if found, otherwise undefined
+     */
+    getTaskById(taskId: string): Task | undefined {
+        return this.taskQueue.find((t) => t.taskId === taskId);
     }
 
     /**
@@ -410,6 +452,17 @@ export class ProgrammingOrchestrator {
         };
 
         return stats;
+    }
+
+    /**
+     * 🔄 Check if orchestrator is busy processing a task
+     * 
+     * Returns true if a task is currently in progress
+     * 
+     * @returns boolean True if actively processing a task
+     */
+    isBusy(): boolean {
+        return this.currentTask !== null && this.currentTask.status === TaskStatus.IN_PROGRESS;
     }
 
     // ========================================================================

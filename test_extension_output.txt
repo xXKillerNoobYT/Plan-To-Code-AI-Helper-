@@ -1,0 +1,142 @@
+
+> copilot-orchestration-extension@0.1.0 pretest
+> npm run compile && npm run lint
+
+
+> copilot-orchestration-extension@0.1.0 compile
+> tsc -p ./
+
+
+> copilot-orchestration-extension@0.1.0 lint
+> eslint src --ext ts
+
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\agents\answerTeam.ts
+  10:26  warning  'question' is defined but never used      @typescript-eslint/no-unused-vars
+  24:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  37:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\agents\planningTeam.ts
+  10:25  warning  'requirement' is defined but never used      @typescript-eslint/no-unused-vars
+  10:55  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  24:47  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  37:20  warning  'taskDescription' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\extension.test.ts
+  14:9   warning  'outputChannels' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  14:9   error    'outputChannels' is never reassigned. Use 'const' instead  prefer-const
+  44:14  warning  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\api.ts
+  15:24  warning  'token' is defined but never used         @typescript-eslint/no-unused-vars
+  29:20  warning  'owner' is defined but never used         @typescript-eslint/no-unused-vars
+  29:35  warning  'repo' is defined but never used          @typescript-eslint/no-unused-vars
+  29:49  warning  'issueNumber' is defined but never used   @typescript-eslint/no-unused-vars
+  29:79  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  37:23  warning  'owner' is defined but never used         @typescript-eslint/no-unused-vars
+  37:38  warning  'repo' is defined but never used          @typescript-eslint/no-unused-vars
+  37:52  warning  'title' is defined but never used         @typescript-eslint/no-unused-vars
+  37:67  warning  'body' is defined but never used          @typescript-eslint/no-unused-vars
+  37:90  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:23  warning  'owner' is defined but never used         @typescript-eslint/no-unused-vars
+  45:38  warning  'repo' is defined but never used          @typescript-eslint/no-unused-vars
+  45:52  warning  'issueNumber' is defined but never used   @typescript-eslint/no-unused-vars
+  45:73  warning  'updates' is defined but never used       @typescript-eslint/no-unused-vars
+  45:82  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:96  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:22  warning  'owner' is defined but never used         @typescript-eslint/no-unused-vars
+  53:37  warning  'repo' is defined but never used          @typescript-eslint/no-unused-vars
+  53:51  warning  'filters' is defined but never used       @typescript-eslint/no-unused-vars
+  53:61  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\issuesSync.ts
+  45:31  warning  'githubAPI' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\webhooks.ts
+   8:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   9:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  38:28  warning  'event' is defined but never used         @typescript-eslint/no-unused-vars
+  43:28  warning  'event' is defined but never used         @typescript-eslint/no-unused-vars
+  48:28  warning  'event' is defined but never used         @typescript-eslint/no-unused-vars
+  53:29  warning  'event' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\__tests__\protocol.test.ts
+  7:5  warning  'MCPRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\__tests__\server.test.ts
+   75:56  warning  'params' is defined but never used  @typescript-eslint/no-unused-vars
+  221:56  warning  'params' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\server.ts
+  28:5  warning  'validateRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools.ts
+  20:35  warning  'params' is defined but never used        @typescript-eslint/no-unused-vars
+  20:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  20:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:38  warning  'params' is defined but never used        @typescript-eslint/no-unused-vars
+  27:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:35  warning  'params' is defined but never used        @typescript-eslint/no-unused-vars
+  34:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\__tests__\askQuestion.test.ts
+  9:5  warning  'AskQuestionResponse' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\__tests__\reportObservation.test.ts
+  8:28  warning  'MCPErrorCode' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\__tests__\reportVerificationResult.test.ts
+  8:28  warning  'MCPErrorCode' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\askQuestion.ts
+  130:5  warning  'context' is defined but never used     @typescript-eslint/no-unused-vars
+  131:5  warning  'searchTerm' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\__tests__\programmingOrchestrator.test.ts
+   21:5   warning  'MCPErrorCode' is defined but never used  @typescript-eslint/no-unused-vars
+  252:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  547:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  554:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  561:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  575:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts
+  165:23  warning  'planId' is defined but never used      @typescript-eslint/no-unused-vars
+  165:39  warning  'filter' is defined but never used      @typescript-eslint/no-unused-vars
+  169:64  warning  'output' is defined but never used      @typescript-eslint/no-unused-vars
+  287:36  warning  '_' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\plans\planManager.ts
+  13:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:16  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\plans\schemas.ts
+  57:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\tasks\taskManager.ts
+  49:32  warning  'updates' is defined but never used  @typescript-eslint/no-unused-vars
+  65:16  warning  'taskId' is defined but never used   @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\ui\plansPanel.ts
+  14:10  warning  'context' is defined but never used       @typescript-eslint/no-unused-vars
+  40:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\config.ts
+  22:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  51:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\logger.ts
+  44:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Γ£û 82 problems (1 error, 81 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

@@ -1,0 +1,21 @@
+FAIL src/extension.test.ts
+  ΓùÅ Test suite failed to run
+
+    Cannot find module 'vscode' from 'src/extension.test.ts'
+
+      11 |
+      12 | // Mock VS Code module for testing
+    > 13 | jest.mock('vscode', () => ({
+         |      ^
+      14 |     window: {
+      15 |         createOutputChannel: jest.fn(() => ({
+      16 |             appendLine: jest.fn(),
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/resolver.js:427:11)
+      at Object.<anonymous> (src/extension.test.ts:13:6)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        10.047 s
+Ran all test suites matching /src\\extension.test.ts/i.
