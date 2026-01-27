@@ -547,4 +547,92 @@ describe('TicketDatabase', () => {
             expect(stats.escalated).toBe(1);
         });
     });
+
+    describe('Connection Cleanup (close)', () => {
+        it('should close connection without error', async () => {
+            // Should not throw
+            await expect(db.close()).resolves.toBeUndefined();
+        });
+
+        it('should handle close on uninitialized DB gracefully', async () => {
+            // Reset and create new instance without init
+            TicketDatabase.resetInstance();
+            const uninitDb = TicketDatabase.getInstance();
+
+            // Should not crash
+            await expect(uninitDb.close()).resolves.toBeUndefined();
+        });
+
+        it('should be safe to call close multiple times', async () => {
+            // Close once
+            await db.close();
+
+            // Close again should not crash
+            await expect(db.close()).resolves.toBeUndefined();
+        });
+
+        it('should set db to null after closing', async () => {
+            // Verify db is not null initially
+            expect((db as any).db).not.toBeNull();
+
+            // Close
+            await db.close();
+
+            // Verify db is null after close
+            expect((db as any).db).toBeNull();
+        });
+
+        it('should still allow operations via fallback after close', async () => {
+            // Create a ticket
+            const params: CreateTicketParams = {
+                type: 'human_to_ai',
+                priority: 2,
+                creator: 'user',
+                assignee: 'Planning Team',
+                title: 'Fallback test',
+                description: 'Test fallback after close'
+            };
+
+            const ticket = await db.createTicket(params);
+            expect(ticket).toBeDefined();
+
+            // Close connection
+            await db.close();
+
+            // Should still be able to create via fallback Map
+            const ticket2 = await db.createTicket({
+                ...params,
+                title: 'Fallback test 2'
+            });
+
+            expect(ticket2).toBeDefined();
+        });
+
+        it('should handle extension reload cycle (init -> close -> init -> close)', async () => {
+            // Simulate extension reload cycle
+            const params: CreateTicketParams = {
+                type: 'human_to_ai',
+                priority: 1,
+                creator: 'user',
+                assignee: 'Planning Team',
+                title: 'Reload cycle test',
+                description: 'Testing multiple reload cycles'
+            };
+
+            // First cycle
+            const ticket1 = await db.createTicket(params);
+            expect(ticket1).toBeDefined();
+
+            await db.close();
+            expect((db as any).db).toBeNull();
+
+            // Can re-init after close
+            await db.initialize(testWorkspaceRoot);
+            const ticket2 = await db.createTicket(params);
+            expect(ticket2).toBeDefined();
+
+            await db.close();
+            expect((db as any).db).toBeNull();
+        });
+    });
 });

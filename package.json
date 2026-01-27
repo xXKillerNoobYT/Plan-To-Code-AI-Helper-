@@ -32,6 +32,14 @@
             {
                 "command": "coe.processTask",
                 "title": "COE: Process Specific Task"
+            },
+            {
+                "command": "coe.testCreateTicket",
+                "title": "COE: Test Create Ticket"
+            },
+            {
+                "command": "coe.testRouteTicket",
+                "title": "COE: Test Boss AI Router"
             }
         ],
         "viewsContainers": {

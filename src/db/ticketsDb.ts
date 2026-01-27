@@ -504,20 +504,75 @@ export class TicketDatabase {
     }
 
     /**
-     * Close database connection (call on extension deactivate)
+     * 💾 Close database connection gracefully
+     * 
+     * Closes SQLite connection with retry logic for EBUSY (OneDrive/Windows file locks).
+     * Max 3 attempts with 500ms delay between retries.
+     * Logs warning if close fails but doesn't crash.
+     * Always sets db to null after attempt and switches to fallback Map.
+     * 
+     * This method is safe to call on extension deactivate/reload.
+     * If close fails due to file lock, logs warning but continues gracefully.
+     * Fallback Map is always available if DB stays locked or after close.
+     * 
+     * @async
+     * @returns Promise that resolves when DB is closed (or after retries exhausted)
      */
     async close(): Promise<void> {
-        if (this.db) {
-            return new Promise((resolve) => {
-                this.db!.close((err) => {
-                    if (err) {
-                        console.error('Error closing database:', err);
-                    }
-                    this.db = null;
-                    resolve();
-                });
-            });
+        if (!this.db) {
+            return; // Already closed or never opened
         }
+
+        const maxAttempts = 3;
+        const retryDelayMs = 500;
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                await this.closeAsync();
+                console.log('✅ Ticket DB connection closed successfully');
+                this.db = null;
+                this.useFallback = true; // Switch to fallback Map for any further operations
+                return;
+            } catch (error) {
+                const errMsg = error instanceof Error ? error.message : String(error);
+                const isEBUSY = errMsg.includes('EBUSY') || errMsg.includes('locked');
+
+                if (attempt < maxAttempts) {
+                    console.warn(
+                        `⚠️  DB close attempt ${attempt}/${maxAttempts} failed: ${errMsg}${isEBUSY ? ' (file lock - retrying)' : ''}`
+                    );
+                    await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+                } else {
+                    console.warn(
+                        `⚠️  DB close failed after ${maxAttempts} attempts: ${errMsg}${isEBUSY ? ' (file may be locked by OneDrive)' : ''} - abandoning but fallback Map still available`
+                    );
+                    this.db = null; // Null it anyway so we don't try again
+                    this.useFallback = true; // Ensure fallback is used
+                }
+            }
+        }
+    }
+
+    /**
+     * ⚙️ Private helper to close database (promisified)
+     * Wraps sqlite3.Database.close() callback in a Promise
+     * 
+     * @private
+     * @async
+     * @returns Promise that rejects if close fails
+     */
+    private closeAsync(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                resolve();
+                return;
+            }
+
+            this.db.close((err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
     }
 
     /**

@@ -1,7 +1,6 @@
-// ./orchestrator.ProgrammingOrchestrator.shutdown.gptgen.web.spec.ts
 import { ProgrammingOrchestrator } from '../../../src/agents/orchestrator';
 
-/** @aiContributed-2026-01-25 */
+/** @aiContributed-2026-01-26 */
 describe('ProgrammingOrchestrator', () => {
     let orchestrator: ProgrammingOrchestrator;
 
@@ -9,7 +8,7 @@ describe('ProgrammingOrchestrator', () => {
         orchestrator = new ProgrammingOrchestrator();
     });
 
-    /** @aiContributed-2026-01-25 */
+    /** @aiContributed-2026-01-26 */
     it('should log messages during shutdown', async () => {
         const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 

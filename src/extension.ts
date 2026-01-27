@@ -6,6 +6,7 @@
  */
 
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { ProgrammingOrchestrator, SimpleLogger, TaskPriority, TaskStatus, Task } from './orchestrator/programmingOrchestrator';
 import { loadTasksFromPlanFile } from './plans/planningStub';
 import { setupMissingFiles } from './utils/setupFiles';
@@ -64,6 +65,12 @@ let llmConfig: LLMConfig = {
     maxOutputTokens: 2000,
     timeoutSeconds: 300,
 };
+
+/**
+ * 🎫 Global TicketDb instance
+ * Manages ticket persistence with SQLite + fallback Map
+ */
+let globalTicketDb: any = null; // Will be initialized on first use
 
 /**
  * 🔍 Get the current orchestrator instance
@@ -718,10 +725,240 @@ export async function activate(context: vscode.ExtensionContext) {
         });
         context.subscriptions.push(testCommand);
 
+        // ====================================================================
+        // 6. Register Test Ticket Command
+        // ====================================================================
+        const testCreateTicketCommand = vscode.commands.registerCommand(
+            'coe.testCreateTicket',
+            async () => {
+                try {
+                    if (!orchestratorOutputChannel) {
+                        vscode.window.showErrorMessage('❌ COE: Output channel not initialized');
+                        return;
+                    }
+
+                    const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+                    if (!workspaceRoot) {
+                        vscode.window.showErrorMessage('❌ COE: No workspace folder open');
+                        return;
+                    }
+
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('🎫 Testing Ticket Database...');
+
+                    // Create or reuse global TicketDb instance
+                    if (!globalTicketDb) {
+                        const TicketDb = (await import('./services/ticketDb')).default;
+                        globalTicketDb = new TicketDb(path.join(workspaceRoot, '.coe'));
+                        await globalTicketDb.init();
+                        orchestratorOutputChannel.appendLine('✅ TicketDb initialized (new instance)');
+                    } else {
+                        orchestratorOutputChannel.appendLine('✅ TicketDb already initialized (reusing instance)');
+                    }
+
+                    // Create test ticket
+                    const ticket = await globalTicketDb.createTicket({
+                        type: 'ai_to_human',
+                        title: 'Test Clarification',
+                        description: 'Need help with X',
+                        priority: 1
+                    });
+
+                    orchestratorOutputChannel.appendLine(`📝 Ticket created: ${ticket.id}`);
+                    orchestratorOutputChannel.appendLine(`   Title: ${ticket.title}`);
+                    orchestratorOutputChannel.appendLine(`   Type: ${ticket.type}`);
+                    orchestratorOutputChannel.appendLine(`   Priority: ${ticket.priority}`);
+                    orchestratorOutputChannel.appendLine(`   Status: ${ticket.status}`);
+                    orchestratorOutputChannel.appendLine(`   Created at: ${ticket.createdAt.toISOString()}`);
+
+                    // Retrieve ticket to verify persistence
+                    const retrieved = await globalTicketDb.getTicket(ticket.id);
+
+                    if (retrieved) {
+                        orchestratorOutputChannel.appendLine(`✅ Ticket retrieved successfully`);
+                        orchestratorOutputChannel.appendLine(`   Retrieved title: ${retrieved.title}`);
+                        orchestratorOutputChannel.appendLine(`   Created at: ${retrieved.createdAt.toISOString()}`);
+                    } else {
+                        orchestratorOutputChannel.appendLine('❌ Failed to retrieve ticket');
+                    }
+
+                    orchestratorOutputChannel.show();
+
+                    vscode.window.showInformationMessage(
+                        `✅ Test ticket created: ${ticket.id}`
+                    );
+
+                    // Note: TicketDb will be closed in deactivate()
+                    orchestratorOutputChannel.appendLine('💡 TicketDb will persist until extension deactivates');
+                } catch (error) {
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    if (orchestratorOutputChannel) {
+                        orchestratorOutputChannel.appendLine(`❌ Error creating test ticket: ${errorMsg}`);
+                        orchestratorOutputChannel.show();
+                    }
+                    vscode.window.showErrorMessage(
+                        `❌ Failed to create test ticket: ${errorMsg}`
+                    );
+                }
+            }
+        );
+        context.subscriptions.push(testCreateTicketCommand);
+
+        // ====================================================================
+        // Test Route Ticket Command
+        // ====================================================================
+        const testRouteTicketCommand = vscode.commands.registerCommand(
+            'coe.testRouteTicket',
+            async () => {
+                try {
+                    if (!orchestratorOutputChannel) {
+                        vscode.window.showErrorMessage('❌ COE: Output channel not initialized');
+                        return;
+                    }
+
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('🎯 Testing Boss AI Router...');
+
+                    // Import BossRouter and AgentTeamType
+                    const { BossRouter } = await import('./services/bossRouter');
+                    const { AgentTeamType } = await import('./types/agentTeam');
+
+                    const router = BossRouter.getInstance();
+
+                    // Create sample tickets for testing
+                    const testTickets = [
+                        {
+                            ticket_id: 'TK-TEST-001',
+                            type: 'ai_to_human' as const,
+                            status: 'open' as const,
+                            priority: 1 as const,
+                            creator: 'Answer Team',
+                            assignee: 'unassigned',
+                            title: 'Need clarification on user requirement',
+                            description: 'What should happen when user clicks the save button?',
+                            thread: [],
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            ticket_id: 'TK-TEST-002',
+                            type: 'human_to_ai' as const,
+                            status: 'open' as const,
+                            priority: 1 as const,
+                            creator: 'user',
+                            assignee: 'unassigned',
+                            title: 'Plan new authentication system',
+                            description: 'Need to define architecture for OAuth integration',
+                            thread: [],
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            ticket_id: 'TK-TEST-003',
+                            type: 'human_to_ai' as const,
+                            status: 'open' as const,
+                            priority: 2 as const,
+                            creator: 'user',
+                            assignee: 'unassigned',
+                            title: 'Verify test coverage',
+                            description: 'Check that all new code has proper test coverage',
+                            thread: [],
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            ticket_id: 'TK-TEST-004',
+                            type: 'human_to_ai' as const,
+                            status: 'open' as const,
+                            priority: 2 as const,
+                            creator: 'user',
+                            assignee: 'unassigned',
+                            title: 'Research best database for project',
+                            description: 'Investigate PostgreSQL vs MongoDB for our use case',
+                            thread: [],
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            ticket_id: 'TK-TEST-005',
+                            type: 'human_to_ai' as const,
+                            status: 'open' as const,
+                            priority: 3 as const,
+                            creator: 'user',
+                            assignee: 'unassigned',
+                            title: 'Unknown task type',
+                            description: 'Something random with no keywords',
+                            thread: [],
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        }
+                    ];
+
+                    // Route each ticket and display results
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('Routing Test Tickets:');
+                    orchestratorOutputChannel.appendLine('─'.repeat(60));
+
+                    for (const ticket of testTickets) {
+                        const team = router.routeTicket(ticket);
+
+                        orchestratorOutputChannel.appendLine('');
+                        orchestratorOutputChannel.appendLine(`Ticket: ${ticket.ticket_id}`);
+                        orchestratorOutputChannel.appendLine(`  Title: ${ticket.title}`);
+                        orchestratorOutputChannel.appendLine(`  Type: ${ticket.type} | Priority: P${ticket.priority}`);
+                        orchestratorOutputChannel.appendLine(`  ➜ Routed to: ${team.toUpperCase()} TEAM`);
+
+                        // Add explanation
+                        let explanation = '';
+                        switch (team) {
+                            case AgentTeamType.Answer:
+                                explanation = ticket.type === 'ai_to_human'
+                                    ? '(AI asking human for clarification)'
+                                    : '(Human question)';
+                                break;
+                            case AgentTeamType.Planning:
+                                explanation = '(Complex work breakdown needed)';
+                                break;
+                            case AgentTeamType.Verification:
+                                explanation = '(Testing/validation required)';
+                                break;
+                            case AgentTeamType.Research:
+                                explanation = '(Investigation needed)';
+                                break;
+                            case AgentTeamType.Escalate:
+                                explanation = '(No matching rule - escalating)';
+                                break;
+                        }
+                        orchestratorOutputChannel.appendLine(`  ${explanation}`);
+                    }
+
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('─'.repeat(60));
+                    orchestratorOutputChannel.appendLine('✅ Boss AI Router test complete!');
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine(`Total rules configured: ${router.getRules().length}`);
+
+                    orchestratorOutputChannel.show();
+                    vscode.window.showInformationMessage('✅ Boss AI Router test complete! Check output.');
+
+                } catch (error) {
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    if (orchestratorOutputChannel) {
+                        orchestratorOutputChannel.appendLine(`❌ Error testing router: ${errorMsg}`);
+                        orchestratorOutputChannel.show();
+                    }
+                    vscode.window.showErrorMessage(`❌ Failed to test router: ${errorMsg}`);
+                }
+            }
+        );
+        context.subscriptions.push(testRouteTicketCommand);
+
         orchestratorOutputChannel.appendLine('📋 Commands Registered:');
         orchestratorOutputChannel.appendLine('  • coe.activate - Activate orchestration');
         orchestratorOutputChannel.appendLine('  • coe.regeneratePRD - Regenerate PRD from Plans/ (Command Palette)');
         orchestratorOutputChannel.appendLine('  • coe.testOrchestrator - Test orchestrator (click status bar or use Command Palette)');
+        orchestratorOutputChannel.appendLine('  • coe.testCreateTicket - Test ticket creation (Command Palette)');
+        orchestratorOutputChannel.appendLine('  • coe.testRouteTicket - Test Boss AI Router (Command Palette)');
         orchestratorOutputChannel.appendLine('');
         orchestratorOutputChannel.appendLine('Start using COE by running "coe.testOrchestrator" from Command Palette or clicking the status bar!');
 
@@ -762,6 +999,17 @@ export async function deactivate() {
         FileConfigManager.dispose();
         console.log('✅ File Config Manager disposed');
 
+        // Close TicketDb if open
+        if (globalTicketDb) {
+            try {
+                await globalTicketDb.close();
+                globalTicketDb = null;
+                console.log('✅ TicketDb closed and handle nulled');
+            } catch (error) {
+                console.error('❌ Error closing TicketDb:', error);
+            }
+        }
+
         // Dispose status bar item
         if (statusBarItem) {
             statusBarItem.dispose();
@@ -783,6 +1031,9 @@ export async function deactivate() {
             orchestratorOutputChannel.dispose();
             orchestratorOutputChannel = null;
         }
+
+        // Small delay for OneDrive sync if needed (non-blocking)
+        await new Promise(resolve => setTimeout(resolve, 200));
 
         console.log('✅ COE: Extension deactivated');
     } catch (error) {

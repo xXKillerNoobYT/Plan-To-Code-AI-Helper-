@@ -1,6 +1,6 @@
 import { PlanningTeam } from '../../../src/agents/planningTeam';
 
-/** @aiContributed-2026-01-25 */
+/** @aiContributed-2026-01-26 */
 describe('PlanningTeam', () => {
   let planningTeam: PlanningTeam;
 
@@ -8,9 +8,9 @@ describe('PlanningTeam', () => {
     planningTeam = new PlanningTeam();
   });
 
-  /** @aiContributed-2026-01-25 */
+  /** @aiContributed-2026-01-26 */
     describe('refineTask', () => {
-    /** @aiContributed-2026-01-25 */
+    /** @aiContributed-2026-01-26 */
         it('should log the correct message when refining a task', async () => {
       const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
@@ -21,7 +21,7 @@ describe('PlanningTeam', () => {
       consoleLogSpy.mockRestore();
     });
 
-    /** @aiContributed-2026-01-25 */
+    /** @aiContributed-2026-01-26 */
         it('should return null after refining a task', async () => {
       const taskId = '12345';
       const result = await planningTeam.refineTask(taskId);
