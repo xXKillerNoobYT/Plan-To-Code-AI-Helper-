@@ -809,6 +809,229 @@ Brief overview...
 
 ---
 
+## 🏗️ CRITICAL: Leverage Existing Systems Before Building
+
+**GOLDEN RULE**: Before writing ANY new code, check if the feature already exists or if there's an existing system you should tap into. This keeps the architecture cohesive and follows the master plan.
+
+### 🔍 Pre-Implementation Checklist
+
+Before coding, answer these questions **IN ORDER**:
+
+#### 1️⃣ **Is there a TIME-BASED variable?** → Check Config System
+If your feature involves time (timeouts, delays, intervals, refresh rates, retry times):
+```
+❌ BAD: Hardcode timeout value
+const TIMEOUT_MS = 120000;
+
+✅ GOOD: Read from FileConfigManager
+const config = FileConfigManager.getLLMConfig();
+const timeoutSeconds = config.timeoutSeconds || 300;
+```
+
+**Config System Location**: `src/utils/fileConfig.ts`  
+**Config File**: `.coe/config.json`  
+**Pattern**: `FileConfigManager.getLLMConfig()`, `FileConfigManager.getExtensionConfig()`
+
+**Checklist**:
+- [ ] Is this a timeout/delay/interval?
+- [ ] Check if already in `.coe/config.json` (llm.timeoutSeconds, extension.autoRegeneratePRD, etc.)
+- [ ] If not in config: Should it be configurable? Ask Planning Team
+- [ ] Use config value, fallback to sensible default
+
+---
+
+#### 2️⃣ **Is this an LLM call?** → Use Ticket System, Not Direct Call
+If your feature needs to call an LLM (GPT, Mistral, Claude, etc.):
+
+```
+❌ BAD: Direct LLM call in your code
+const response = await fetch('http://llm-server/chat', { body: JSON.stringify(prompt) });
+
+✅ GOOD: Create ticket, use agent system
+// Instead: Create task via Planning Team
+// Planning Team breaks down into smaller tasks
+// Agent teams execute those tasks
+// Verification Team tests results
+```
+
+**Why**: The MCP ticket system already coordinates all LLM work through agent teams (Orchestrator, Planning, Answer, Verification). Direct LLM calls bypass this architecture.
+
+**Correct Pattern**:
+1. Is this a small sub-task an agent should handle? → Use **MCP `askQuestion` tool**
+2. Is this a major work item? → **Create a GitHub issue** → Planning Team breaks it down
+3. Is this a LLM-powered feature? → Use **Agent Teams** (not direct fetch calls)
+
+**Reference**: `Plans/TICKET-SYSTEM-SPECIFICATION.md`, `Plans/02-Agent-Role-Definitions.md`
+
+---
+
+#### 3️⃣ **Does a Service Already Exist?** → Reuse It
+Before creating a new file/module, search for existing services:
+
+| Feature Type | Check Here | Pattern |
+|--------------|-----------|---------|
+| **LLM Config** | `src/utils/fileConfig.ts` | `FileConfigManager.getLLMConfig()` |
+| **Task Queue** | `src/orchestrator/programmingOrchestrator.ts` | `orchestrator.getNextTask()` |
+| **File I/O** | `src/utils/setupFiles.ts` | `setupMissingFiles()` |
+| **Plans Reading** | `src/services/plansReader.ts` | `PlansReader.readAllPlans()` |
+| **PRD Generation** | `src/services/prdGenerator.ts` | `PRDGenerator.generate()` |
+| **Configuration** | `src/utils/fileConfig.ts` | `FileConfigManager.getConfig()` |
+| **Logging** | `src/utils/logger.ts` | `logger.log()`, `logger.error()` |
+
+**Checklist**:
+- [ ] Search `src/` for similar names (serviceX, managerX, X.ts, X-service.ts)
+- [ ] Check `Plans/` docs for architecture references
+- [ ] Ask: "Has someone already solved this?"
+- [ ] If yes: **Import and reuse** (Don't reinvent!)
+- [ ] If no: Proceed with implementation, following atomic rules
+
+---
+
+#### 4️⃣ **Is This Agent-Related?** → Understand Agent System
+Features involving agents should use existing agent infrastructure:
+
+**Existing Agent Teams** (from `Plans/02-Agent-Role-Definitions.md`):
+- **Programming Orchestrator** - Coordinates overall task flow
+- **Planning Team** - Breaks down work, estimates
+- **Answer Team** - Provides Q&A, context-aware help
+- **Verification Team** - Tests, validates, reports results
+
+**When to Create New Agent vs. Use Existing**:
+- ❌ **Don't** create new agent if existing team can do it
+- ✅ **Do** add specialized tools to existing agents
+- ✅ **Do** create new agent only if agent roles don't fit the work (rare!)
+- ✅ **Do** consult `Plans/02-Agent-Role-Definitions.md` first
+
+**Pattern**: If you need agent capability, likely you need a **new MCP tool** (use `reportTaskStatus`, `askQuestion`, etc.), not a new agent.
+
+---
+
+#### 5️⃣ **Integration Checklist** → Follow Plan Architecture
+Before finalizing code, verify alignment with master plan:
+
+**Checklist**:
+- [ ] Does PRD.json mention this feature?
+- [ ] Does `Plans/CONSOLIDATED-MASTER-PLAN.md` describe the architecture?
+- [ ] Is config used where timing/settings matter?
+- [ ] Are tickets/agents used for LLM work (not direct calls)?
+- [ ] Are existing services reused (no duplication)?
+- [ ] Does it follow the agent coordination flow?
+- [ ] Is it in an atomic, testable state?
+
+---
+
+### 📚 Key Existing Systems Reference
+
+```
+Core Configuration (Time-Based, Settings)
+├─ FileConfigManager (src/utils/fileConfig.ts)
+│  └─ Reads/writes .coe/config.json
+│  └─ Auto-creates defaults if missing
+│  └─ Watches for changes
+│  └─ Properties: llm.timeoutSeconds, extension.autoRegeneratePRD
+
+Task Coordination (Planning & Execution)
+├─ ProgrammingOrchestrator (src/orchestrator/programmingOrchestrator.ts)
+│  └─ Manages task queue
+│  └─ Routes tasks to agents
+│  └─ Tracks status
+
+LLM Interaction (Through Agents, Not Direct)
+├─ MCP Server (src/mcpServer/server.ts)
+│  └─ getNextTask, reportTaskStatus, askQuestion, etc.
+├─ Agent Teams
+│  └─ Orchestrator, Planning, Answer, Verification
+
+PRD Generation (Existing System)
+├─ PRDGenerator (src/services/prdGenerator.ts)
+│  └─ Uses config timeoutSeconds from FileConfigManager
+│  └─ Calls LLM through agents
+└─ Query: "Does my feature need PRD generation? Use existing service!"
+
+File I/O & Setup
+├─ setupMissingFiles (src/utils/setupFiles.ts)
+├─ PlansReader (src/services/plansReader.ts)
+└─ FileConfigManager (config reading)
+```
+
+---
+
+### ✨ Examples: Correct Pattern Recognition
+
+#### Example 1: Add Timeout to New Component
+```
+User says: "Add auto-refresh feature that checks every X seconds"
+
+❌ WRONG APPROACH:
+const REFRESH_INTERVAL = 30000;  // Hardcoded 30 seconds
+
+✅ RIGHT APPROACH:
+1. Check: Is this configurable? YES
+2. Check config file already has it? 
+   - Look in .coe/config.json - Extension settings
+   - Not there? Add it!
+3. Implementation:
+   const config = FileConfigManager.getExtensionConfig();
+   const interval = config.refreshIntervalMs || 30000;
+   
+4. If adding to config: Update docs, note in PRD.md
+```
+
+#### Example 2: Need LLM for Analysis
+```
+User says: "Analyze this code with an LLM and generate suggestions"
+
+❌ WRONG APPROACH:
+const response = await fetch('http://llm:1234/chat', { 
+  body: JSON.stringify({ messages: [...] }) 
+});
+
+✅ RIGHT APPROACH:
+1. Is this a task agents should do? → YES
+2. Use Answer Team via MCP tool:
+   const answer = await mcpServer.callTool('askQuestion', {
+     question: 'Analyze this code...',
+     context: { code: codeString }
+   });
+3. Answer Team handles LLM call, agents coordinate
+4. Keep your code focused on ONE task
+```
+
+#### Example 3: Read Plans for Feature
+```
+User says: "Extract all plan files and process them"
+
+❌ WRONG APPROACH:
+const fs = require('fs');
+const files = fs.readdirSync('./Plans');  // Manual file reading
+
+✅ RIGHT APPROACH:
+1. Check: Does a service already read plans?
+   Search: PlansReader - YES!
+2. Use it:
+   const plans = await PlansReader.readAllPlans();
+3. Don't reinvent file reading/processing
+```
+
+#### Example 4: Store/Retrieve Settings
+```
+User says: "Remember user's preferred LLM model"
+
+❌ WRONG APPROACH:
+function saveUserPreference(key, value) {
+  localStorage.setItem(key, value);  // Ad-hoc storage
+}
+
+✅ RIGHT APPROACH:
+1. Check: Is this user config? → YES
+2. Is there a config system? → YES (FileConfigManager)
+3. Use FileConfigManager:
+   await FileConfigManager.updateLLMConfig({ model: 'gpt-4' });
+4. This auto-persists to .coe/config.json
+```
+
+---
+
 ## ⚠️ Common Pitfalls (Avoid These!)
 
 ### 1. **Overgeneration** (Big #1 Mistake!)

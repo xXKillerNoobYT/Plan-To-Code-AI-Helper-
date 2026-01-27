@@ -19,6 +19,8 @@ export class PRDGenerationPrompt {
 
 Your task is to analyze the provided planning documents and synthesize them into a comprehensive, well-structured PRD.
 
+⚠️  CRITICAL: Do NOT ask questions, do NOT request clarification, do NOT explain limitations. Generate the PRD directly with the information provided.
+
 Guidelines:
 1. Create clear, logical sections with appropriate markdown headers (##, ###)
 2. Include Overview, Features, Architecture, Testing, Deployment, and Priorities sections
@@ -31,7 +33,9 @@ Guidelines:
 9. Use markdown formatting with proper emphasis, lists, and code blocks
 10. Temperature: 0.3 (deterministic, consistent output)
 
-Output format: Markdown with clear section hierarchy. Do NOT include \`\`\`markdown fences - just raw markdown.`;
+Output format: Markdown with clear section hierarchy. Do NOT include \`\`\`markdown fences - just raw markdown.
+
+REMEMBER: Generate the PRD now. No questions. Direct output only.`;
     }
 
     /**

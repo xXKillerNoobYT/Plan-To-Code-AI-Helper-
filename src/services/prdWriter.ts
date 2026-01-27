@@ -47,12 +47,14 @@ export class PRDWriter {
      * 
      * @param prdContent - Generated PRD markdown content
      * @param metadata - PRD metadata
-     * @returns Object with paths and success status
+     * @returns Object with paths, URIs, and success status
      * @throws Error if write fails
      */
     static async writePRD(prdContent: string, metadata: PRDMetadata): Promise<{
         mdPath: string;
         jsonPath: string;
+        mdUri: vscode.Uri;
+        jsonUri: vscode.Uri;
         backupPath?: string;
         success: boolean;
         message: string;
@@ -62,9 +64,16 @@ export class PRDWriter {
             throw new Error('No workspace folder found');
         }
 
-        const workspaceRoot = workspaceFolders[0].uri.fsPath;
-        const mdPath = path.join(workspaceRoot, 'PRD.md');
-        const jsonPath = path.join(workspaceRoot, 'PRD.json');
+        // Use workspace root URI for proper path construction
+        const workspaceRootUri = workspaceFolders[0].uri;
+        const mdUri = vscode.Uri.joinPath(workspaceRootUri, 'PRD.md');
+        const jsonUri = vscode.Uri.joinPath(workspaceRootUri, 'PRD.json');
+        const mdPath = mdUri.fsPath;
+        const jsonPath = jsonUri.fsPath;
+
+        console.log(`📝 Writing PRD files to workspace root:`);
+        console.log(`   PRD.md: ${mdPath}`);
+        console.log(`   PRD.json: ${jsonPath}`);
 
         try {
             // Create backup of existing PRD.md
@@ -72,11 +81,13 @@ export class PRDWriter {
             try {
                 await fs.access(mdPath);
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                backupPath = path.join(workspaceRoot, `PRD.backup-${timestamp}.md`);
+                backupPath = path.join(workspaceRootUri.fsPath, `PRD.backup-${timestamp}.md`);
                 const existingContent = await fs.readFile(mdPath, 'utf-8');
                 await fs.writeFile(backupPath, existingContent, 'utf-8');
+                console.log(`✅ Created backup: ${backupPath}`);
             } catch {
                 // No existing PRD or backup failed - that's OK
+                console.log('ℹ️  No existing PRD.md to backup');
             }
 
             // Write markdown file with frontmatter
@@ -88,6 +99,7 @@ export class PRDWriter {
 `;
             const mdContent = frontmatter + prdContent;
             await fs.writeFile(mdPath, mdContent, 'utf-8');
+            console.log(`✅ Wrote PRD.md to: ${mdPath}`);
 
             // Write JSON file (machine-readable, can be parsed by agents)
             const prdjson: PRDJSON = {
@@ -96,20 +108,29 @@ export class PRDWriter {
                 sections: this.extractSections(prdContent),
             };
             await fs.writeFile(jsonPath, JSON.stringify(prdjson, null, 2), 'utf-8');
+            console.log(`✅ Wrote PRD.json to: ${jsonPath}`);
 
-            // Trigger file change events so watchers pick it up
-            const mdUri = vscode.Uri.file(mdPath);
-            const jsonUri = vscode.Uri.file(jsonPath);
+            // Refresh VS Code explorer so files appear immediately
+            try {
+                await vscode.commands.executeCommand('workbench.files.action.refreshFilesExplorer');
+                console.log('✅ Refreshed VS Code explorer');
+            } catch (error) {
+                console.warn('⚠️  Failed to refresh explorer:', error);
+                // Non-critical, continue
+            }
 
             return {
                 mdPath,
                 jsonPath,
+                mdUri,
+                jsonUri,
                 backupPath,
                 success: true,
                 message: `✅ PRD regenerated successfully (${metadata.tokenCount} tokens)`,
             };
         } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error);
+            console.error(`❌ Failed to write PRD: ${errMsg}`);
             throw new Error(`Failed to write PRD: ${errMsg}`);
         }
     }

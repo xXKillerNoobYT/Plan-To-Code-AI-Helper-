@@ -141,18 +141,36 @@ export class PlansFileWatcher {
                 { tokenLimit: 4000, retryOnFailure: true },
                 (status) => {
                     outputChannel?.appendLine(status);
-                }
+                },
+                outputChannel || undefined
             );
 
             if (result.success) {
                 outputChannel?.appendLine('');
                 outputChannel?.appendLine(`✅ PRD auto-regenerated successfully!`);
+                if (result.mdPath) {
+                    outputChannel?.appendLine(`📄 PRD.md: ${result.mdPath}`);
+                }
+                if (result.jsonPath) {
+                    outputChannel?.appendLine(`📄 PRD.json: ${result.jsonPath}`);
+                }
                 if (result.duration) {
                     outputChannel?.appendLine(`⏱️  Duration: ${(result.duration / 1000).toFixed(2)}s`);
                 }
                 if (result.warning) {
                     outputChannel?.appendLine(`⚠️  ${result.warning}`);
                 }
+
+                // Show popup notification for auto-regeneration
+                const openButton = 'Open PRD.md';
+                vscode.window.showInformationMessage(
+                    '✅ PRD auto-regenerated from Plans/ changes',
+                    openButton
+                ).then(selection => {
+                    if (selection === openButton && result.mdUri) {
+                        vscode.commands.executeCommand('vscode.open', result.mdUri);
+                    }
+                });
             } else {
                 outputChannel?.appendLine(`❌ Auto-regeneration failed: ${result.message}`);
             }

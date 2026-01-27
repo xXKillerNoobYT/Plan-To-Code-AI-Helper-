@@ -38,7 +38,9 @@ describe('PRDWriter', () => {
             const content = 'This is a very long content that needs to be truncated';
             const preview = PRDWriter.getContentPreview(content, 20);
 
-            expect(preview.length).toBeLessThanOrEqual(40); // 20 + some buffer
+            // Preview should be the 20 chars + '[truncated for display]' suffix
+            // Total expected: 20 + 1 ('\n') + 26 ('... [truncated for display]') = 47-48 chars
+            expect(preview.length).toBeLessThanOrEqual(50);
             expect(preview).toContain('[truncated');
         });
 

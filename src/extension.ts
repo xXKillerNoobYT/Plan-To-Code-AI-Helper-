@@ -11,8 +11,10 @@ import { loadTasksFromPlanFile } from './plans/planningStub';
 import { setupMissingFiles } from './utils/setupFiles';
 import { CoeTaskTreeProvider } from './tree/CoeTaskTreeProvider';
 import { FileConfigManager, LLMConfig as FileLLMConfig } from './utils/fileConfig';
+import { callLLMWithStreaming } from './utils/streamingLLM';
 import { PRDGenerator } from './services/prdGenerator';
 import { PlansFileWatcher } from './services/plansWatcher';
+import { TicketDatabase } from './db/ticketsDb';
 
 // ============================================================================
 // Global State
@@ -198,6 +200,36 @@ export async function activate(context: vscode.ExtensionContext) {
         orchestratorOutputChannel.appendLine('');
 
         // ====================================================================
+        // 2.7 Initialize Ticket Database (.coe/tickets.db)
+        // ====================================================================
+        orchestratorOutputChannel.appendLine('🗄️  Initializing Ticket Database...');
+        try {
+            const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+            if (workspaceRoot) {
+                const ticketDb = TicketDatabase.getInstance();
+                await ticketDb.initialize(workspaceRoot);
+                const stats = await ticketDb.getStats();
+                orchestratorOutputChannel.appendLine(
+                    `✅ Ticket Database initialized (${stats.total} tickets, fallback: ${stats.usingFallback})`
+                );
+                // Add cleanup on deactivation
+                context.subscriptions.push({
+                    dispose: async () => {
+                        await ticketDb.close();
+                    }
+                });
+            } else {
+                orchestratorOutputChannel.appendLine('⚠️  No workspace folder found - ticket DB not initialized');
+            }
+        } catch (dbError) {
+            const errorMsg = dbError instanceof Error ? dbError.message : String(dbError);
+            orchestratorOutputChannel.appendLine(`⚠️  Ticket Database initialization failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Using in-memory fallback for tickets');
+        }
+
+        orchestratorOutputChannel.appendLine('');
+
+        // ====================================================================
         // 3. Initialize Programming Orchestrator
         // ====================================================================
         const logger = new SimpleLogger('COE.Extension');
@@ -366,154 +398,45 @@ export async function activate(context: vscode.ExtensionContext) {
                 }
             };
 
-            const controller = new AbortController();
-            const timeoutMs = llmConfig.timeoutSeconds * 1000;
-            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-            const start = Date.now();
-
             orchestratorOutputChannel?.appendLine(
-                `🤖 Sending prompt to ${llmConfig.model} (timeout: ${llmConfig.timeoutSeconds}s)...`
+                `🌊 Streaming from ${llmConfig.model} (inactivity timeout: ${llmConfig.timeoutSeconds}s)...`
             );
 
             try {
-                const response = await fetch(llmConfig.url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: llmConfig.model,
-                        messages: [
-                            { role: 'system', content: 'You are a senior TypeScript developer helping build a VS Code extension.' },
-                            { role: 'user', content: finalPrompt },
-                        ],
-                        temperature: 0.7,
-                        max_tokens: llmConfig.maxOutputTokens,
-                        stream: true,
-                    }),
-                    signal: controller.signal,
-                });
+                if (statusBarItem) {
+                    statusBarItem.text = `$(sync~spin) Receiving from ${llmConfig.model}...`;
+                    statusBarItem.color = '#ffff00';
+                    statusBarItem.show();
+                }
 
-                clearTimeout(timeoutId);
+                const start = Date.now();
+
+                const result = await callLLMWithStreaming({
+                    config: llmConfig,
+                    systemPrompt: 'You are a senior TypeScript developer helping build a VS Code extension.',
+                    userPrompt: finalPrompt,
+                    temperature: 0.7,
+                    maxTokens: llmConfig.maxOutputTokens,
+                    onToken: () => {
+                        // Callback exists for future use with advanced logging
+                    },
+                    onError: (error) => {
+                        orchestratorOutputChannel?.appendLine(`⚠️  Streaming error: ${error}`);
+                    },
+                    onComplete: () => {
+                        orchestratorOutputChannel?.appendLine('✅ Streaming ended');
+                    },
+                });
 
                 const elapsedMs = Date.now() - start;
 
-                if (!response.ok) {
-                    const statusInfo = `HTTP ${response.status} ${response.statusText}`.trim();
-                    throw new Error(statusInfo);
+                if (!result.success) {
+                    const errorMsg = result.error || 'Unknown streaming error';
+                    orchestratorOutputChannel?.appendLine(`❌ LLM call failed: ${errorMsg}`);
+                    throw new Error(errorMsg);
                 }
 
-                const contentType = response.headers.get('content-type') || '';
-                const isStream = contentType.includes('text/event-stream') && typeof (response.body as any)?.getReader === 'function';
-
-                let fullReply = '';
-
-                if (isStream) {
-                    const reader = (response.body as ReadableStream<Uint8Array>).getReader();
-                    const decoder = new TextDecoder();
-
-                    if (statusBarItem) {
-                        statusBarItem.text = `$(sync~spin) Receiving from ${llmConfig.model}...`;
-                        statusBarItem.color = '#ffff00';
-                        statusBarItem.show();
-                    }
-
-                    let partialLine = '';
-                    const collectedContent: string[] = [];
-                    const fallbackChunks: string[] = [];
-                    let sawDoneSignal = false;
-
-                    const tryAppendDeltaContent = (dataStr: string): boolean => {
-                        try {
-                            const parsed = JSON.parse(dataStr) as {
-                                choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
-                            };
-                            const delta = parsed.choices?.[0]?.delta?.content;
-                            if (typeof delta === 'string' && delta.length > 0) {
-                                collectedContent.push(delta);
-                                return true;
-                            }
-
-                            // Treat finish_reason stop as a clean end signal without content
-                            const finishReason = parsed.choices?.[0]?.finish_reason;
-                            if (finishReason === 'stop') {
-                                sawDoneSignal = true;
-                            }
-                        } catch {
-                            // Parsing failed; handled by caller
-                        }
-                        return false;
-                    };
-
-                    const sanitizeFallbackReply = (fallbackRaw: string): string => {
-                        if (!fallbackRaw) {
-                            return '';
-                        }
-
-                        const noDone = fallbackRaw.replace(/\s*\[DONE\]\s*$/i, '').trim();
-                        if (!noDone) {
-                            return '';
-                        }
-
-                        // Remove trailing metadata objects (e.g., `{ "id": ... }`)
-                        const lastBrace = noDone.lastIndexOf('{');
-                        if (lastBrace !== -1) {
-                            return noDone.slice(0, lastBrace).trim();
-                        }
-
-                        return noDone;
-                    };
-
-                    // eslint-disable-next-line no-constant-condition
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-
-                        const chunk = decoder.decode(value, { stream: true });
-                        const combined = partialLine + chunk;
-                        const lines = combined.split('\n');
-                        partialLine = lines.pop() ?? '';
-
-                        for (const rawLine of lines) {
-                            const line = rawLine.trim();
-                            if (!line.startsWith('data:')) continue;
-
-                            const dataStr = line.slice(5).trim();
-                            if (!dataStr) continue;
-                            if (dataStr === '[DONE]') {
-                                sawDoneSignal = true;
-                                break;
-                            }
-
-                            const appended = tryAppendDeltaContent(dataStr);
-                            if (!appended) {
-                                fallbackChunks.push(dataStr);
-                            }
-                        }
-
-                        if (sawDoneSignal) {
-                            break;
-                        }
-                    }
-
-                    // Process any remaining partial line (in case stream ended mid-line)
-                    const trimmedPartial = partialLine.trim();
-                    if (!sawDoneSignal && trimmedPartial.startsWith('data:')) {
-                        const dataStr = trimmedPartial.slice(5).trim();
-                        if (dataStr && dataStr !== '[DONE]') {
-                            const appended = tryAppendDeltaContent(dataStr);
-                            if (!appended) {
-                                fallbackChunks.push(dataStr);
-                            }
-                        }
-                    }
-
-                    const primaryReply = collectedContent.join('');
-                    const fallbackReply = sanitizeFallbackReply(fallbackChunks.join(' '));
-
-                    fullReply = primaryReply || fallbackReply || 'Model returned no text content (metadata-only response).';
-                } else {
-                    const json = (await response.json()) as { choices?: Array<{ message?: { content?: string } }>; };
-                    fullReply = json.choices?.[0]?.message?.content ?? '';
-                }
+                const fullReply = result.content || 'Model returned no text content';
 
                 // Validate we received content
                 const trimmedReply = fullReply.trim();
@@ -521,7 +444,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     throw new Error('No content received from model');
                 }
 
-                orchestratorOutputChannel?.appendLine(`✅ Received response in ${elapsedMs}ms`);
+                orchestratorOutputChannel?.appendLine(`✅ Received response in ${elapsedMs}ms (method: ${result.method})`);
                 orchestratorOutputChannel?.appendLine('─'.repeat(60));
                 orchestratorOutputChannel?.appendLine('🧠 Model Reply:');
                 orchestratorOutputChannel?.appendLine('─'.repeat(60));
@@ -530,12 +453,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
                 await completeTaskAndNotify(`Task completed via ${llmConfig.model}`);
             } catch (error) {
-                clearTimeout(timeoutId);
-                const isAbort = error instanceof Error && error.name === 'AbortError';
-                const message = isAbort
-                    ? `Request timed out after ${llmConfig.timeoutSeconds}s`
-                    : `Error while calling model: ${error instanceof Error ? error.message : String(error)}`;
-                orchestratorOutputChannel?.appendLine(`❌ ${message}`);
+                const message = error instanceof Error ? error.message : String(error);
+                orchestratorOutputChannel?.appendLine(`❌ Error while calling model: ${message}`);
                 vscode.window.showErrorMessage(`LLM not responding — ${message}`);
                 // Return task to ready state so it can be retried
                 nextTask.status = TaskStatus.READY;
@@ -650,12 +569,19 @@ export async function activate(context: vscode.ExtensionContext) {
                             (status) => {
                                 orchestratorOutputChannel?.appendLine(status);
                                 progress.report({ message: status });
-                            }
+                            },
+                            orchestratorOutputChannel || undefined
                         );
 
                         if (result.success) {
                             orchestratorOutputChannel?.appendLine('');
                             orchestratorOutputChannel?.appendLine(result.message);
+                            if (result.mdPath) {
+                                orchestratorOutputChannel?.appendLine(`📄 PRD.md: ${result.mdPath}`);
+                            }
+                            if (result.jsonPath) {
+                                orchestratorOutputChannel?.appendLine(`📄 PRD.json: ${result.jsonPath}`);
+                            }
                             if (result.warning) {
                                 orchestratorOutputChannel?.appendLine(`⚠️  ${result.warning}`);
                             }
@@ -665,7 +591,16 @@ export async function activate(context: vscode.ExtensionContext) {
                                 );
                             }
 
-                            vscode.window.showInformationMessage(result.message);
+                            // Show popup with Open button
+                            const openButton = 'Open PRD.md';
+                            vscode.window.showInformationMessage(
+                                '✅ PRD generated successfully!',
+                                openButton
+                            ).then(selection => {
+                                if (selection === openButton && result.mdUri) {
+                                    vscode.commands.executeCommand('vscode.open', result.mdUri);
+                                }
+                            });
                         } else {
                             orchestratorOutputChannel?.appendLine(result.message);
                             vscode.window.showErrorMessage(result.message);

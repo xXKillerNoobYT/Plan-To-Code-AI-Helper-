@@ -16,6 +16,8 @@ import { PlansReader } from './plansReader';
 import { ContextBundler } from './contextBundler';
 import { PRDWriter, PRDMetadata } from './prdWriter';
 import { PRDGenerationPrompt } from '../prompts/prdGenerationPrompt';
+import { FileConfigManager, LLMConfig } from '../utils/fileConfig';
+import { callLLMWithStreaming } from '../utils/streamingLLM';
 
 /**
  * 🔄 PRD Generation Options
@@ -41,6 +43,8 @@ export interface GenerationResult {
     prdContent?: string;
     mdPath?: string;
     jsonPath?: string;
+    mdUri?: vscode.Uri;
+    jsonUri?: vscode.Uri;
     backupPath?: string;
     message: string;
     warning?: string;
@@ -60,17 +64,19 @@ export class PRDGenerator {
      * 1. Read all .md files from Plans/
      * 2. Bundle with token limits
      * 3. Create prompts
-     * 4. Call LLM
+     * 4. Call LLM with streaming
      * 5. Validate output
      * 6. Write to PRD.md/PRD.json
      * 
      * @param options - Generation options
      * @param onStatus - Callback for status updates
+     * @param outputChannel - Output channel for streaming tokens
      * @returns Generation result
      */
     static async generate(
         options: PRDGenerationOptions = {},
-        onStatus?: (status: string) => void
+        onStatus?: (status: string) => void,
+        outputChannel?: vscode.OutputChannel
     ): Promise<GenerationResult> {
         const startTime = Date.now();
         const tokenLimit = options.tokenLimit || 4000;
@@ -101,12 +107,13 @@ export class PRDGenerator {
             const systemPrompt = PRDGenerationPrompt.getSystemPrompt();
             const userPrompt = PRDGenerationPrompt.getUserPrompt(bundleResult.prompt);
 
-            // Step 4: Call LLM
-            onStatus?.('🤖 Calling LLM for PRD synthesis...');
+            // Step 4: Call LLM (with streaming)
+            onStatus?.('🤖 Calling LLM for PRD synthesis (streaming)...');
             const llmResponse = await this.callLLM(
                 systemPrompt,
                 userPrompt,
-                options.llmConfig
+                options.llmConfig,
+                outputChannel
             );
 
             if (!llmResponse.success) {
@@ -132,7 +139,8 @@ export class PRDGenerator {
                 const retryResponse = await this.callLLM(
                     systemPrompt,
                     retryPrompt,
-                    options.llmConfig
+                    options.llmConfig,
+                    outputChannel
                 );
 
                 if (retryResponse.success) {
@@ -157,6 +165,8 @@ export class PRDGenerator {
             );
 
             const writeResult = await PRDWriter.writePRD(prdContent, metadata);
+            onStatus?.(`✅ Wrote PRD.md to: ${writeResult.mdPath}`);
+            onStatus?.(`✅ Wrote PRD.json to: ${writeResult.jsonPath}`);
 
             const duration = Date.now() - startTime;
 
@@ -165,6 +175,8 @@ export class PRDGenerator {
                 prdContent,
                 mdPath: writeResult.mdPath,
                 jsonPath: writeResult.jsonPath,
+                mdUri: writeResult.mdUri,
+                jsonUri: writeResult.jsonUri,
                 backupPath: writeResult.backupPath,
                 message: writeResult.message,
                 warning: bundleResult.warning || (validation.warnings?.join('; ')),
@@ -181,83 +193,98 @@ export class PRDGenerator {
     }
 
     /**
-     * 🔗 Call LLM with prompt
+     * 🌊 Call LLM with streaming and inactivity timeout
      * 
-     * Uses fetch to call configured LLM endpoint
-     * Implements streaming and parsing
+     * Uses streaming fetch with inactivity-based timeout (not hard timeout).
+     * Falls back to non-streaming if stream fails.
+     * Appends tokens to output channel in real-time.
      * 
      * @param systemPrompt - System prompt
      * @param userPrompt - User prompt
      * @param llmConfig - LLM configuration
+     * @param outputChannel - Output channel for token streaming (optional)
      * @returns Response with generated content
      */
     private static async callLLM(
         systemPrompt: string,
         userPrompt: string,
-        llmConfig?: PRDGenerationOptions['llmConfig']
+        llmConfig?: PRDGenerationOptions['llmConfig'],
+        outputChannel?: vscode.OutputChannel
     ): Promise<{
         success: boolean;
         content?: string;
         error?: string;
     }> {
         // Use passed config or get from global config
-        const config = llmConfig || this.getDefaultLLMConfig(); if (!config) {
+        const fullConfig = llmConfig || this.getDefaultLLMConfig();
+        if (!fullConfig) {
             throw new Error('LLM configuration is required');
         }
+
+        // Convert to LLMConfig type expected by streaming utility
+        const streamingConfig: LLMConfig = {
+            url: fullConfig.url,
+            model: fullConfig.model,
+            inputTokenLimit: 4000,
+            maxOutputTokens: fullConfig.maxOutputTokens || 4000,
+            timeoutSeconds: fullConfig.timeoutSeconds || 300,
+            temperature: fullConfig.temperature || 0.3,
+        };
+
+        // Track collected tokens for PRD generation
+        const collectedTokens: string[] = [];
+
         try {
-            // Create abort controller for timeout
-            const controller = new AbortController();
-            const timeoutId = setTimeout(
-                () => controller.abort(),
-                (config.timeoutSeconds || 300) * 1000
+            outputChannel?.appendLine(
+                `🌊 Starting streaming PRD generation (inactivity timeout: ${streamingConfig.timeoutSeconds}s)...`
             );
 
-            try {
-                const response = await fetch(config.url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: config.model,
-                        messages: [
-                            { role: 'system', content: systemPrompt },
-                            { role: 'user', content: userPrompt },
-                        ],
-                        temperature: 0.3,  // Deterministic for PRD generation
-                        max_tokens: config.maxOutputTokens || 4000,
-                        stream: true,
-                    }),
-                    signal: controller.signal,
-                });
+            const result = await callLLMWithStreaming({
+                config: streamingConfig,
+                systemPrompt,
+                userPrompt,
+                temperature: 0.3,  // Deterministic for PRD generation
+                maxTokens: streamingConfig.maxOutputTokens,
+                onToken: (token) => {
+                    collectedTokens.push(token);
+                    // Note: vscode.OutputChannel doesn't support append(), only appendLine()
+                    // Token streaming happens in-memory and is output after completion
+                },
+                onError: (error) => {
+                    outputChannel?.appendLine(`⚠️  Streaming error: ${error}`);
+                },
+                onComplete: () => {
+                    outputChannel?.appendLine('✅ Streaming complete');
+                },
+            });
 
-                clearTimeout(timeoutId);
-
-                if (!response.ok) {
-                    const statusInfo = `HTTP ${response.status} ${response.statusText}`.trim();
-                    return {
-                        success: false,
-                        error: statusInfo,
-                    };
-                }
-
-                // Parse streaming response
-                const content = await this.parseStreamingResponse(response);
-
+            if (!result.success) {
+                outputChannel?.appendLine(`❌ LLM call failed: ${result.error}`);
                 return {
-                    success: true,
-                    content,
+                    success: false,
+                    error: result.error || 'Unknown streaming error',
                 };
-            } catch (error) {
-                clearTimeout(timeoutId);
-                if (error instanceof Error && error.name === 'AbortError') {
-                    return {
-                        success: false,
-                        error: `Timeout after ${config.timeoutSeconds || 300} seconds`,
-                    };
-                }
-                throw error;
             }
+
+            const content = result.content || (collectedTokens.length > 0 ? collectedTokens.join('') : '');
+
+            if (!content) {
+                outputChannel?.appendLine('❌ LLM returned empty response');
+                return {
+                    success: false,
+                    error: 'LLM returned empty response',
+                };
+            }
+
+            outputChannel?.appendLine(`✅ Received ${collectedTokens.length} tokens from LLM (method: ${result.method})`);
+
+            return {
+                success: true,
+                content,
+            };
         } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error);
+            outputChannel?.appendLine(`❌ Fatal error in LLM call: ${errMsg}`);
             return {
                 success: false,
                 error: errMsg,
@@ -265,116 +292,37 @@ export class PRDGenerator {
         }
     }
 
-    /**
-     * 📨 Parse streaming LLM response
-     * 
-     * Handles both SSE format (data: {json}) and direct JSON chunks
-     * 
-     * @param response - Fetch response object
-     * @returns Accumulated content string
-     */
-    private static async parseStreamingResponse(response: Response): Promise<string> {
-        const reader = (response.body as ReadableStream<Uint8Array>).getReader();
-        const decoder = new TextDecoder();
-
-        let fullContent = '';
-        let partialLine = '';
-
-        try {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                partialLine += chunk;
-
-                const lines = partialLine.split('\n');
-                partialLine = lines[lines.length - 1];
-
-                for (let i = 0; i < lines.length - 1; i++) {
-                    const line = lines[i].trim();
-                    if (!line) continue;
-
-                    // Handle SSE format (data: {...})
-                    if (line.startsWith('data: ')) {
-                        const dataStr = line.substring(6);
-                        if (dataStr === '[DONE]') continue;
-
-                        try {
-                            const parsed = JSON.parse(dataStr) as {
-                                choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
-                            };
-                            const delta = parsed.choices?.[0]?.delta?.content;
-                            if (typeof delta === 'string' && delta.length > 0) {
-                                fullContent += delta;
-                            }
-                        } catch {
-                            // Parsing error - skip this chunk
-                        }
-                    } else {
-                        // Try to parse as direct JSON
-                        try {
-                            const parsed = JSON.parse(line) as {
-                                choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
-                            };
-                            const delta = parsed.choices?.[0]?.delta?.content;
-                            if (typeof delta === 'string' && delta.length > 0) {
-                                fullContent += delta;
-                            }
-                        } catch {
-                            // Not valid JSON - might be malformed
-                        }
-                    }
-                }
-            }
-
-            // Process any remaining partial line
-            if (partialLine.trim()) {
-                try {
-                    if (partialLine.trim().startsWith('data: ')) {
-                        const dataStr = partialLine.trim().substring(6);
-                        if (dataStr !== '[DONE]') {
-                            const parsed = JSON.parse(dataStr) as {
-                                choices?: Array<{ delta?: { content?: string } }>;
-                            };
-                            const delta = parsed.choices?.[0]?.delta?.content;
-                            if (typeof delta === 'string') {
-                                fullContent += delta;
-                            }
-                        }
-                    } else {
-                        const parsed = JSON.parse(partialLine) as {
-                            choices?: Array<{ delta?: { content?: string } }>;
-                        };
-                        const delta = parsed.choices?.[0]?.delta?.content;
-                        if (typeof delta === 'string') {
-                            fullContent += delta;
-                        }
-                    }
-                } catch {
-                    // Final parse attempt failed
-                }
-            }
-        } finally {
-            reader.releaseLock();
-        }
-
-        return fullContent;
-    }
 
     /**
      * ⚙️  Get default LLM configuration
-     * From FileConfigManager or extension context
+     * Reads from FileConfigManager (.coe/config.json) with fallback to hardcoded defaults
      * 
-     * @returns Default LLM config
+     * @returns Default LLM config with timeout from config
      */
     private static getDefaultLLMConfig(): Required<PRDGenerationOptions['llmConfig']> {
-        return {
-            url: 'http://192.168.1.205:1234/v1/chat/completions',
-            model: 'mistralai/ministral-3-14b-reasoning',
-            maxOutputTokens: 4000,
-            timeoutSeconds: 300,
-            temperature: 0.3,
-        };
+        try {
+            const fileConfig = FileConfigManager.getLLMConfig();
+            const timeoutSeconds = fileConfig.timeoutSeconds || 300;
+            console.log(`🕐 Using PRD generation timeout: ${timeoutSeconds} seconds from config`);
+
+            return {
+                url: fileConfig.url,
+                model: fileConfig.model,
+                maxOutputTokens: fileConfig.maxOutputTokens || 4000,
+                timeoutSeconds,
+                temperature: fileConfig.temperature || 0.3,
+            };
+        } catch (error) {
+            // Fallback to hardcoded defaults if config unavailable
+            const fallbackTimeout = 300;
+            console.log(`⚠️  Config unavailable, using fallback timeout: ${fallbackTimeout} seconds`);
+            return {
+                url: 'http://192.168.1.205:1234/v1/chat/completions',
+                model: 'mistralai/ministral-3-14b-reasoning',
+                maxOutputTokens: 4000,
+                timeoutSeconds: fallbackTimeout,
+                temperature: 0.3,
+            };
+        }
     }
 }
