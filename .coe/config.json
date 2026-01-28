@@ -7,6 +7,9 @@
         "timeoutSeconds": 300,
         "temperature": 0.3
     },
+    "database": {
+        "taskRetentionDays": 30
+    },
     "extension": {
         "autoRegeneratePRD": true,
         "debugMode": false

@@ -5,16 +5,22 @@
 
 ## Overview
 
-This index provides a roadmap to all the AI Teams documentation updates (versions 4.4 through 5.5) that have been integrated into the COE Plans directory. These documents represent a comprehensive evolution of the planning, building, and evolution systems for the Code Master extension.
+This index provides a roadmap to all the AI Teams documentation updates (versions 4.4 through 5.6) that have been integrated into the COE Plans directory. These documents represent:
+- **v4.4-v4.9**: Planning wizard evolution, modular execution philosophy
+- **v5.0-v5.3**: Plan updating, lifecycle model, evolution mechanisms
+- **v5.4-v5.6**: Ticket system, answer team, clear API contracts
+- **NEW (Jan 2026)**: AI Use System implementation plans (multi-agent orchestration)
+
+Together, these form the **complete strategic + tactical planning** for COE: from concept to implementation to continuous improvement.
 
 ---
 
 ## Quick Navigation
 
-### 📘 Core Documentation
-0. **[COE Comprehensive Report - Integrated](COE-COMPREHENSIVE-REPORT-INTEGRATED.md)** ⭐ **COMPLETE MAPPING** - Shows how all comprehensive report content maps to documentation
+### 📘 AI Use System Implementation (NEW - Jan 2026)
+0. **[AI-USE-SYSTEM-PLANNING-INDEX.md](AI-USE-SYSTEM-PLANNING-INDEX.md)** ⭐ **START HERE** - Complete navigation + index for all AI Use System planning docs
 
-### Core Planning Documents
+### 📘 Core AI Teams Documentation (v4.4-v5.6)
 1. [Planning Wizard Specification](PLANNING-WIZARD-SPECIFICATION.md) - v4.4-4.8
 2. [Plan Updating Process](PLAN-UPDATING-PROCESS.md) - v5.0
 3. [Human + AI + Backend Plan Builder](PLANNING-WIZARD-SPECIFICATION.md#4-human--ai--backend-plan-builder-v48) - v4.8
@@ -38,7 +44,28 @@ This index provides a roadmap to all the AI Teams documentation updates (version
 
 ---
 
-## Version History & Key Concepts
+## 🆕 Bridge to AI Use System Implementation (Jan 2026)
+
+The **AI Use System Planning Documents** (4 detailed guides) are the **tactical implementation blueprint** for the strategic foundations laid by this documentation (v4.4-v5.6).
+
+### Strategic ↔ Tactical Mapping
+
+| Strategic (This Index) | Tactical (AI Use System) | Purpose |
+|------------------------|------------------------|---------|
+| v4.9: Modular Execution | Quick Reference + Incremental Plan | Atomic task philosophy applied |
+| v5.0: Plan Updating | Incremental Plan (Task 1-7) | Implementation of update process |
+| v5.2: Lifecycle Model | Complete.md diagram + Diagrams.md | Birth/Growth integration |
+| v5.4-5.6: Ticket System | Ticket DB + Wireframes | Direct implementation |
+| v4.8: Human + AI Builder | Planning Team role in system | Agent team coordination |
+
+### When to Reference Each Set
+
+**Strategic (v4.4-v5.6)**: Understand the WHY, design patterns, philosophy  
+**Tactical (AI Use System)**: Understand the HOW, implementation details, atomic tasks
+
+Both are needed. The strategic docs set context; the tactical docs provide actionable steps.
+
+---
 
 ### v4.4 - Adaptive Wizard Paths Prototype
 **Key Innovation**: Dynamic question flow based on user role and focus
@@ -145,7 +172,7 @@ This index provides a roadmap to all the AI Teams documentation updates (version
 - Risk management
 - Resource allocation
 
-**Location**: [Project Roadmap (Detailed)](PROJECT-ROADMAP-DETAILED.md)
+**Location**: Timeline section in [CONSOLIDATED-MASTER-PLAN.md](CONSOLIDATED-MASTER-PLAN.md) + [PROJECT-BREAKDOWN.md](PROJECT-BREAKDOWN.md)
 
 ---
 
@@ -344,8 +371,8 @@ Project Roadmap (v5.1)
 2. Build UI from [Ticket Sidebar Prototypes](TICKET-SYSTEM-SPECIFICATION.md#ticket-sidebar-ui--prototypes)
 
 ### For Project Management
-1. Reference [Project Roadmap (Detailed)](PROJECT-ROADMAP-DETAILED.md)
-2. Track against phase milestones and success metrics
+1. Reference [CONSOLIDATED-MASTER-PLAN.md](CONSOLIDATED-MASTER-PLAN.md) (timeline + phases)
+2. Consult [PROJECT-BREAKDOWN.md](PROJECT-BREAKDOWN.md) (task tracking)
 
 ---
 

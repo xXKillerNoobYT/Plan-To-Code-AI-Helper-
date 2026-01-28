@@ -213,49 +213,98 @@ describe('ProgrammingOrchestrator', () => {
             expect(afterCount).toBe(1);
         });
 
-        it('should prevent duplicates by title+priority fallback when ticketId differs', async () => {
+        it('should log DEBUG message when duplicate ticketId is detected', async () => {
+            const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => { });
+            const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { });
+
             const task1: Task = {
-                taskId: 'task-003',
-                title: 'Same Title Task',
+                taskId: 'task-debug-001',
+                title: 'Task 1',
                 description: 'First task',
                 priority: TaskPriority.P2,
                 status: TaskStatus.READY,
                 dependencies: [],
                 blockedBy: [],
                 estimatedHours: 2,
-                acceptanceCriteria: ['Test 1'],
+                acceptanceCriteria: ['Test'],
                 fromPlanningTeam: true,
                 createdAt: new Date(),
                 metadata: {
-                    ticketId: 'ticket-003a'
+                    ticketId: 'ticket-debug-001'
                 }
             };
 
             const task2: Task = {
-                taskId: 'task-004',
-                title: 'Same Title Task', // Same title
-                description: 'Different description',
-                priority: TaskPriority.P2, // Same priority
+                taskId: 'task-debug-002',
+                title: 'Task 2',
+                description: 'Second task with same ticket',
+                priority: TaskPriority.P1,
                 status: TaskStatus.READY,
                 dependencies: [],
                 blockedBy: [],
-                estimatedHours: 3,
-                acceptanceCriteria: ['Test 2'],
+                estimatedHours: 1,
+                acceptanceCriteria: ['Test'],
                 fromPlanningTeam: true,
                 createdAt: new Date(),
                 metadata: {
-                    ticketId: 'ticket-003b' // Different ticketId
+                    ticketId: 'ticket-debug-001' // Duplicate
                 }
             };
 
             await orchestrator.addTask(task1);
-            const beforeCount = orchestrator.getAllTasks().length;
+            await orchestrator.addTask(task2); // Should log DEBUG, not WARN
 
-            await orchestrator.addTask(task2); // Should be skipped due to title+priority match
-            const afterCount = orchestrator.getAllTasks().length;
+            // Verify DEBUG log was called (message may be "already queued" or "already in queue")
+            const debugCalls = consoleDebugSpy.mock.calls.map(call => call[0]);
+            const hasExpectedMessage = debugCalls.some(msg =>
+                msg.includes('ticket-debug-001') && msg.includes('already') && msg.includes('skipping')
+            );
+            expect(hasExpectedMessage).toBe(true);
 
-            expect(afterCount).toBe(beforeCount);
-            expect(afterCount).toBe(1);
+            // Verify WARN was NOT called for duplicates
+            expect(consoleWarnSpy).not.toHaveBeenCalledWith(
+                expect.stringContaining('duplicate')
+            );
+
+            consoleDebugSpy.mockRestore();
+            consoleWarnSpy.mockRestore();
+        });
+
+        it('should reload without false positives on removed tasks (Strategy C)', async () => {
+            // Simulate: Reload extension with task that was removed
+            const task1: Task = {
+                taskId: 'task-reload-001',
+                title: 'Task to be removed',
+                description: 'This will be removed before reload',
+                priority: TaskPriority.P2,
+                status: TaskStatus.READY,
+                dependencies: [],
+                blockedBy: [],
+                estimatedHours: 2,
+                acceptanceCriteria: ['Test'],
+                fromPlanningTeam: true,
+                createdAt: new Date(),
+                metadata: {
+                    ticketId: 'ticket-reload-001'
+                }
+            };
+
+            // Add task, then manually remove it from queue
+            await orchestrator.addTask(task1);
+            expect(orchestrator.getAllTasks().length).toBe(1);
+
+            // Simulate reload: remove the task from queue
+            const beforeReloadTasks = orchestrator.getAllTasks();
+            orchestrator['taskQueue'] = beforeReloadTasks.filter(t => t.taskId !== task1.taskId);
+
+            // After reload, hasTaskForTicket should return false (no warning)
+            const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => { });
+            const result = await orchestrator.hasTaskForTicket('ticket-reload-001');
+
+            expect(result).toBe(false); // Task was removed, so ticket is NOT in queue
+            expect(consoleDebugSpy).not.toHaveBeenCalled(); // No debug log for non-existent task
+
+            consoleDebugSpy.mockRestore();
         });
 
         it('should allow tasks with same title but different priority', async () => {

@@ -1,7 +1,8 @@
 # Project Breakdown - Plan-To-Code AI Helper
 **Comprehensive Task Hierarchy**  
-**Last Updated**: January 25, 2026  
-**Status**: Development in Progress (54% Complete)
+**Last Updated**: January 27, 2026  
+**Status**: Development in Progress (58% Complete)
+**Major Update**: AI Use System planning integrated (Multi-Agent Orchestration Phase)
 
 ---
 
@@ -97,7 +98,58 @@ This is your **master to-do list** breaking down the entire project into:
 - [x] Handle rate limit scenarios
 - [x] Add conflict resolution
 
-### F001: Interactive Plan Builder 🔄 IN PROGRESS
+## PHASE 3: MCP Server & Agent Coordination 🔄 IN PROGRESS (75% Complete)
+
+**This phase implements the complete AI Use System** - multi-agent orchestration, ticket-based communication between agents and users, and streaming LLM integration with inactivity timeout.
+
+### 📊 Phase 3 Progress Tracker
+
+#### ✅ Foundation Complete (3/10 features)
+- [x] **F002**: Plan Decomposition Engine (20 tests, AI-powered breakdown)
+- [x] **F022**: MCP Server with 6 Core Tools (WebSocket + SQLite, comprehensive tests)
+- [x] **F010**: Context Bundle Builder (token tracking, overflow prevention)
+
+#### 🔄 In Progress (2/10 features)
+- [ ] **F001**: Interactive Plan Builder (visual UI, on hold pending AI Use System)
+- [ ] **F016**: Multi-Agent Orchestration (5 agents total: Programming Orchestrator, Planning Team, Answer Team, Verification Team, Task Decomposition; ALL use ticket system F023 for communication)
+
+#### 🎯 AI Use System - Ready to Implement (6/10 features)
+
+**📚 Detailed Planning**: See `Plans/AI-USE-SYSTEM-PLANNING-INDEX.md` for 4 comprehensive implementation guides
+
+**🔴 P1 Core Features (NEXT UP - Start Immediately)**
+- [ ] **F023**: Ticket Database & Communication Layer (4-6 hrs, no blockers) ⭐ **START HERE**
+  - SQLite schema at `.coe/tickets.db`
+  - CRUD operations + MCP tools integration
+  - In-memory fallback for resilience
+- [ ] **F024**: Programming Orchestrator Task Routing (3-4 hrs, depends on F023)
+  - Task-by-task Copilot direction
+  - Blocker detection with auto-escalation
+  - Config-driven inactivity timeout
+
+**🟡 P2 UI Features (Blocked by P1)**
+- [ ] **F025**: Agents Sidebar Tab (3-4 hrs, blocked by F024)
+  - Live status for 5 agent teams
+  - Real-time metrics display
+- [ ] **F026**: Tickets Sidebar Tab (3-4 hrs, blocked by F023)
+  - Ticket grouping by status
+  - Reply thread UI with Clarity scoring
+- [ ] **F027**: Streaming LLM Mode (2-3 hrs, no dependencies)
+  - Config-driven inactivity timeout
+  - Graceful degradation on timeout
+
+**🟢 P3 Polish Features (Blocked by P1 + P2)**
+- [ ] **F028**: Verification Panel UI (2-3 hrs, blocked by F023 + F024)
+  - Test results display
+  - Re-run, approve, escalate actions
+
+**📅 Timeline to AI Use System MVP**: ~15-20 hours total → Feb 15, 2026 target
+
+**🎫 Central Principle**: All agents (Planning, Orchestrator, Answer, Verification, Clarity) communicate with users and each other via the **Ticket System** (F023). No ad-hoc chat, no separate channels.
+
+---
+
+### F001: Interactive Plan Builder 🔄 IN PROGRESS/On Hold
 - [ ] Design visual drag-and-drop UI
   - [ ] Task card components
   - [ ] Dependency arrow rendering
@@ -144,8 +196,6 @@ This is your **master to-do list** breaking down the entire project into:
 
 ---
 
-## PHASE 3: MCP Server & Agent Coordination 🔄 IN PROGRESS (60% Complete)
-
 ### F022: MCP Server with 6 Core Tools ✅ COMPLETE
 - [x] Set up Node.js MCP server
 - [x] Implement WebSocket server
@@ -180,6 +230,8 @@ This is your **master to-do list** breaking down the entire project into:
 - [x] Create integration tests
 
 ### F016: Multi-Agent Orchestration 🔄 IN PROGRESS
+**🎫 Uses Ticket System**: All 4 agent teams communicate via F023 (Ticket DB). Agents create ai_to_human tickets when blocked; users reply via Tickets Tab.
+
 #### Programming Orchestrator
 - [x] Create orchestrator base class
 - [ ] Implement task routing algorithm
@@ -301,77 +353,198 @@ This is your **master to-do list** breaking down the entire project into:
 - [x] Add caching layer
 - [x] Create comprehensive tests
 
+### F023: AI Use System - Ticket Database & Communication Layer 🔄 P1 PRIORITY
+**Purpose**: Central communication hub for ALL agents. Replaces ad-hoc chat with structured tickets. **SEPARATED DATABASES**: active tickets + completed task history.
+- [x] Create SQLite schema at `.coe/tickets.db` with SEPARATED TABLES:
+  - [x] **ACTIVE**: Tickets table (id, type, status, priority, creator, assignee, task_id, title, description, timestamps)
+  - [x] **HISTORY**: Completed_tasks table (task_id, original_ticket_id, title, status, priority, completed_at, duration_minutes, outcome, created_at) ← NEW for P1.1
+  - [ ] Ticket replies table (id, ticket_id, author, content, clarity_score, needs_followup, timestamp)
+  - [x] Indexes for fast status/assignee lookups
+  - [x] Schema versioning (db_version table) for migrations (P1.2 completed)
+- [x] Implement HISTORY operations on COMPLETED tasks (P1.1)
+  - [x] archiveTask(taskId) → move to completed_tasks, delete from active
+  - [x] getAllCompleted(filters?) → retrieve completed task history
+  - [ ] Auto-cleanup tasks >taskRetentionDays (default 30, from config.json)
+  - [x] Indexed queries on status and completion date
+- [ ] Implement CRUD operations on ACTIVE tickets
+  - [ ] createTicket(type, title, description, priority, creator) → ticket ID
+  - [ ] getTicket(id) → full ticket + thread
+  - [ ] getTickets(filters) → paginated list (active only)
+  - [ ] updateTicketStatus(id, newStatus) → updates timestamp
+  - [ ] addReply(ticketId, author, content) → reply ID
+  - [ ] Soft delete via status='archived'
+- [ ] Implement in-memory fallback
+  - [ ] Use Map<string, Ticket> if SQLite init fails
+  - [ ] Log warning to user ("DB unavailable; tickets won't persist")
+  - [ ] Still provide full UI/API (no crashes)
+- [ ] Add new MCP tools for ticket interaction
+  - [ ] createTicket MCP tool
+  - [ ] replyToTicket MCP tool
+  - [ ] getTickets MCP tool
+  - [ ] getTicket MCP tool
+- [ ] Create comprehensive tests (≥80% coverage)
+  - [x] CRUD on completed_tasks (P1.1)
+  - [x] archiveTask() and getAllCompleted() (P1.1)
+  - [x] Data integrity with separated tables (P1.1)
+  - [x] Schema migration v0→v1 (P1.2)
+  - [ ] CRUD on active tickets, in-memory fallback, concurrency, MCP tools
+
+**Timeline**: 4–6 hours | **Blockers**: None | **Integration**: .coe/tickets.db (P1.2 migration v0→v1 done), MCP tools | **Config**: taskRetentionDays in .coe/config.json | **Status**: P1.1 (completed tasks) + P1.2 (schema versioning) COMPLETE, P1.0 (active tickets CRUD) IN PROGRESS
+
+### F024: AI Use System - Programming Orchestrator Task Routing 🔄 P1 PRIORITY
+**Purpose**: Direct Copilot task-by-task; auto-escalate via **ticket creation** (F023) if blocked >30s (no token from LLM).
+- [ ] Implement task assignment workflow
+  - [ ] getNextTask() → pull highest P1 from queue
+  - [ ] Send task to Copilot via MCP with super-detailed prompt
+  - [ ] Track currentTask in Orchestrator state
+  - [ ] reportTaskStatus('completed') → update queue
+- [ ] Implement blocker detection logic
+  - [ ] Monitor LLM token inactivity (timeout from config.llm.timeoutSeconds)
+  - [ ] If no token for >30s:
+    - [ ] Auto-create ticket (type='ai_to_human', priority=P1)
+    - [ ] Call MCP askQuestion() with task context
+    - [ ] Log warning to console
+- [ ] Add config integration
+  - [ ] Read config.llm.timeoutSeconds (default 60s)
+  - [ ] **Never write to config** (read-only)
+  - [ ] Use for inactivity timeout, not total request timeout
+- [ ] Create routing audit trail
+  - [ ] Log all routing decisions (JSON format)
+  - [ ] Track task → agent assignments
+  - [ ] Record escalations with reasons
+- [ ] Create comprehensive tests (≥75% coverage)
+  - [ ] Task assignment + priority ordering
+  - [ ] Blocker detection after timeout
+  - [ ] Config read-only verification
+  - [ ] Ticket creation on escalation
+
+**Timeline**: 3–4 hours | **Blockers**: F023 (Ticket DB) | **Integration**: Reuses MCP tools + existing task queue
+
+### F025: AI Use System - Agents Sidebar Tab 🔄 P2 PRIORITY
+**Purpose**: Display live status of 5 agent teams (Planning, Orchestrator, Answer, Verification, Clarity). All agents log to shared system; all use ticket system (F023) for communication.
+
+- [ ] Implement agent logging infrastructure
+  - [ ] Create logger utility (JSON lines format to `agents.log`)
+  - [ ] Log all agent actions (task assignment, ticket creation, responses)
+  - [ ] Track metrics per agent (response time, task count, uptime)
+  - [ ] Implement log rotation (max 10 MB, keep 5 old files)
+  - [ ] Ensure ALL agents (Planning, Orchestrator, Answer, Verification, Clarity) use same logger
+- [ ] Create AgentsTreeProvider (extends TreeDataProvider<AgentItem>)
+  - [ ] Display 5 agents: Planning Team, Programming Orchestrator, Answer Team, Verification Team, Clarity Agent
+  - [ ] Status indicator per agent (Idle / Working / Waiting / Error)
+  - [ ] Show current task/activity for active agents
+  - [ ] Display uptime + last activity timestamp
+  - [ ] Show ticket count per agent (how many tickets each created/resolved)
+- [ ] Implement tree view UI
+  - [ ] Use emoji for quick scanning (🤖 for agents, 🟢/🟡/🔴 for status)
+  - [ ] Refresh every 5 seconds (configurable)
+  - [ ] Click agent → open webview with logs/stats
+  - [ ] Right-click menu: View logs, Reset agent, Escalate to user
+- [ ] Add agent webview panel
+  - [ ] Display last 20 log entries (JSON lines format)
+  - [ ] Show metrics (avg response time, tasks completed, uptime)
+  - [ ] Color-coded status (green=Idle, blue=Working, yellow=Waiting, red=Error)
+  - [ ] Show agent's ticket history (created/resolved tickets from F023)
+- [ ] Create comprehensive tests
+  - [ ] Tree renders all 5 agents
+  - [ ] Status updates in real-time
+  - [ ] Click opens correct webview
+  - [ ] Menu actions trigger correctly
+  - [ ] Logging infrastructure works for all agents
+
+**Timeline**: 3–4 hours | **Blockers**: F024 (Orchestrator routing) | **Integration**: Extends tasksTreeView pattern; reads from agents.log
+
+### F026: AI Use System - Tickets Sidebar Tab 🔄 P2 PRIORITY
+**Purpose**: Display ALL agent-created tickets (from Planning, Orchestrator, Answer, Verification, Clarity teams) grouped by status; click to open details + reply thread.
+- [ ] Create TicketsTreeProvider (extends TreeDataProvider<TicketItem>)
+  - [ ] Group tickets by status (Open / In Review / Resolved / Escalated)
+  - [ ] Show ticket ID, title, priority badge (P1/P2/P3), assignee
+  - [ ] Display count for each group
+  - [ ] Filter by priority (P1 / P2 / P3 / All)
+  - [ ] Refresh every 5 seconds
+- [ ] Implement tree view UI
+  - [ ] Use emoji for quick scanning (🎫=ticket, 📋=open, ✅=resolved, 🚨=escalated)
+  - [ ] Click ticket → open webview with full details
+  - [ ] Right-click menu: Mark as reviewed, Escalate, Archive
+  - [ ] Show "X new" badge on tab if unreviewed tickets
+- [ ] Add ticket details webview
+  - [ ] Display header (ID, status, priority, creator, assignee)
+  - [ ] Show description
+  - [ ] Display full thread (replies with author, content, clarity score, timestamp)
+  - [ ] Reply input box at bottom
+  - [ ] Send reply → calls addReply() → auto-score with Clarity Agent
+  - [ ] Buttons: Send, Close & Resolve, Escalate
+- [ ] Create comprehensive tests
+  - [ ] Tree groups tickets by status
+  - [ ] Click opens correct webview
+  - [ ] Filter works (P1 only shows P1)
+  - [ ] Counts match DB
+
+**Timeline**: 3–4 hours | **Blockers**: F023 (Ticket DB) | **Integration**: Extends tasksTreeView pattern; queries ticket DB
+
+### F027: AI Use System - Streaming LLM Mode with Inactivity Timeout 🔄 P2 PRIORITY
+**Purpose**: Stream LLM responses with config-driven inactivity timeout (graceful close if no tokens).
+- [ ] Attach streaming listener to LLM calls
+  - [ ] LLM clients (OpenAI, Mistral) support stream: true
+  - [ ] Streaming listener records last token timestamp
+  - [ ] Loop: while (now - last_token_time < config.timeoutSeconds)
+    - [ ] Read next token
+    - [ ] Append to response buffer
+    - [ ] Update last_token_time
+- [ ] Implement graceful timeout handling
+  - [ ] If no token for config.timeoutSeconds: exit loop (don't retry)
+  - [ ] Return accumulated response buffer (partial OK)
+  - [ ] Log warning: "LLM inactivity detected; used partial response"
+  - [ ] Don't throw exception (graceful degradation)
+- [ ] Add config integration
+  - [ ] Read config.llm.timeoutSeconds on startup (default 60s)
+  - [ ] Use for max inactivity between tokens
+  - [ ] **Never write to config**
+  - [ ] Fallback to 60s if config missing
+- [ ] Create comprehensive tests (≥70% coverage)
+  - [ ] Stream starts and receives tokens
+  - [ ] Token time tracked correctly
+  - [ ] Timeout triggers after N seconds no-token
+  - [ ] Buffer accumulated (partial response OK)
+  - [ ] Config not modified
+  - [ ] Warning logged to console/output
+  - [ ] No crashes on timeout
+
+**Timeline**: 2–3 hours | **Blockers**: None | **Integration**: LLM service + config manager (read-only)
+
+### F028: AI Use System - Verification Panel UI (Test Results Display) 🔄 P3 PRIORITY
+**Purpose**: Show Verification Team test results; allow re-run, approve, or escalate.
+- [ ] Create verification webview panel
+  - [ ] Display test output (failed/passed counts, statistics)
+  - [ ] Show stack traces for failures
+  - [ ] Clickable file links (jump to editor)
+  - [ ] Coverage summary if available
+- [ ] Implement result actions
+  - [ ] **Re-Run Tests** button → triggers test execution
+  - [ ] **Approve Changes** button → calls reportVerificationResult('passed')
+  - [ ] **Escalate** button → creates investigation ticket
+  - [ ] **Dismiss** button → hides panel
+- [ ] Add auto-dismiss logic
+  - [ ] If all tests pass: auto-dismiss after 10s (configurable)
+  - [ ] If failures: stays visible until user acts
+  - [ ] Manual dismiss always works
+- [ ] Integrate with Verification Team
+  - [ ] Triggered automatically 60s after file changes
+  - [ ] Reads test results from reportVerificationResult calls
+  - [ ] Calls MCP tools for user actions
+- [ ] Create comprehensive tests
+  - [ ] Panel loads test output correctly
+  - [ ] File links clickable
+  - [ ] Button actions call correct MCP tools
+  - [ ] Auto-hide timer works
+
+**Timeline**: 2–3 hours | **Blockers**: F023, F024 (for integration) | **Integration**: Verification Team + MCP tools
+
 ---
 
-## PHASE 4: Visual Tools & UI Components 📅 QUEUED
+## PHASE 4: Visual Tools & UI Components (Advanced) 📅 QUEUED
 
-### F023: Visual Verification Panel
-- [ ] Design verification UI mockups
-- [ ] Implement webview panel creation
-- [ ] Add dev server integration
-  - [ ] Auto server launch
-  - [ ] Port management
-  - [ ] Live reload
-- [ ] Create interactive checklist
-  - [ ] Dynamic item generation from acceptance criteria
-  - [ ] Pass/fail/skip options
-  - [ ] Notes field per item
-  - [ ] Screenshot attachment
-- [ ] Add design system reference panel
-  - [ ] Color palette display
-  - [ ] Typography reference
-  - [ ] Component examples
-  - [ ] Icon library
-- [ ] Implement issue reporting
-  - [ ] Severity selection (critical/major/minor)
-  - [ ] Description field
-  - [ ] Screenshot annotation
-  - [ ] Auto investigation task creation
-- [ ] Add server controls
-  - [ ] Start/stop/restart buttons
-  - [ ] Port configuration
-  - [ ] Log viewer
-- [ ] Create 6 annotation types
-  - [ ] Color mismatch
-  - [ ] Spacing issue
-  - [ ] Typography problem
-  - [ ] Missing element
-  - [ ] Alignment issue
-  - [ ] Functional bug
-- [ ] Add Ready gate workflow
-  - [ ] Human approval checkpoint
-  - [ ] Batch approval option
-  - [ ] Rejection with feedback
-- [ ] Create comprehensive tests
-
-### F024: Programming Orchestrator Dashboard
-- [ ] Design dashboard UI
-- [ ] Implement agent status cards
-  - [ ] Status indicators (active/idle/error)
-  - [ ] Current task display
-  - [ ] Queue depth
-  - [ ] Performance metrics
-- [ ] Add live metrics display
-  - [ ] Tasks completed
-  - [ ] Success rate
-  - [ ] Average response time
-  - [ ] Error count
-- [ ] Create configuration panel
-  - [ ] Auto-decompose toggle
-  - [ ] Agent enable/disable
-  - [ ] Priority thresholds
-  - [ ] Timeout settings
-- [ ] Add plan selector
-  - [ ] Active project dropdown
-  - [ ] Recent plans list
-  - [ ] Quick switch
-- [ ] Implement real-time updates
-  - [ ] WebSocket integration
-  - [ ] Auto-refresh
-  - [ ] Visual notifications
-- [ ] Create comprehensive tests
-
-### F005: Review Tool with Annotation System
+### F029: Review Tool with Annotation System
 - [ ] Design annotation UI
 - [ ] Implement file diff viewer
   - [ ] Side-by-side comparison
@@ -395,7 +568,7 @@ This is your **master to-do list** breaking down the entire project into:
 - [ ] Implement integration with GitHub PR reviews
 - [ ] Create comprehensive tests
 
-### F006: Plan Adjustment Wizard
+### F030: Plan Adjustment Wizard
 - [ ] Design wizard UI flow
 - [ ] Implement change detection
   - [ ] Diff computation
@@ -425,7 +598,7 @@ This is your **master to-do list** breaking down the entire project into:
 
 ### Stage 1: Core AI Functionality
 
-#### F036: Boss AI Team - Basic Coordination
+#### F031: Boss AI Team - Basic Coordination
 - [ ] Design Boss AI architecture
 - [ ] Implement task routing to agent teams
   - [ ] Team capability matching
@@ -1668,50 +1841,69 @@ This is your **master to-do list** breaking down the entire project into:
 - ✅ MCP Server (6 tools, comprehensive tests)
 - ✅ Context Bundle Builder (token tracking)
 
-### In Progress (Active Development)
-- 🔄 Interactive Plan Builder (visual UI, templates)
-- 🔄 Multi-Agent Orchestration (4 teams + Boss AI)
-- 🔄 Visual Verification Panel (design system integration)
-- 🔄 Programming Orchestrator Dashboard (metrics, coordination)
+### In Progress (Active Development - PHASE 2-3)
+- 🔄 **PHASE 2**: Interactive Plan Builder (visual UI, templates)
+- 🔄 **PHASE 3: AI Use System** ([See AI-USE-SYSTEM-PLANNING-INDEX.md](AI-USE-SYSTEM-PLANNING-INDEX.md))
+  - 🔴 **P1 Tasks** (Start immediately, 7-10 days):
+    - [ ] F023: Ticket Database & Communication Layer
+    - [ ] F024: Programming Orchestrator Task Routing
+  - 🟡 **P2 Tasks** (Follow P1, 5-7 days):
+    - [ ] F025: Agents Sidebar Tab
+    - [ ] F026: Tickets Sidebar Tab
+    - [ ] F027: Streaming LLM Mode with Inactivity Timeout
+  - 🟢 **P3 Tasks** (Follow P2, 2-3 days):
+    - [ ] F028: Verification Panel UI
+- 🔄 Multi-Agent Orchestration (Planning Team, Answer Team, Verification Team)
 
 ### Queued (Not Started)
-- 📅 LangGraph Integration
-- 📅 AutoGen Framework
-- 📅 Agent Evolution System
-- 📅 Advanced Context Management
-- 📅 Researcher/Critic/Scraper/Updater Teams
-- 📅 Real-time Collaboration
-- 📅 Analytics Dashboard
-- 📅 Plugin Architecture
-- 📅 Comprehensive Testing Suite
-- 📅 Documentation & Launch
+- 📅 **PHASE 4**: Visual Tools & Advanced UI (F029-F030)
+  - 📅 Review Tool with Annotation System
+  - 📅 Plan Adjustment Wizard
+- 📅 **PHASE 5+**: AI Intelligence & Extension Ecosystem
+  - 📅 LangGraph Integration & Advanced Workflows
+  - 📅 AutoGen Framework & Agent Communication
+  - 📅 Agent Evolution System & Loop Detection
+  - 📅 Context Breaking & Advanced Strategies
+  - 📅 Researcher/Critic/Scraper/Updater Agents
+  - 📅 Real-time Collaboration
+  - 📅 Analytics Dashboard & KPI Tracking
+  - 📅 Plugin Architecture & Custom Extensions
+  - 📅 Comprehensive Testing Suite
+  - 📅 Documentation & Launch Preparation
 
 ### Overall Progress
 **Total Features**: 35  
-**Completed**: 12 (34%)  
-**In Progress**: 10 (29%)  
-**Queued**: 13 (37%)
+**Completed (✅)**: 8 (23%)  
+**In Progress/Planned (🔄)**: 6 (17%)  
+  - P1 Priority: 2 features (F023-F024)
+  - P2 Priority: 3 features (F025-F027)
+  - P3 Priority: 1 feature (F028)
+**Queued (📅)**: 21 (60%)
 
-**Project Completion**: ~54%
+**Project Completion**: ~58% (up from 54% with detailed AI Use System planning)
+
+**Key Milestone**: AI Use System MVP = Feb 15, 2026 (all P1/P2/P3 complete)
 
 ---
 
 ## 🎯 Priority Legend
 
-- **P0** - Critical for MVP launch
-- **P1** - High priority, needed for full v1.0
-- **P2** - Medium priority, nice-to-have enhancements
-- **P3** - Low priority, future improvements
+- **P0** - Critical for MVP launch (System integrity)
+- **P1** - High priority, needed for MVP (Feb 15, 2026) → AI Use System core
+- **P2** - Medium priority, follows P1 → AI Use System UI
+- **P3** - Lower priority, polish & features → AI Use System results panel
 
 ---
 
 ## 📝 Notes
 
 - This is a **living document** - update as work progresses
+- **AI Use System Phase**: Detailed planning complete [See AI-USE-SYSTEM-* docs](AI-USE-SYSTEM-PLANNING-INDEX.md)
 - Check off items as completed
 - Add notes/blockers inline as needed
 - Reference GitHub Issues for detailed task tracking
-- Maintain minimum 3 open issues at all times
+- Maintain minimum 3 open issues at all times (P1 first!)
 - Follow atomic task philosophy (5 criteria)
 - Ensure 80%+ test coverage for all new code
 - Document all public APIs inline
+- **NEW**: Config-driven inactivity timeout (never write to .coe/config.json)

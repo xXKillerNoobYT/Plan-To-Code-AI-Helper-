@@ -1,21 +1,35 @@
-# Planning Documentation - Core Specifications
+# Planning Documentation - Core Specifications & Implementation Plans
 
 **Created**: January 18, 2026  
-**Updated**: January 24, 2026  
-**Status**: ✅ Cleaned - Pure planning specifications only (no status/task tracking)  
+**Updated**: January 27, 2026  
+**Status**: ✅ Complete with AI Use System (Multi-Agent Orchestration Phase 3)  
 **Location**: `/Plans/`
 
 ---
 
 ## 📋 What's Here
 
-This directory contains **pure planning specifications, templates, and methodologies** for the Copilot Orchestration Extension (COE). All work-tracking, status updates, and task lists have been removed to maintain focus on reusable planning artifacts.
+This directory contains **pure planning specifications, implementation plans, and methodologies** for the Copilot Orchestration Extension (COE). Focus areas include:
+- **AI Use System**: Complete multi-agent orchestration + ticket system (Phases 1-3, Feb 15 MVP)
+- **Planning Methodologies**: Adaptive wizards, modular execution, evolution patterns
+- **Architecture & Design**: Complete system architecture and agent team specifications
+- All work-tracking, detailed status updates removed to maintain focus on reusable planning artifacts.
 
 ### 📚 Quick Navigation
 
+#### 🆕 AI Use System (PHASE 3: Multi-Agent Orchestration) - [Read First!]
+| Document | Purpose |
+|----------|---------|
+| 🎯 [**AI-USE-SYSTEM-PLANNING-INDEX.md**](AI-USE-SYSTEM-PLANNING-INDEX.md) | **START HERE** - Navigation guide for all AI Use System docs |
+| 📊 [**AI-USE-SYSTEM-INCREMENTAL-PLAN.md**](AI-USE-SYSTEM-INCREMENTAL-PLAN.md) | Complete implementation plan (8 atomic P1/P2/P3 tasks, MVP Feb 15) |
+| 📋 [**AI-USE-SYSTEM-QUICK-REFERENCE.md**](AI-USE-SYSTEM-QUICK-REFERENCE.md) | Short cheat sheet for developers (2 pages, P1 tasks only) |
+| 📊 [**AI-USE-SYSTEM-DIAGRAMS.md**](AI-USE-SYSTEM-DIAGRAMS.md) | Architecture diagrams, workflows, state machines |
+| 🏗️ [**AI-Use-System-Complete.md**](AI-Use-System-Complete.md) | Python implementation skeleton + Mermaid diagrams |
+
+#### 📘 Core Planning Documents
 | Document | Type | Purpose |
 |----------|------|---------|
-| 📖 [**AI-TEAMS-DOCUMENTATION-INDEX.md**](AI-TEAMS-DOCUMENTATION-INDEX.md) | Index | Master index with version history & navigation |
+| 📖 [**AI-TEAMS-DOCUMENTATION-INDEX.md**](AI-TEAMS-DOCUMENTATION-INDEX.md) | Index | Master version index v4.4-v5.6 (planning evolution) |
 | 🤖 [**ANSWER-AI-TEAM-SPECIFICATION.md**](ANSWER-AI-TEAM-SPECIFICATION.md) | Specification | On-demand question resolution team |
 | 📁 [**COE-Master-Plan/**](COE-Master-Plan/) | Architecture | Complete architecture documentation (10 files) |
 | 🎯 [**CONSOLIDATED-MASTER-PLAN.md**](CONSOLIDATED-MASTER-PLAN.md) | Master Plan | Primary project plan and structure |
@@ -26,36 +40,85 @@ This directory contains **pure planning specifications, templates, and methodolo
 | 📊 [**PROGRAM-LIFECYCLE-MODEL.md**](PROGRAM-LIFECYCLE-MODEL.md) | Model | Birth → Growth → Evolution → Refinement |
 | 📝 [**PROJECT-PLAN-TEMPLATE.md**](PROJECT-PLAN-TEMPLATE.md) | Template | Generic project plan template |
 | 🎯 [**QUICK-REFERENCE-CARD.md**](QUICK-REFERENCE-CARD.md) | Reference | Fast lookup + metrics cheat sheet |
-| 🎫 [**TICKET-SYSTEM-SPECIFICATION.md**](TICKET-SYSTEM-SPECIFICATION.md) | Specification | AI-human interaction system |
+| 🎫 [**TICKET-SYSTEM-SPECIFICATION.md**](TICKET-SYSTEM-SPECIFICATION.md) | Specification | AI-human interaction system (synchronous tickets) |
 | 🗺️ [**VISUAL-DOCUMENTATION-MAP.md**](VISUAL-DOCUMENTATION-MAP.md) | Navigation | Hierarchy & flow diagrams |
 
 ---
 
 ## 📊 Content Summary
-- **13 Core Documents**: Specifications, templates, methodologies, navigation
+- **18 Core Documents**: Specifications, templates, methodologies, navigation, implementation plans
+- **AI Use System**: 5 dedicated documents (complete implementation planning for Feb 15 MVP)
 - **1 Architecture Folder**: COE-Master-Plan with 10 detailed architecture files
-- **~150,000 Words**: Comprehensive, implementation-ready planning content
-- **15+ Flow Charts**: Mermaid diagrams + ASCII fallbacks
-- **25+ Code Examples**: TypeScript, JSON, SQL schemas
+- **~200,000 Words**: Comprehensive, implementation-ready planning content
+- **20+ Flow Charts**: Mermaid diagrams + ASCII fallbacks
+- **30+ Code Examples**: TypeScript, Python, JSON, SQL schemas
+- **8 Atomic Implementation Tasks**: Ready to convert to GitHub Issues
 
 ---
 
 ## 🎯 How to Use
 
-### For AI Systems
+### 🚀 For AI Use System Implementation (Immediate - Feb 15 MVP)
+1. **Start with**: `AI-USE-SYSTEM-PLANNING-INDEX.md` (navigation + overview)
+2. **For developers**: Read `AI-USE-SYSTEM-QUICK-REFERENCE.md` (2 pages, P1 tasks)
+3. **For detailed plan**: `AI-USE-SYSTEM-INCREMENTAL-PLAN.md` (8 tasks, blockers, timelines)
+4. **For architecture**: `AI-USE-SYSTEM-DIAGRAMS.md` (system design, workflows)
+5. **Create GitHub Issues** from 8 atomic P1/P2/P3 tasks (time estimates included)
+
+### For AI Systems (Strategic Planning)
 1. **Start with**: `AI-TEAMS-DOCUMENTATION-INDEX.md` for complete navigation
 2. **Master plan**: `CONSOLIDATED-MASTER-PLAN.md` for project structure
-3. **Specifications**: Individual spec files for detailed requirements
-4. **Templates**: Use `PROJECT-PLAN-TEMPLATE.md` for new projects
+3. **AI Use System**: See section above (this is current focus through Feb 15)
+4. **Specifications**: Individual spec files for detailed requirements
+5. **Templates**: Use `PROJECT-PLAN-TEMPLATE.md` for new projects
 
-### For Developers
-1. **Architecture**: Explore `COE-Master-Plan/` folder for technical details
-2. **Quick lookup**: Use `QUICK-REFERENCE-CARD.md` for fast reference
-3. **Visual maps**: Check `VISUAL-DOCUMENTATION-MAP.md` for system overview
+### For Developers (Implementation)
+1. **AI Use System First**: See "For AI Use System Implementation" section above
+2. **Architecture**: Explore `COE-Master-Plan/` folder for technical details
+3. **Quick lookup**: Use `QUICK-REFERENCE-CARD.md` for fast reference
+4. **Visual maps**: Check `VISUAL-DOCUMENTATION-MAP.md` for system overview
 
 ---
 
-## 🧹 What Was Removed
+## 🆕 AI Use System - Current Priority (Feb 15 MVP)
+
+### What Is It?
+The **AI Use System** is a multi-agent orchestration platform that transforms COE from planning-only into a **ticket-based agent coordination system**. It enables:
+- ✅ **Ticket Database** (SQLite) - Async AI-to-human communication
+- ✅ **Programming Orchestrator** - Routes tasks to Copilot, detects blockers
+- ✅ **Agents Sidebar Tab** - Live agent team status (5 agents)
+- ✅ **Tickets Sidebar Tab** - Task/clarification tracking
+- ✅ **Streaming LLM** - Config-driven inactivity timeout
+- ✅ **Verification Panel** - Test result display & approval
+
+### Implementation Status
+**Phase**: Planning Complete (✅) → Ready for Development (Jan 27, 2026)  
+**Timeline**: 3 phases (Feb 5 → Feb 10 → Feb 15)  
+**Deliverables**: 8 atomic implementation tasks (P1 → P3)  
+**Team**: Developers can start immediately using PROVIDED PLANS
+
+### Key Documents
+| Name | Purpose |
+|------|---------|
+| [AI-USE-SYSTEM-PLANNING-INDEX.md](AI-USE-SYSTEM-PLANNING-INDEX.md) | Index + navigation for all 4 AI Use System planning docs |
+| [AI-USE-SYSTEM-QUICK-REFERENCE.md](AI-USE-SYSTEM-QUICK-REFERENCE.md) | 2-page quick start (P1 tasks, SQL schema, test examples) |
+| [AI-USE-SYSTEM-INCREMENTAL-PLAN.md](AI-USE-SYSTEM-INCREMENTAL-PLAN.md) | **MAIN REFERENCE** - Full implementation plan (15 pages, all details) |
+| [AI-USE-SYSTEM-DIAGRAMS.md](AI-USE-SYSTEM-DIAGRAMS.md) | Architecture, workflows, state machines (visuals) |
+| [PROJECT-BREAKDOWN.md](../PROJECT-BREAKDOWN.md) | Master task list (updated Jan 27 to include AI Use System) |
+
+### Getting Started
+**For Developers**:
+1. Read `AI-USE-SYSTEM-QUICK-REFERENCE.md` (5 min)
+2. Read relevant sections in `AI-USE-SYSTEM-INCREMENTAL-PLAN.md` 
+3. Convert P1 tasks to GitHub Issues
+4. Start coding Task 1 (Ticket DB, 4-6 hours)
+
+**For Architects/PMs**:
+1. Read overview in `AI-USE-SYSTEM-PLANNING-INDEX.md`
+2. Review timeline + success metrics (same doc)
+3. Approve/adjust scope with team
+
+---
 
 All temporal/status-based content has been removed:
 - ❌ Task tracking and sprint plans

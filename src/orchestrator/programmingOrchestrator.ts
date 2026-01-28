@@ -533,22 +533,25 @@ export class ProgrammingOrchestrator {
      * Adds a pre-decomposed task from Planning Team to the orchestrator's queue.
      * Tasks are validated and inserted in priority order (P1 > P2 > P3).
      * 
+     * **Duplicate Prevention (Option A - Reusable TicketIds)**:
+     * - Only prevents active duplicates (ready, in-progress, blocked)
+     * - Archived/completed tasks with same ticketId are IGNORED
+     * - Allows ticketId reuse across test runs and production cycles
+     * - Example: 'TEST_001' can be recreated after previous run's archive
+     * 
      * **Enforces**: Planning Team output only (verifies fromPlanningTeam flag)
-     * **Prevents**: Duplicate tasks for the same ticket (if task has ticketId metadata)
+     * **Prevents**: Duplicate ACTIVE tasks by exact ticketId metadata match
      * 
      * @param task - Task to add (must be from Planning Team)
      * @throws Error if task is invalid or not from Planning Team
      */
     async addTask(task: Task): Promise<void> {
-        // Prevent duplicate tasks for tickets (with fallback to title+priority check)
+        // Prevent duplicate ACTIVE tasks for tickets (exact match only)
+        // Note: Archived/completed tasks are ignored - allows reuse
         if (task.metadata?.ticketId) {
-            const exists = await this.hasTaskForTicket(
-                task.metadata.ticketId,
-                { title: task.title, priority: task.priority }
-            );
+            const exists = await this.hasTaskForTicket(task.metadata.ticketId);
             if (exists) {
-                console.warn(`⚠️ Task already exists for ticket ${task.metadata.ticketId}, skipping duplicate`);
-                console.log(`   Task title: "${task.title}", Priority: ${task.priority}`);
+                console.debug(`ℹ️ Task for ticket ${task.metadata.ticketId} already in queue (skipping)`);
                 return;
             }
         }
@@ -730,42 +733,40 @@ export class ProgrammingOrchestrator {
      * 🎫 Check if task already exists for a given ticket ID
      * 
      * Prevents duplicate tasks from being created for the same ticket.
-     * Useful for ticket routing to avoid double-queueing.
+     * **CRITICAL**: Only checks ACTIVE queue, not historical/completed tasks.
+     * This enables Option A behavior: test ticketIds can be reused across runs.
      * 
-     * Uses two-level duplicate detection:
-     * 1. Primary: Exact ticketId match in metadata
-     * 2. Fallback: title + priority match (if ticket data provided)
+     * Uses exact match only for precise deduplication:
+     * - Checks metadata.ticketId for exact match
+     * - Verifies task has ACTIVE status only:
+     *   ✅ ready, in-progress, blocked (CHECKED)
+     *   ❌ completed, failed, archived (IGNORED - in history)
+     * - NO fuzzy matching (removed title+priority fallback)
      * 
-     * @param ticketId - Ticket ID to check
-     * @param ticket - Optional ticket object for fallback title/priority matching
-     * @returns Promise<boolean> True if a task already exists for this ticket
+     * **Option A (Reusable TicketIds)**:
+     * - Run 1: Create 'TEST_001' → completes → archives → removed from active queue
+     * - Run 2: hasTaskForTicket('TEST_001') → FALSE (archive is ignored)
+     *          → Can create 'TEST_001' again! ✅
+     * - Run 3: Same as Run 2 → 'TEST_001' fully reusable
+     * 
+     * @param ticketId - Ticket ID to check (from task.metadata.ticketId)
+     * @returns Promise<boolean> True only if exact match found in ACTIVE queue
      */
-    async hasTaskForTicket(ticketId: string, ticket?: { title: string; priority: string }): Promise<boolean> {
+    async hasTaskForTicket(ticketId: string): Promise<boolean> {
         if (!this.taskQueue || !Array.isArray(this.taskQueue)) {
-            console.warn('⚠️ Queue not initialized when checking for duplicate ticket');
             return false;
         }
 
-        // Primary check: exact ticketId match in metadata
+        // Exact match only: metadata.ticketId MUST match AND task must be ACTIVE
+        const activeStatuses = ['ready', 'in-progress', 'blocked'];
         const existingTask = this.taskQueue.find((task: Task) =>
-            task.metadata?.ticketId === ticketId
+            task.metadata?.ticketId === ticketId &&
+            activeStatuses.includes(task.status)
         );
 
         if (existingTask) {
-            console.log(`🔍 Found duplicate task by ticketId: ${ticketId}`);
+            console.debug(`ℹ️ Task for ticket ${ticketId} already queued (skipping duplicate)`);
             return true;
-        }
-
-        // Fallback check: if ticket provided, check title + priority match
-        if (ticket) {
-            const hasSimilarMatch = this.taskQueue.some((task: Task) =>
-                task.title === ticket.title && task.priority === ticket.priority
-            );
-
-            if (hasSimilarMatch) {
-                console.log(`🔍 Found duplicate task by title+priority match for ticket: ${ticketId}`);
-                return true;
-            }
         }
 
         return false;

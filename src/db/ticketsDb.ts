@@ -29,6 +29,7 @@ import {
 interface TicketDbConfig {
     dbPath: string;         // Path to SQLite database file
     autoMigrate: boolean;   // Auto-run migrations on init
+    skipPlaceholder?: boolean; // Skip creating placeholder ticket (for testing)
 }
 
 /**
@@ -82,6 +83,7 @@ export class TicketDatabase {
      * - Creates tickets.db file if missing
      * - Runs migrations (CREATE TABLE IF NOT EXISTS)
      * - Falls back to in-memory Map on errors
+     * - Strategy B/C: Adds placeholder task on NEW database, leaves existing DB empty
      * 
      * @param workspaceRoot - Path to workspace root (VS Code workspace folder)
      * @param customConfig - Optional custom configuration
@@ -100,6 +102,9 @@ export class TicketDatabase {
             const coeDir = path.join(workspaceRoot, '.coe');
             const dbPath = path.join(workspaceRoot, this.config.dbPath);
 
+            // **B/C Strategy**: Check if database is NEW or EXISTING
+            const isNewDatabase = !fs.existsSync(dbPath);
+
             // Create .coe directory if missing
             if (!fs.existsSync(coeDir)) {
                 fs.mkdirSync(coeDir, { recursive: true });
@@ -114,8 +119,20 @@ export class TicketDatabase {
                 await this.runMigrations();
             }
 
+            // **P1.3**: Cleanup old completed tasks (retention policy)
+            if (!this.useFallback) {
+                await this.cleanupOldCompletedTasks();
+            }
+
+            // **Strategy B**: If NEW database, add placeholder task (unless skipPlaceholder is set)
+            if (isNewDatabase && !this.useFallback && !this.config.skipPlaceholder) {
+                await this.createPlaceholderTicket();
+                console.log('ℹ️ Created placeholder ticket for new database');
+            }
+            // **Strategy C**: If EXISTING database, do nothing (leave empty or as-is)
+
             this.initialized = true;
-            console.log(`TicketDatabase initialized at: ${dbPath} (fallback: ${this.useFallback})`);
+            console.log(`TicketDatabase initialized at: ${dbPath} (fallback: ${this.useFallback}, isNew: ${isNewDatabase})`);
         } catch (error) {
             console.error('Failed to initialize TicketDatabase, using in-memory fallback:', error);
             this.useFallback = true;
@@ -148,8 +165,8 @@ export class TicketDatabase {
     }
 
     /**
-     * Run database migrations
-     * Creates tickets table if it doesn't exist
+     * Run database migrations with versioning
+     * Creates/upgrades schema and tracks version for future migrations
      */
     private async runMigrations(): Promise<void> {
         if (!this.db) {
@@ -157,40 +174,131 @@ export class TicketDatabase {
             return;
         }
 
-        const createTableSql = `
-            CREATE TABLE IF NOT EXISTS tickets (
-                ticket_id TEXT PRIMARY KEY,
-                type TEXT NOT NULL CHECK(type IN ('ai_to_human', 'human_to_ai')),
-                status TEXT NOT NULL CHECK(status IN ('open', 'in_review', 'resolved', 'escalated', 'rejected')),
-                priority INTEGER NOT NULL CHECK(priority IN (1, 2, 3)),
-                creator TEXT NOT NULL,
-                assignee TEXT NOT NULL,
-                task_id TEXT,
-                title TEXT NOT NULL,
-                description TEXT NOT NULL,
-                thread TEXT NOT NULL DEFAULT '[]',
-                resolution TEXT,
-                created_at TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            );
-        `;
-
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (!this.db) {
-                reject(new Error('No database connection'));
+                resolve();
                 return;
             }
 
-            this.db.run(createTableSql, (err) => {
+            // Step 1: Create version tracking table if not exists
+            const versionTableSql = `
+                CREATE TABLE IF NOT EXISTS db_version (
+                    version INTEGER NOT NULL
+                );
+            `;
+
+            this.db.run(versionTableSql, (err) => {
                 if (err) {
-                    console.error('Migration failed:', err);
+                    console.warn('⚠️ Could not create version table:', err);
                     this.useFallback = true;
-                    resolve(); // Don't reject, fall back
-                } else {
-                    console.log('Migrations completed successfully');
                     resolve();
+                    return;
                 }
+
+                // Step 2: Initialize version if not already set
+                this.db?.run(`INSERT OR IGNORE INTO db_version (version) VALUES (0)`, (err) => {
+                    if (err) {
+                        console.warn('⚠️ Could not initialize version:', err);
+                    }
+
+                    // Step 3: Create tickets table
+                    const createTicketsTableSql = `
+                        CREATE TABLE IF NOT EXISTS tickets (
+                            ticket_id TEXT PRIMARY KEY,
+                            type TEXT NOT NULL CHECK(type IN ('ai_to_human', 'human_to_ai')),
+                            status TEXT NOT NULL CHECK(status IN ('open', 'in_review', 'resolved', 'escalated', 'rejected')),
+                            priority INTEGER NOT NULL CHECK(priority IN (1, 2, 3)),
+                            creator TEXT NOT NULL,
+                            assignee TEXT NOT NULL,
+                            task_id TEXT,
+                            title TEXT NOT NULL,
+                            description TEXT NOT NULL,
+                            thread TEXT NOT NULL DEFAULT '[]',
+                            resolution TEXT,
+                            created_at TEXT NOT NULL,
+                            updated_at TEXT NOT NULL
+                        );
+                    `;
+
+                    this.db?.run(createTicketsTableSql, (err) => {
+                        if (err) {
+                            console.error('❌ Tickets table migration failed:', err);
+                            this.useFallback = true;
+                            resolve();
+                            return;
+                        }
+
+                        // Step 4: Check schema version and run v1 migration if needed
+                        this.getDbVersion((err, version) => {
+                            if (err || version === undefined) {
+                                console.warn('⚠️ Could not read DB version:', err);
+                                resolve();
+                                return;
+                            }
+
+                            // Migration v0 → v1: Add completed_tasks table
+                            if (version < 1) {
+                                const createCompletedTableSql = `
+                                    CREATE TABLE IF NOT EXISTS completed_tasks (
+                                        task_id TEXT PRIMARY KEY,
+                                        original_ticket_id TEXT,
+                                        title TEXT NOT NULL,
+                                        status TEXT NOT NULL,
+                                        priority INTEGER NOT NULL,
+                                        completed_at TEXT NOT NULL,
+                                        duration_minutes INTEGER,
+                                        outcome TEXT,
+                                        created_at TEXT NOT NULL
+                                    );
+                                    CREATE INDEX IF NOT EXISTS idx_completed_status ON completed_tasks(status);
+                                    CREATE INDEX IF NOT EXISTS idx_completed_at ON completed_tasks(completed_at);
+                                `;
+
+                                this.db?.run(createCompletedTableSql, (err) => {
+                                    if (err) {
+                                        console.warn('⚠️ Completed tasks table migration failed:', err);
+                                        resolve();
+                                        return;
+                                    }
+
+                                    // Update schema version
+                                    this.db?.run(`UPDATE db_version SET version = 1`, (err) => {
+                                        if (err) {
+                                            console.warn('⚠️ Could not update DB version:', err);
+                                        } else {
+                                            console.log('[TicketDb] ✅ Schema migrated: v0 → v1 (completed_tasks table added)');
+                                        }
+                                        resolve();
+                                    });
+                                });
+                            } else {
+                                console.log('[TicketDb] ✅ Migrations completed successfully (current version: ' + version + ')');
+                                resolve();
+                            }
+                        });
+                    });
+                });
             });
+        });
+    }
+
+    /**
+     * Get current database schema version
+     * @param callback - Returns (error, version) where version is 0 for old DBs
+     */
+    private getDbVersion(callback: (err: Error | null, version?: number) => void): void {
+        if (!this.db) {
+            callback(new Error('No database connection'));
+            return;
+        }
+
+        this.db.get('SELECT version FROM db_version LIMIT 1', (err: Error | null, row: any) => {
+            if (err) {
+                // Old DB without version table - assume v0
+                callback(null, 0);
+            } else {
+                callback(null, row?.version ?? 0);
+            }
         });
     }
 
@@ -596,11 +704,261 @@ export class TicketDatabase {
             usingFallback: this.useFallback
         };
     }
-}
 
-/**
- * Convenience function to get database instance
- */
-export function getTicketDb(): TicketDatabase {
-    return TicketDatabase.getInstance();
+    /**
+     * Create placeholder ticket for new databases (Strategy B)
+     * Used on first initialization to avoid confusing empty state
+     * 
+     * @private
+     * @async
+     */
+    private async createPlaceholderTicket(): Promise<void> {
+        try {
+            await this.createTicket({
+                type: 'ai_to_human',
+                priority: 3,
+                creator: 'SYSTEM',
+                assignee: 'SYSTEM',
+                title: '[PLACEHOLDER] New Database - Delete this task',
+                description: 'This is a temporary placeholder ticket created on first run. You can safely delete this ticket by changing its status to resolved or updating any field.'
+            });
+        } catch (error) {
+            console.warn('⚠️ Failed to create placeholder ticket (non-blocking):', error);
+        }
+    }
+
+    /**
+     * 🗑️ Cleanup old completed tasks based on retention policy (P1.3)
+     * 
+     * Removes completed tasks older than taskRetentionDays from config.json.
+     * Default retention: 30 days (can be overridden in .coe/config.json).
+     * 
+     * Error handling:
+     * - Config missing/invalid: Uses default 30 days
+     * - DB error: Logs warning but doesn't crash
+     * - Cleanup runs silently (no user notification unless error)
+     * 
+     * Called automatically on initialize() after migrations complete.
+     * 
+     * @private
+     * @async
+     */
+    private async cleanupOldCompletedTasks(): Promise<void> {
+        if (!this.db) {
+            return; // DB not initialized, skip cleanup
+        }
+
+        try {
+            // Load taskRetentionDays from config.json (default: 30 days)
+            const retentionDays = await this.getTaskRetentionDays();
+            const cutoffDate = new Date(Date.now() - retentionDays * 24 * 60 * 60 * 1000).toISOString();
+
+            return new Promise((resolve) => {
+                if (!this.db) {
+                    resolve();
+                    return;
+                }
+
+                // Delete completed tasks older than cutoff date
+                this.db.run(
+                    `DELETE FROM completed_tasks WHERE completed_at < ?`,
+                    [cutoffDate],
+                    (err) => {
+                        if (err) {
+                            console.warn(`⚠️ Cleanup: Failed to remove old tasks (>  ${retentionDays} days):`, err);
+                        } else {
+                            console.log(`🗑️ Cleanup: Removed completed tasks older than ${retentionDays} days`);
+                        }
+                        resolve();
+                    }
+                );
+            });
+        } catch (error) {
+            console.warn('⚠️ Cleanup: Unexpected error during old task removal:', error);
+        }
+    }
+
+    /**
+     * Load taskRetentionDays from .coe/config.json
+     * 
+     * Returns the configured retention period in days.
+     * Falls back to 30 days if config missing or invalid.
+     * 
+     * @private
+     * @async
+     * @returns Promise<number> - Days to retain completed tasks
+     */
+    private async getTaskRetentionDays(): Promise<number> {
+        const defaultRetention = 30;
+
+        try {
+            const configPath = path.join(path.dirname(this.config.dbPath), '..', 'config.json');
+            const configContent = fs.readFileSync(configPath, 'utf8');
+            const config = JSON.parse(configContent);
+
+            const retention = config?.database?.taskRetentionDays;
+            if (typeof retention === 'number' && retention > 0) {
+                return retention;
+            }
+        } catch (error) {
+            // Config file not found or invalid - use default
+        }
+
+        return defaultRetention;
+    }
+
+    /**
+     * Archive a task to completed_tasks table (P1.1 - Task History)
+     * Moves task from active tracking to history; used when task completes or is archived.
+     * 
+     * **Option A (Reusable TicketIds)**: 
+     * - `originalTicketId` is stored as reference (can be duplicated across multiple test runs)
+     * - Each run gets unique `task_id` (PRIMARY KEY, timestamp-based)
+     * - Allows same ticketId to be reused in future test/production cycles
+     * - Active queue (hasTaskForTicket) only checks active statuses, not archived
+     * - Multiple archived entries with same originalTicketId = safe, expected
+     * 
+     * Example Flow:
+     * ```
+     * Run 1: Create ticket 'TEST_001' → archive with originalTicketId='TEST_001'
+     * Run 2: Create ticket 'TEST_001' → archive with originalTicketId='TEST_001' 
+     *        (different task_id each time, both stored in completed_tasks)
+     * Run 3: Create ticket 'TEST_001' → hasTaskForTicket('TEST_001') → false
+     *        (active queue is clean, previous archived entries ignored)
+     * ```
+     * 
+     * @param taskId - Unique task identifier (PRIMARY KEY, generated per run)
+     * @param title - Task title
+     * @param status - Final status ('completed' | 'failed' | 'archived')
+     * @param originalTicketId - Reference to original ticket (Option A: can duplicate)
+     * @param durationMinutes - How long task took (optional)
+     * @returns Promise<void>
+     */
+    async archiveTask(
+        taskId: string,
+        title: string,
+        status: 'completed' | 'failed' | 'archived' = 'completed',
+        originalTicketId?: string,
+        durationMinutes?: number
+    ): Promise<void> {
+        if (!taskId || !title) {
+            throw new Error('archiveTask: taskId and title are required');
+        }
+
+        if (this.useFallback) {
+            // Fallback: store in memory
+            const now = new Date().toISOString();
+            if (!this.fallbackCompletedTasks) {
+                this.fallbackCompletedTasks = new Map();
+            }
+            this.fallbackCompletedTasks.set(taskId, {
+                task_id: taskId,
+                original_ticket_id: originalTicketId,
+                title,
+                status,
+                priority: 2, // Default priority for archived tasks
+                completed_at: now,
+                duration_minutes: durationMinutes,
+                outcome: undefined,
+                created_at: now
+            });
+            return;
+        }
+
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error('Database not initialized'));
+                return;
+            }
+
+            const now = new Date().toISOString();
+            this.db!.run(
+                `INSERT INTO completed_tasks (task_id, original_ticket_id, title, status, priority, completed_at, duration_minutes, created_at)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [taskId, originalTicketId || null, title, status, 2, now, durationMinutes || null, now],
+                (err) => {
+                    if (err) {
+                        console.error(`❌ Failed to archive task ${taskId}:`, err);
+                        reject(err);
+                    } else {
+                        console.log(`✅ Task archived: ${taskId}`);
+                        resolve();
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Get all completed tasks from history (P1.1 - Task History)
+     * Retrieves tasks moved to completed_tasks table.
+     * 
+     * @param filters - Optional: { status?: string; minDaysAgo?: number }
+     * @returns Promise<CompletedTask[]>
+     */
+    async getAllCompleted(filters?: {
+        status?: 'completed' | 'failed' | 'archived';
+        minDaysAgo?: number;
+    }): Promise<any[]> {
+        if (this.useFallback) {
+            // Fallback: return from memory
+            if (!this.fallbackCompletedTasks) {
+                return [];
+            }
+            let tasks = Array.from(this.fallbackCompletedTasks.values());
+
+            if (filters?.status) {
+                tasks = tasks.filter(t => t.status === filters.status);
+            }
+            if (filters?.minDaysAgo !== undefined) {
+                const cutoffDate = new Date(Date.now() - filters.minDaysAgo * 24 * 60 * 60 * 1000).toISOString();
+                tasks = tasks.filter(t => t.completed_at >= cutoffDate);
+            }
+
+            return tasks;
+        }
+
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error('Database not initialized'));
+                return;
+            }
+
+            let where = '';
+            const params: any[] = [];
+
+            if (filters?.status) {
+                where += `WHERE status = ?`;
+                params.push(filters.status);
+            }
+
+            if (filters?.minDaysAgo !== undefined) {
+                const cutoffDate = new Date(Date.now() - filters.minDaysAgo * 24 * 60 * 60 * 1000).toISOString();
+                if (where) {
+                    where += ` AND completed_at >= ?`;
+                } else {
+                    where = `WHERE completed_at >= ?`;
+                }
+                params.push(cutoffDate);
+            }
+
+            const query = `SELECT * FROM completed_tasks ${where} ORDER BY completed_at DESC`;
+
+            this.db!.all(query, params, (err, rows: any[]) => {
+                if (err) {
+                    console.error('❌ Failed to get completed tasks:', err);
+                    reject(err);
+                } else {
+                    console.log(`✅ Retrieved ${rows.length} completed tasks`);
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    /**
+     * Private fallback storage for completed tasks (in-memory)
+     * Used when SQLite is unavailable
+     */
+    private fallbackCompletedTasks?: Map<string, any>;
 }

@@ -23,9 +23,9 @@ describe('TicketDatabase', () => {
         // Reset singleton from previous test
         TicketDatabase.resetInstance();
 
-        // Initialize database
+        // Initialize database with skipPlaceholder for testing
         db = TicketDatabase.getInstance();
-        await db.initialize(testWorkspaceRoot);
+        await db.initialize(testWorkspaceRoot, { skipPlaceholder: true });
     });
 
     afterEach(async () => {
