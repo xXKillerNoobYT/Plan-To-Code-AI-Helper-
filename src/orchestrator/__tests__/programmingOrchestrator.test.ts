@@ -164,9 +164,12 @@ describe('Programming Orchestrator', () => {
             expect(status.totalTasks).toBe(1);
         });
 
-        it('should reject task not from Planning Team', () => {
+        it('should reject task not from Planning Team during routing', async () => {
             const task = createTestTask({ fromPlanningTeam: false });
-            expect(() => orchestrator.addTask(task)).toThrow(
+            await orchestrator.addTask(task);
+
+            // Validation happens during routing, not adding
+            await expect(orchestrator.routeTask(task)).rejects.toThrow(
                 /Planning Team/i,
             );
         });
@@ -268,11 +271,12 @@ describe('Programming Orchestrator', () => {
             expect(directive.contextBundle).toContain('RELATED FILES');
         });
 
-        it('should reject task not from Planning Team', async () => {
+        it('should reject task not from Planning Team when routing', async () => {
             const task = createTestTask({ fromPlanningTeam: false });
 
-            // Can't even add it to queue - add validates Planning Team requirement
-            await expect(() => orchestrator.addTask(task)).toThrow(
+            // Can add it, but routing validates Planning Team requirement
+            await orchestrator.addTask(task);
+            await expect(orchestrator.routeTask(task)).rejects.toThrow(
                 /Planning Team/i,
             );
         });
@@ -281,8 +285,8 @@ describe('Programming Orchestrator', () => {
             const task1 = createTestTask({ taskId: 'task-1' });
             const task2 = createTestTask({ taskId: 'task-2' });
 
-            orchestrator.addTask(task1);
-            orchestrator.addTask(task2);
+            await orchestrator.addTask(task1);
+            await orchestrator.addTask(task2);
 
             // Route first task
             await orchestrator.routeTask(task1);
@@ -297,7 +301,7 @@ describe('Programming Orchestrator', () => {
             const task = createTestTask({
                 dependencies: ['unmet-dep-123'],
             });
-            orchestrator.addTask(task);
+            await orchestrator.addTask(task);
 
             await expect(orchestrator.routeTask(task)).rejects.toThrow(
                 /unmet dependencies/i,
@@ -542,39 +546,44 @@ describe('Programming Orchestrator', () => {
             await orchestrator.init();
         });
 
-        it('should reject task with missing taskId', () => {
+        it('should reject task with missing taskId when routing', async () => {
             const badTask = createTestTask();
             (badTask as any).taskId = '';
 
-            expect(() => orchestrator.addTask(badTask)).toThrow();
+            await orchestrator.addTask(badTask);
+            await expect(orchestrator.routeTask(badTask)).rejects.toThrow();
         });
 
-        it('should reject task with missing title', () => {
+        it('should reject task with missing title when routing', async () => {
             const badTask = createTestTask();
             (badTask as any).title = '';
 
-            expect(() => orchestrator.addTask(badTask)).toThrow();
+            await orchestrator.addTask(badTask);
+            await expect(orchestrator.routeTask(badTask)).rejects.toThrow();
         });
 
-        it('should reject task with missing description', () => {
+        it('should reject task with missing description when routing', async () => {
             const badTask = createTestTask();
             (badTask as any).description = '';
 
-            expect(() => orchestrator.addTask(badTask)).toThrow();
+            await orchestrator.addTask(badTask);
+            await expect(orchestrator.routeTask(badTask)).rejects.toThrow();
         });
 
-        it('should reject task with no acceptance criteria', () => {
+        it('should reject task with no acceptance criteria when routing', async () => {
             const badTask = createTestTask();
             badTask.acceptanceCriteria = [];
 
-            expect(() => orchestrator.addTask(badTask)).toThrow();
+            await orchestrator.addTask(badTask);
+            await expect(orchestrator.routeTask(badTask)).rejects.toThrow();
         });
 
-        it('should reject task with invalid priority', () => {
+        it('should reject task with invalid priority when routing', async () => {
             const badTask = createTestTask();
             (badTask as any).priority = 'P4';
 
-            expect(() => orchestrator.addTask(badTask)).toThrow();
+            await orchestrator.addTask(badTask);
+            await expect(orchestrator.routeTask(badTask)).rejects.toThrow();
         });
     });
 
@@ -657,15 +666,16 @@ describe('Programming Orchestrator', () => {
             await orchestrator.init();
         });
 
-        it('should handle large queue', () => {
-            // Add 100 tasks
+        it('should handle large queue (capped at MAX_TASKS=50)', async () => {
+            // Try to add 100 tasks
             for (let i = 0; i < 100; i++) {
                 const task = createTestTask({ taskId: `task-${i}` });
-                orchestrator.addTask(task);
+                await orchestrator.addTask(task);
             }
 
             const status = orchestrator.getQueueStatus();
-            expect(status.totalTasks).toBe(100);
+            // Should be capped at 50 (MAX_TASKS limit)
+            expect(status.totalTasks).toBe(50);
         });
 
         it('should handle many P1 tasks', () => {

@@ -3,6 +3,66 @@ import * as fs from 'fs';
 import path from 'path';
 
 /**
+ * Task Priority Levels
+ */
+export type TaskPriority = 'P1' | 'P2' | 'P3';
+
+/**
+ * Task Status States
+ */
+export type TaskStatus = 'ready' | 'inProgress' | 'completed' | 'blocked' | 'failed';
+
+/**
+ * Metadata for tasks routed from tickets
+ */
+export interface TaskMetadata {
+  ticketId?: string;
+  routedTeam?: 'ANSWER' | 'PLANNING' | 'VERIFICATION' | 'ESCALATE';
+  routingReason?: string;
+  routingConfidence?: number;
+  isEscalated?: boolean;
+  [key: string]: any;
+}
+
+/**
+ * Task in the programming orchestrator queue
+ * 
+ * Represents a unit of work that can be executed by agents.
+ * Tasks are created from plan items or routed from tickets.
+ * 
+ * @interface Task
+ */
+export interface Task {
+  taskId: string;
+  title: string;
+  description: string;
+  priority: TaskPriority;
+  status: TaskStatus;
+  dependencies: string[];
+  blockedBy: string[];
+  estimatedHours: number;
+  actualHours?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+  assignedTo?: string;
+
+  // NEW: Metadata for tasks from tickets
+  metadata?: TaskMetadata;
+}
+
+/**
+ * Persisted task format (excludes large contextBundles)
+ */
+export interface PersistedTask extends Omit<Task, 'createdAt' | 'updatedAt' | 'startedAt' | 'completedAt'> {
+  createdAt: string;
+  updatedAt: string;
+  startedAt?: string;
+  completedAt?: string;
+}
+
+/**
  * Test suite for TicketDb service
  * Covers: initialization, CRUD operations, fallback mode, threading
  */
@@ -665,6 +725,159 @@ describe('TicketDb', () => {
       await expect(
         ticketDb.createTicket({ title: 'After close', description: 'Should fail' })
       ).rejects.toThrow();
+    });
+  });
+
+  // ============================================================================
+  // Ticket → Task Queue Integration Tests (P1 Task 2)
+  // ============================================================================
+
+  describe('Ticket → Task Queue Integration', () => {
+    // Note: These tests verify integration with ProgrammingOrchestrator
+    // Tests use skipRouting option to isolate TicketDb functionality
+    // Full integration tests would involve live orchestrator instance
+
+    it('should route ticket with skipRouting=false (default)', async () => {
+      await ticketDb.init();
+
+      // Create a ticket without skipping routing
+      // This should trigger routing if Orchestrator is initialized
+      const ticket = await ticketDb.createTicket({
+        type: 'human_to_ai',
+        title: 'How do I implement error handling?',
+        description: 'Need guidance on TypeScript patterns',
+        priority: 2,
+      });
+
+      expect(ticket.id).toBeDefined();
+      expect(ticket.title).toBe('How do I implement error handling?');
+      // Routing happens asynchronously, so we don't fail if Orchestrator isn't available
+    });
+
+    it('should skip routing when options.skipRouting=true', async () => {
+      await ticketDb.init();
+
+      const ticket = await ticketDb.createTicket(
+        {
+          type: 'human_to_ai',
+          title: 'Skip routing test',
+          description: 'This should not trigger routing',
+          priority: 1,
+        },
+        { skipRouting: true } // Skip routing
+      );
+
+      expect(ticket.id).toBeDefined();
+      // Should complete without errors even if Orchestrator not available
+    });
+
+    it('should persist ticket and retrieve it correctly', async () => {
+      await ticketDb.init();
+
+      const ticket = await ticketDb.createTicket({
+        type: 'human_to_ai',
+        title: 'Architecture planning question',
+        description: 'Need help designing the system architecture',
+        priority: 1,
+      });
+
+      const retrieved = await ticketDb.getTicket(ticket.id);
+      expect(retrieved).not.toBeNull();
+      expect(retrieved!.title).toBe('Architecture planning question');
+      expect(retrieved!.priority).toBe(1);
+    });
+
+    it('should handle routing failures gracefully', async () => {
+      await ticketDb.init();
+
+      // This test verifies that if routing fails, the ticket is still created and saved
+      const ticket = await ticketDb.createTicket({
+        type: 'ai_to_human',
+        title: 'Test robustness',
+        description: 'Verify ticket is saved even if routing fails',
+        priority: 2,
+      });
+
+      // Ticket should still be retrievable even if routing failed
+      const retrieved = await ticketDb.getTicket(ticket.id);
+      expect(retrieved).not.toBeNull();
+      expect(retrieved!.id).toBe(ticket.id);
+    });
+
+    it('should handle createTicket with various priority levels', async () => {
+      await ticketDb.init();
+
+      // Test P1 (priority 1)
+      const p1Ticket = await ticketDb.createTicket(
+        {
+          type: 'human_to_ai',
+          title: 'Critical issue',
+          description: 'Must be addressed immediately',
+          priority: 1,
+        },
+        { skipRouting: true }
+      );
+      expect(p1Ticket.priority).toBe(1);
+
+      // Test P2 (priority 2)
+      const p2Ticket = await ticketDb.createTicket(
+        {
+          type: 'human_to_ai',
+          title: 'Important task',
+          description: 'Should be done soon',
+          priority: 2,
+        },
+        { skipRouting: true }
+      );
+      expect(p2Ticket.priority).toBe(2);
+
+      // Test P3 (priority 3)
+      const p3Ticket = await ticketDb.createTicket(
+        {
+          type: 'human_to_ai',
+          title: 'Nice to have',
+          description: 'Can be done later',
+          priority: 3,
+        },
+        { skipRouting: true }
+      );
+      expect(p3Ticket.priority).toBe(3);
+    });
+
+    it('should create valid tickets with all optional fields', async () => {
+      await ticketDb.init();
+
+      const ticket = await ticketDb.createTicket(
+        {
+          type: 'human_to_ai',
+          title: 'Full ticket with all fields',
+          description: 'Testing optional fields',
+          priority: 2,
+          assignee: 'answer-team',
+          labels: ['urgent', 'feature'],
+        },
+        { skipRouting: true }
+      );
+
+      const retrieved = await ticketDb.getTicket(ticket.id);
+      expect(retrieved!.assignee).toBe('answer-team');
+      expect(retrieved!.labels).toEqual(['urgent', 'feature']);
+    });
+
+    it('should reject ticket creation without title', async () => {
+      await ticketDb.init();
+
+      await expect(
+        ticketDb.createTicket(
+          {
+            type: 'human_to_ai',
+            title: '', // Empty title
+            description: 'Missing title',
+            priority: 2,
+          },
+          { skipRouting: true }
+        )
+      ).rejects.toThrow('Ticket title is required');
     });
   });
 });

@@ -9,9 +9,9 @@
  */
 
 import * as vscode from 'vscode';
-import { activate, deactivate, getOrchestrator, getStatusBarItem } from './extension';
-import { ProgrammingOrchestrator, TaskPriority, TaskStatus } from './orchestrator/programmingOrchestrator';
-import * as setupFilesModule from './utils/setupFiles';
+import { activate, deactivate, getOrchestrator, getStatusBarItem } from '../src/extension';
+import { ProgrammingOrchestrator, TaskPriority, TaskStatus } from '../src/orchestrator/programmingOrchestrator';
+import * as setupFilesModule from '../src/utils/setupFiles';
 
 describe('COE Extension Integration', () => {
     // Mock VS Code context for testing
@@ -305,9 +305,10 @@ describe('COE Status Bar Item', () => {
 
         await activate(context);
 
-        // Status bar should be set to initializing
+        // Status bar should be initialized
         expect(mockStatusBar.text).toContain('COE');
-        expect(mockStatusBar.tooltip).toBe('Click to process next task');
+        // Initial state: no tasks in queue
+        expect(mockStatusBar.tooltip).toBe('No tasks in queue. Create a ticket to get started.');
         expect(mockStatusBar.command).toBe('coe.processNextTask');
     });
 
@@ -327,7 +328,7 @@ describe('COE Status Bar Item', () => {
     // ========================================================================
     // Test 4: Status bar shows "Waiting for tasks" when queue is empty
     // ========================================================================
-    it('should display "Waiting for tasks" text when queue is empty', async () => {
+    it('should display "No tasks" text when queue is empty', async () => {
         const context = createMockContext() as any;
         const mockStatusBar = {
             text: '$(check) COE: Initializing...',
@@ -342,8 +343,8 @@ describe('COE Status Bar Item', () => {
 
         await activate(context);
 
-        // After initialization, queue should be empty and status should change
-        expect(mockStatusBar.text).toContain('All tasks complete');
+        // After initialization, queue should be empty and status should show "No tasks"
+        expect(mockStatusBar.text).toContain('No tasks');
         expect(mockStatusBar.color).toBe('#888888'); // Gray color
     });
 
@@ -828,7 +829,8 @@ describe('COE Test Command - Repeated Execution', () => {
 
         const statusBarItem = getStatusBarItem();
         expect(statusBarItem?.command).toBe('coe.processNextTask');
-        expect(statusBarItem?.tooltip).toContain('process next task');
+        // Initial tooltip when queue is empty
+        expect(statusBarItem?.tooltip).toBe('No tasks in queue. Create a ticket to get started.');
     });
 
     it('should process next task and show working status', async () => {

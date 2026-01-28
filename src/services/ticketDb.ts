@@ -3,6 +3,8 @@ import path from 'path';
 import * as fs from 'fs';
 import { randomUUID } from 'crypto';
 import { logger } from '../utils/logger';
+import { BossRouter } from './bossRouter';
+import { TaskPriority, TaskStatus } from '../orchestrator/programmingOrchestrator';
 
 // ============================================================================
 // 🎫 Types & Interfaces
@@ -313,8 +315,11 @@ export class TicketDb {
      *
      * Generates unique ID and timestamps, validates required fields.
      * Enforces max ticket limit to prevent bloat.
+     * Automatically routes ticket to appropriate agent team and adds task to queue.
      *
      * @param {Partial<Ticket>} ticket - Ticket data (type, priority, title, description)
+     * @param {Object} options - Optional configuration
+     * @param {boolean} options.skipRouting - Skip automatic routing (default: false)
      * @returns {Promise<Ticket>} Created ticket with ID and timestamps
      * @throws {TicketError} If limit exceeded or required fields missing
      *
@@ -326,7 +331,7 @@ export class TicketDb {
      *   description: 'How to implement task routing?'
      * });
      */
-    async createTicket(ticket: Partial<Ticket>): Promise<Ticket> {
+    async createTicket(ticket: Partial<Ticket>, options?: { skipRouting?: boolean }): Promise<Ticket> {
         const id = `ticket_${Date.now()}_${randomUUID().substring(0, 8)}`;
         const now = new Date();
 
@@ -354,6 +359,16 @@ export class TicketDb {
                     throw new TicketError(`Max tickets (${this.maxTickets}) reached`);
                 }
                 this.fallbackTickets.set(id, fullTicket);
+
+                // Route and enqueue even in fallback mode (unless skipped)
+                if (!options?.skipRouting) {
+                    try {
+                        await this.routeAndEnqueueTicket(fullTicket);
+                    } catch (error) {
+                        logger.warn(`Failed to route ticket in fallback mode: ${error}`);
+                    }
+                }
+
                 return fullTicket;
             }
 
@@ -380,11 +395,129 @@ export class TicketDb {
                 ]
             ));
 
+            // Route and enqueue ticket to task queue (unless explicitly skipped)
+            if (!options?.skipRouting) {
+                try {
+                    await this.routeAndEnqueueTicket(fullTicket);
+                } catch (error) {
+                    // Log error but don't throw - ticket is already saved
+                    logger.error(`Failed to route/enqueue ticket ${fullTicket.id}: ${error}`);
+                }
+            }
+
             return fullTicket;
         } catch (error) {
             if (error instanceof TicketError) throw error;
             logger.error(`🎫 Failed to create ticket: ${error}`, { error });
             throw new TicketError(`Create ticket failed: ${error}`);
+        }
+    }
+
+    /**
+     * 🎯 Route ticket to agent team and add task to orchestrator queue
+     * 
+     * Private method called automatically by createTicket().
+     * Routes ticket using BossRouter, then creates a task in the orchestrator queue.
+     * Includes error handling to avoid losing tickets if routing fails.
+     * 
+     * @private
+     * @param {Ticket} ticket - The ticket to route
+     * @returns {Promise<void>}
+     */
+    private async routeAndEnqueueTicket(ticket: Ticket): Promise<void> {
+        try {
+            // Get singleton instances
+            const router = BossRouter.getInstance();
+
+            // Dynamically import to avoid circular dependency
+            // getOrchestrator() is exported from extension.ts
+            let orchestrator;
+            try {
+                const extensionModule = await import('../extension');
+                orchestrator = extensionModule.getOrchestrator();
+            } catch (error) {
+                logger.warn('Orchestrator not available yet, skipping task enqueue');
+                return;
+            }
+
+            if (!orchestrator) {
+                logger.info('Orchestrator not initialized, skipping routing');
+                return;
+            }
+
+            // Convert TicketDb.Ticket to format expected by BossRouter
+            // BossRouter expects: ticket_id, type, priority, title, description
+            const ticketForRouter = {
+                ticket_id: ticket.id,
+                type: ticket.type,
+                priority: ticket.priority,
+                title: ticket.title,
+                description: ticket.description,
+                status: ticket.status,
+                creator: ticket.assignee || 'system',
+                assignee: ticket.assignee || 'unassigned',
+                thread: [],
+                created_at: ticket.createdAt,
+                updated_at: ticket.updatedAt,
+            };
+
+            // Route ticket to determine agent team
+            let routedTeam: string;
+            try {
+                routedTeam = router.routeTicket(ticketForRouter as any);
+                logger.info(`🎯 Ticket ${ticket.id} routed to ${routedTeam}`);
+            } catch (error) {
+                logger.warn(`Failed to route ticket ${ticket.id}, escalating: ${error}`);
+                routedTeam = 'escalate';
+            }
+
+            // Check if task already exists for this ticket (duplicate prevention)
+            const taskExists = await orchestrator.hasTaskForTicket(ticket.id);
+            if (taskExists) {
+                logger.info(`⏭️ Task already exists for ticket ${ticket.id}, skipping enqueue`);
+                return;
+            }
+
+            // Create task object with metadata linking to ticket
+            const taskId = `task-${ticket.id}`;
+            const task = {
+                taskId,
+                title: ticket.title,
+                description: ticket.description,
+                // Map ticket priority (1,2,3) to task priority (P1, P2, P3)
+                priority: ticket.priority === 1 ? TaskPriority.P1 :
+                    ticket.priority === 2 ? TaskPriority.P2 :
+                        TaskPriority.P3,
+                status: TaskStatus.READY,
+                dependencies: [],
+                blockedBy: [],
+                estimatedHours: 1,
+                acceptanceCriteria: [
+                    `Address ticket: ${ticket.title}`,
+                    'Provide complete and accurate response',
+                    'Assign to appropriate team for follow-up'
+                ],
+                relatedFiles: [],
+                fromPlanningTeam: true, // Tickets treated as planning items from user
+                createdAt: new Date(),
+                assignedTo: routedTeam,
+                // Store ticket metadata for reference
+                metadata: {
+                    ticketId: ticket.id,
+                    routedTeam: routedTeam,
+                    isFromTicket: true,
+                }
+            };
+
+            // Add task to orchestrator queue
+            orchestrator.addTask(task);
+            logger.info(`✅ Ticket ${ticket.id} routed to ${routedTeam} → queued as task ${taskId}`);
+            console.log(`✅ Ticket ${ticket.id} routed to ${routedTeam} → queued as ${taskId}`);
+
+        } catch (error) {
+            // Non-critical error - ticket is already saved
+            // Don't re-throw, just log
+            logger.error(`Failed to route/enqueue ticket: ${error}`);
         }
     }
 

@@ -114,21 +114,27 @@ function updateStatusBar(): void {
         return;
     }
 
-    const status = programmingOrchestrator.getQueueStatus();
-    const activeTask = status.currentTask;
-    const readyCount = status.byStatus.ready;
+    const readyCount = programmingOrchestrator.getReadyTasksCount();
+    const inProgressCount = programmingOrchestrator.getInProgressTasksCount();
+    const totalCount = programmingOrchestrator.getAllTasks().length;
 
-    // Update text and icon based on orchestrator state
-    if (activeTask) {
-        const shortTitle = activeTask.title.slice(0, 25);
-        statusBarItem.text = `$(play) COE: Working on ${shortTitle}...`;
+    // Update text and icon based on queue state
+    if (inProgressCount > 0) {
+        statusBarItem.text = `$(sync~spin) COE: ${inProgressCount} active`;
         statusBarItem.color = '#ffff00'; // Yellow
+        statusBarItem.tooltip = `${inProgressCount} tasks in progress, ${readyCount} ready`;
     } else if (readyCount > 0) {
-        statusBarItem.text = `$(list-tree) COE: ${readyCount} tasks ready`;
+        statusBarItem.text = `$(checklist) COE Tasks: ${readyCount} ready`;
         statusBarItem.color = '#00ff00'; // Green
-    } else {
-        statusBarItem.text = '$(check-all) COE: All tasks complete — edit plan!';
+        statusBarItem.tooltip = `${readyCount} tasks ready to process`;
+    } else if (totalCount > 0) {
+        statusBarItem.text = '$(check) COE: All tasks complete';
         statusBarItem.color = '#888888'; // Gray
+        statusBarItem.tooltip = `${totalCount} total tasks (all done)`;
+    } else {
+        statusBarItem.text = '$(checklist) COE: No tasks';
+        statusBarItem.color = '#888888'; // Gray
+        statusBarItem.tooltip = 'No tasks in queue. Create a ticket to get started.';
     }
 
     statusBarItem.show();
@@ -245,6 +251,10 @@ export async function activate(context: vscode.ExtensionContext) {
         orchestratorOutputChannel.appendLine('📝 Initializing Programming Orchestrator...');
         await programmingOrchestrator.init();
 
+        // Initialize persistence to load previously saved tasks
+        orchestratorOutputChannel.appendLine('💾 Loading persisted tasks from workspace state...');
+        await programmingOrchestrator.initializeWithPersistence(context.workspaceState);
+
         orchestratorOutputChannel.appendLine('✅ Programming Orchestrator initialized – waiting for tasks…');
         orchestratorOutputChannel.appendLine('');
 
@@ -255,6 +265,9 @@ export async function activate(context: vscode.ExtensionContext) {
         const explorerTree = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
         const sidebarTree = vscode.window.createTreeView('coe-tasks', { treeDataProvider });
         context.subscriptions.push(explorerTree, sidebarTree);
+
+        // Link TreeView provider to orchestrator for auto-refresh on queue changes
+        programmingOrchestrator.setTreeDataProvider(treeDataProvider);
 
         // ====================================================================
         // 3.3 Load tasks from plan file
@@ -744,7 +757,23 @@ export async function activate(context: vscode.ExtensionContext) {
                     }
 
                     orchestratorOutputChannel.appendLine('');
-                    orchestratorOutputChannel.appendLine('🎫 Testing Ticket Database...');
+                    orchestratorOutputChannel.appendLine('🔗 Testing Ticket → Task Queue Integration (P1 Task 2)');
+                    orchestratorOutputChannel.appendLine('═'.repeat(70));
+
+                    // Get orchestrator to check queue status
+                    const orchestrator = getOrchestrator();
+                    if (!orchestrator) {
+                        vscode.window.showErrorMessage('❌ COE: Orchestrator not initialized');
+                        return;
+                    }
+
+                    // Log initial queue status
+                    const beforeCount = orchestrator.getReadyTasksCount();
+                    const beforeStats = orchestrator.getQueueStatus();
+                    orchestratorOutputChannel.appendLine(`📊 Queue Status Before:`);
+                    orchestratorOutputChannel.appendLine(`   Ready Tasks: ${beforeCount}`);
+                    orchestratorOutputChannel.appendLine(`   Total Tasks: ${beforeStats.totalTasks}`);
+                    orchestratorOutputChannel.appendLine(`   By Priority: P1=${beforeStats.byPriority.P1}, P2=${beforeStats.byPriority.P2}, P3=${beforeStats.byPriority.P3}`);
 
                     // Create or reuse global TicketDb instance
                     if (!globalTicketDb) {
@@ -756,48 +785,119 @@ export async function activate(context: vscode.ExtensionContext) {
                         orchestratorOutputChannel.appendLine('✅ TicketDb already initialized (reusing instance)');
                     }
 
-                    // Create test ticket
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('🎫 Creating test ticket...');
+
+                    // Create test ticket - should automatically route and enqueue
                     const ticket = await globalTicketDb.createTicket({
-                        type: 'ai_to_human',
-                        title: 'Test Clarification',
-                        description: 'Need help with X',
-                        priority: 1
+                        type: 'human_to_ai',
+                        title: 'How do I implement error handling?',
+                        description: 'Need guidance on TypeScript error handling patterns for the project',
+                        priority: 2
                     });
 
-                    orchestratorOutputChannel.appendLine(`📝 Ticket created: ${ticket.id}`);
+                    orchestratorOutputChannel.appendLine(`✅ Ticket created: ${ticket.id}`);
                     orchestratorOutputChannel.appendLine(`   Title: ${ticket.title}`);
                     orchestratorOutputChannel.appendLine(`   Type: ${ticket.type}`);
-                    orchestratorOutputChannel.appendLine(`   Priority: ${ticket.priority}`);
+                    orchestratorOutputChannel.appendLine(`   Priority: P${ticket.priority}`);
                     orchestratorOutputChannel.appendLine(`   Status: ${ticket.status}`);
-                    orchestratorOutputChannel.appendLine(`   Created at: ${ticket.createdAt.toISOString()}`);
 
-                    // Retrieve ticket to verify persistence
+                    // Wait for async routing and TreeView refresh to complete
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('⏳ Waiting for routing, persistence, and TreeView refresh...');
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    // Check queue status after routing
+                    const afterCount = orchestrator.getReadyTasksCount();
+                    const afterStats = orchestrator.getQueueStatus();
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine(`📊 Queue Status After:`);
+                    orchestratorOutputChannel.appendLine(`   Ready Tasks: ${afterCount}`);
+                    orchestratorOutputChannel.appendLine(`   Total Tasks: ${afterStats.totalTasks}`);
+
+                    // Verify task was added
+                    if (afterCount > beforeCount) {
+                        orchestratorOutputChannel.appendLine('');
+                        orchestratorOutputChannel.appendLine('✅ SUCCESS: Task added to queue!');
+                        orchestratorOutputChannel.appendLine(`   Tasks increased from ${beforeCount} to ${afterCount}`);
+
+                        // Find the newly added task
+                        const readyTasks = orchestrator.getReadyTasks();
+                        const newTask = readyTasks.find((t: Task) => (t as any)?.metadata?.ticketId === ticket.id);
+
+                        if (newTask) {
+                            orchestratorOutputChannel.appendLine('');
+                            orchestratorOutputChannel.appendLine('📋 Added Task Details:');
+                            orchestratorOutputChannel.appendLine(`   Task ID: ${newTask.taskId}`);
+                            orchestratorOutputChannel.appendLine(`   Title: ${newTask.title}`);
+                            orchestratorOutputChannel.appendLine(`   Priority: ${newTask.priority}`);
+                            orchestratorOutputChannel.appendLine(`   Status: ${newTask.status}`);
+                            orchestratorOutputChannel.appendLine(`   Routed To: ${(newTask as any)?.metadata?.routedTeam || 'unknown'}`);
+                            orchestratorOutputChannel.appendLine(`   Metadata.ticketId: ${(newTask as any)?.metadata?.ticketId}`);
+
+                            orchestratorOutputChannel.appendLine('');
+                            orchestratorOutputChannel.appendLine('👀 CHECK SIDEBAR & STATUS BAR:');
+                            orchestratorOutputChannel.appendLine('   → Sidebar: "COE Tasks Queue" should show 1 task');
+                            orchestratorOutputChannel.appendLine(`   → Status Bar: Should show "COE Tasks: ${afterCount} ready"`);
+                            orchestratorOutputChannel.appendLine('   → Task persisted to workspace storage ✅');
+                            orchestratorOutputChannel.appendLine('');
+                            orchestratorOutputChannel.appendLine('🔄 TRY RELOADING (Ctrl+R):');
+                            orchestratorOutputChannel.appendLine('   → Task should still be in queue after reload');
+                            orchestratorOutputChannel.appendLine('   → Run test again → should skip duplicate');
+
+                            vscode.window.showInformationMessage(
+                                `✅ Ticket ${ticket.id} created! Check sidebar & status bar (${afterCount} ready).`,
+                                'Open Sidebar',
+                                'Reload & Test'
+                            ).then(selection => {
+                                if (selection === 'Open Sidebar') {
+                                    vscode.commands.executeCommand('workbench.view.extension.coe-explorer');
+                                } else if (selection === 'Reload & Test') {
+                                    vscode.commands.executeCommand('workbench.action.reloadWindow');
+                                }
+                            });
+                        } else {
+                            orchestratorOutputChannel.appendLine('⚠️ Task found in queue but metadata not matching');
+                        }
+                    } else {
+                        orchestratorOutputChannel.appendLine('');
+                        orchestratorOutputChannel.appendLine('⚠️ Task not added to queue');
+
+                        // Check if it's a duplicate
+                        if (await orchestrator.hasTaskForTicket(ticket.id)) {
+                            orchestratorOutputChannel.appendLine('   Reason: Duplicate ticket detected');
+                            orchestratorOutputChannel.appendLine('   → Task for this ticket already exists in queue');
+                            orchestratorOutputChannel.appendLine('   → This is expected behavior (duplicate prevention working!)');
+                            vscode.window.showInformationMessage(`Duplicate skipped: Task already exists for ticket ${ticket.id}`);
+                        } else {
+                            orchestratorOutputChannel.appendLine('  - Routing/enqueue failed (check logs)');
+                            vscode.window.showWarningMessage(`Task not added to queue`);
+                        }
+                    }
+
+                    // Verify persistence by retrieving ticket
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('🔄 Verifying persistence...');
                     const retrieved = await globalTicketDb.getTicket(ticket.id);
-
                     if (retrieved) {
-                        orchestratorOutputChannel.appendLine(`✅ Ticket retrieved successfully`);
-                        orchestratorOutputChannel.appendLine(`   Retrieved title: ${retrieved.title}`);
-                        orchestratorOutputChannel.appendLine(`   Created at: ${retrieved.createdAt.toISOString()}`);
+                        orchestratorOutputChannel.appendLine(`✅ Ticket persisted: ${retrieved.title}`);
                     } else {
                         orchestratorOutputChannel.appendLine('❌ Failed to retrieve ticket');
                     }
 
+                    orchestratorOutputChannel.appendLine('');
+                    orchestratorOutputChannel.appendLine('═'.repeat(70));
                     orchestratorOutputChannel.show();
 
-                    vscode.window.showInformationMessage(
-                        `✅ Test ticket created: ${ticket.id}`
-                    );
-
-                    // Note: TicketDb will be closed in deactivate()
-                    orchestratorOutputChannel.appendLine('💡 TicketDb will persist until extension deactivates');
                 } catch (error) {
                     const errorMsg = error instanceof Error ? error.message : String(error);
                     if (orchestratorOutputChannel) {
-                        orchestratorOutputChannel.appendLine(`❌ Error creating test ticket: ${errorMsg}`);
+                        orchestratorOutputChannel.appendLine(`❌ Error: ${errorMsg}`);
+                        orchestratorOutputChannel.appendLine(`Stack: ${error instanceof Error ? error.stack : 'N/A'}`);
                         orchestratorOutputChannel.show();
                     }
                     vscode.window.showErrorMessage(
-                        `❌ Failed to create test ticket: ${errorMsg}`
+                        `❌ Failed to test ticket integration: ${errorMsg}`
                     );
                 }
             }

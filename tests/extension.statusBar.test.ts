@@ -369,7 +369,7 @@ describe('COE Status Bar and Commands', () => {
         expect(status.currentTask).toBeNull();
     });
 
-    it('shows "All tasks complete" in status bar when queue is empty', async () => {
+    it('shows "No tasks" in status bar when queue is empty', async () => {
         // Activate extension (no plan tasks loaded by mock)
         await activate(buildContext());
 
@@ -377,8 +377,8 @@ describe('COE Status Bar and Commands', () => {
         expect(statusBar).toBeTruthy();
         if (!statusBar) return;
 
-        // Empty queue should show "All tasks complete"
-        expect(statusBar.text).toContain('All tasks complete');
+        // Empty queue should show "No tasks"
+        expect(statusBar.text).toContain('No tasks');
     });
 
     it('displays disabled message for test command when real tasks exist', async () => {

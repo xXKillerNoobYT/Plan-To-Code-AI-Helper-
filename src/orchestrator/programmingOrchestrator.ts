@@ -24,6 +24,7 @@
  */
 
 import { z } from 'zod';
+import * as vscode from 'vscode';
 
 // ============================================================================
 // Logger Interface
@@ -87,12 +88,45 @@ export const TaskSchema = z.object({
     fromPlanningTeam: z.boolean().default(true), // CRITICAL: Must come from Planning Team
     createdAt: z.date().optional(),
     assignedTo: z.string().optional(),
+    metadata: z.object({
+        ticketId: z.string().optional(),
+        routedTeam: z.string().optional(),
+        routingReason: z.string().optional(),
+        routingConfidence: z.number().optional(),
+        isEscalated: z.boolean().optional()
+    }).optional() // Optional metadata for ticket-routed tasks
 });
 
 export type Task = z.infer<typeof TaskSchema>;
 
 /**
- * 📋 Routing Directive (sent to Coding AI/Copilot)
+ * � Persisted Task Format
+ * Minimal task data for storage (excludes large fields like contextBundle)
+ */
+export interface PersistedTask {
+    taskId: string;
+    title: string;
+    description: string;
+    priority: TaskPriority;
+    status: TaskStatus;
+    dependencies: string[];
+    blockedBy: string[];
+    estimatedHours: number;
+    acceptanceCriteria: string[];
+    relatedFiles?: string[];
+    assignedTo?: string;
+    metadata?: {
+        ticketId?: string;
+        routedTeam?: string;
+        routingReason?: string;
+        routingConfidence?: number;
+        isEscalated?: boolean;
+    };
+    createdAt: string;
+}
+
+/**
+ * �📋 Routing Directive (sent to Coding AI/Copilot)
  * Super-detailed prompt for Copilot with task context bundled together
  */
 export const RoutingDirectiveSchema = z.object({
@@ -219,6 +253,12 @@ export class ProgrammingOrchestrator {
     private tokenLimitPerPrompt: number = 3000;
     private healthCheckInterval: number = 10000; // 10 seconds
     private escalationTimeout: number = 30000; // 30 seconds
+    private treeDataProvider: any = null; // Reference to TreeView provider for auto-refresh
+    private workspaceState?: vscode.Memento; // VS Code workspace state for persistence
+    private saveDebounceTimer?: NodeJS.Timeout; // Debounce timer for saving
+    private readonly STORAGE_KEY = 'coe.taskQueue';
+    private readonly SAVE_DEBOUNCE_MS = 200;
+    private readonly MAX_TASKS = 50;
 
     /**
      * 🏗️ Constructor
@@ -239,6 +279,165 @@ export class ProgrammingOrchestrator {
     // ========================================================================
     // Lifecycle Management
     // ========================================================================
+
+    /**
+     * 🌲 Set TreeView data provider for auto-refresh
+     * 
+     * Links the TreeView provider to the orchestrator so it can be refreshed
+     * automatically when the queue changes.
+     * 
+     * @param provider - TreeView data provider instance
+     */
+    setTreeDataProvider(provider: any): void {
+        this.treeDataProvider = provider;
+        console.log('✅ TreeView provider linked to ProgrammingOrchestrator');
+    }
+
+    /**
+     * 🔔 Notify TreeView to refresh (internal helper)
+     * 
+     * Called after any queue modification to keep UI in sync.
+     */
+    private notifyTreeViewUpdate(): void {
+        if (this.treeDataProvider?.refresh) {
+            console.log('🌲 TreeView refreshed after queue change');
+            this.treeDataProvider.refresh();
+        }
+    }
+
+    /**
+     * 💾 Initialize persistence with workspace state
+     * 
+     * Loads persisted tasks from previous session. Call this during
+     * extension activation to restore task queue.
+     * 
+     * @param workspaceState - VS Code workspace state for persistence
+     */
+    async initializeWithPersistence(workspaceState: vscode.Memento): Promise<void> {
+        this.workspaceState = workspaceState;
+        await this.loadPersistedTasks();
+        console.log('✅ ProgrammingOrchestrator initialized with persistence');
+    }
+
+    /**
+     * 📦 Load persisted tasks from workspace state
+     * 
+     * @private
+     */
+    private async loadPersistedTasks(): Promise<void> {
+        if (!this.workspaceState) {
+            console.warn('⚠️ No workspace state available, skipping task load');
+            return;
+        }
+
+        try {
+            const persistedData = this.workspaceState.get<any[]>(this.STORAGE_KEY);
+
+            if (!persistedData || !Array.isArray(persistedData)) {
+                console.log('📦 No persisted tasks found, starting fresh');
+                return;
+            }
+
+            // Filter to only load active tasks (ready/inProgress/blocked)
+            const activeTasks = persistedData.filter(t =>
+                ['ready', 'in-progress', 'blocked'].includes(t.status)
+            );
+
+            // Restore tasks to queue
+            this.taskQueue = activeTasks.map(t => ({
+                ...t,
+                taskId: t.taskId || t.id, // Handle both formats
+                fromPlanningTeam: true // Mark as valid
+            })) as Task[];
+
+            console.log(`📦 Loaded ${activeTasks.length} tasks from storage (filtered from ${persistedData.length} total)`);
+
+            // Log loaded tasks
+            activeTasks.forEach(task => {
+                console.log(`   - ${task.taskId || task.id}: ${task.title} (${task.status}, ${task.priority})`);
+            });
+
+            // Trigger UI refresh
+            this.notifyTreeViewUpdate();
+        } catch (error) {
+            console.error('❌ Failed to load persisted tasks:', error);
+            console.log('   Starting with empty queue');
+            this.taskQueue = [];
+        }
+    }
+
+    /**
+     * Save current task queue to workspace state (debounced)
+     * 
+     * Persists tasks so they survive extension reloads.
+     * Only saves essential data (excludes large contextBundles).
+     * Debounced to avoid excessive writes.
+     * 
+     * @private
+     */
+    private async saveTaskQueue(): Promise<void> {
+        // Clear existing debounce timer
+        if (this.saveDebounceTimer) {
+            clearTimeout(this.saveDebounceTimer);
+        }
+
+        // Debounce save operation
+        this.saveDebounceTimer = setTimeout(async () => {
+            if (!this.workspaceState) {
+                console.warn('⚠️ No workspace state available, cannot save tasks');
+                return;
+            }
+
+            try {
+                // Convert tasks to minimal persisted format
+                const persistedTasks: PersistedTask[] = this.taskQueue.map((task: Task) => ({
+                    taskId: task.taskId,
+                    title: task.title,
+                    description: task.description,
+                    priority: task.priority,
+                    status: task.status,
+                    dependencies: task.dependencies || [],
+                    blockedBy: task.blockedBy || [],
+                    estimatedHours: task.estimatedHours,
+                    acceptanceCriteria: task.acceptanceCriteria,
+                    relatedFiles: task.relatedFiles,
+                    assignedTo: task.assignedTo,
+                    createdAt: task.createdAt?.toISOString() || new Date().toISOString(),
+                    // Include metadata if present (for ticket-routed tasks)
+                    metadata: task.metadata ? {
+                        ticketId: task.metadata.ticketId,
+                        routedTeam: task.metadata.routedTeam,
+                        routingReason: task.metadata.routingReason,
+                        routingConfidence: task.metadata.routingConfidence,
+                        isEscalated: task.metadata.isEscalated
+                    } : undefined
+                }));
+
+                // Enforce max task limit (keep most recent 50)
+                const tasksToSave = persistedTasks.slice(-this.MAX_TASKS);
+
+                if (persistedTasks.length > this.MAX_TASKS) {
+                    console.warn(`⚠️ Task queue exceeded max size (${persistedTasks.length}), trimming to ${this.MAX_TASKS}`);
+                }
+
+                await this.workspaceState.update(this.STORAGE_KEY, tasksToSave);
+
+                console.log(`💾 Queue saved to storage (${tasksToSave.length} tasks)`);
+            } catch (error) {
+                console.error('❌ Failed to save task queue:', error);
+
+                // If storage quota exceeded, trim completed tasks and retry
+                if (error instanceof Error && error.message.includes('quota')) {
+                    console.log('   Storage quota exceeded, trimming completed tasks...');
+                    const activeTasks = this.taskQueue.filter((t: Task) => t.status !== 'completed');
+                    this.taskQueue = activeTasks;
+
+                    // Retry save with trimmed data
+                    setTimeout(() => this.saveTaskQueue(), 100);
+                }
+            }
+        }, this.SAVE_DEBOUNCE_MS);
+    }
 
     /**
      * 🚀 Initialize the Orchestrator
@@ -311,36 +510,44 @@ export class ProgrammingOrchestrator {
      * Tasks are validated and inserted in priority order (P1 > P2 > P3).
      * 
      * **Enforces**: Planning Team output only (verifies fromPlanningTeam flag)
+     * **Prevents**: Duplicate tasks for the same ticket (if task has ticketId metadata)
      * 
      * @param task - Task to add (must be from Planning Team)
      * @throws Error if task is invalid or not from Planning Team
      */
-    addTask(task: Task): void {
-        try {
-            console.log(`➕ addTask() called for: ${task.title} [${task.taskId}]`);
-            console.log(`   Status: ${task.status}, Priority: ${task.priority}, Dependencies: ${task.dependencies?.length || 0}`);
-            
-            // Validate task structure
-            const validatedTask = TaskSchema.parse(task);
-
-            // CRITICAL: Verify task comes from Planning Team
-            if (!validatedTask.fromPlanningTeam) {
-                throw new Error(
-                    'Orchestrator only accepts tasks from Planning Team. ' +
-                    'Set fromPlanningTeam=true.',
-                );
+    async addTask(task: Task): Promise<void> {
+        // Prevent duplicate tasks for tickets
+        if (task.metadata?.ticketId) {
+            const exists = await this.hasTaskForTicket(task.metadata.ticketId);
+            if (exists) {
+                console.warn(`⚠️ Task already exists for ticket ${task.metadata.ticketId}, skipping duplicate`);
+                return;
             }
-
-            // Insert task maintaining priority order (P1, P2, P3)
-            this.insertByPriority(validatedTask);
-
-            console.log(`✅ Task successfully added to queue at index ${this.taskQueue.length - 1}`);
-            this.logger.info(`✅ Task added to queue: ${validatedTask.taskId} (${validatedTask.priority})`);
-        } catch (error) {
-            console.log(`❌ Failed to add task: ${error}`);
-            this.logger.error('❌ Failed to add task:', error);
-            throw error;
         }
+
+        // Enforce max task limit
+        if (this.taskQueue.length >= this.MAX_TASKS) {
+            console.warn(`⚠️ Task queue at capacity (${this.MAX_TASKS}), removing oldest completed task`);
+            const completedIndex = this.taskQueue.findIndex((t: Task) => t.status === 'completed');
+            if (completedIndex >= 0) {
+                this.taskQueue.splice(completedIndex, 1);
+            } else {
+                console.error('❌ Cannot add task: queue full and no completed tasks to remove');
+                return;
+            }
+        }
+
+        // Add to queue
+        this.taskQueue.push(task);
+
+        console.log(`📋 Task added to queue: ${task.taskId} (Priority: ${task.priority}, Status: ${task.status})`);
+        if (task.metadata?.ticketId) {
+            console.log(`   Linked to ticket: ${task.metadata.ticketId} (Team: ${task.metadata.routedTeam})`);
+        }
+
+        // Save to storage and trigger UI refresh
+        await this.saveTaskQueue();
+        this.notifyTreeViewUpdate();
     }
 
     /**
@@ -381,12 +588,12 @@ export class ProgrammingOrchestrator {
      */
     getReadyTasks(): Task[] {
         console.log(`🔍 getReadyTasks() called - Total queue size: ${this.taskQueue.length}`);
-        
+
         const readyTasks = this.taskQueue.filter((t) => {
             const isReady = t.status === TaskStatus.READY;
             const notBlocked = !t.blockedBy || t.blockedBy.length === 0;
             const dependenciesMet = this.areDependenciesMet(t);
-            
+
             if (!isReady) {
                 console.log(`  ❌ Task ${t.taskId} (${t.title}): status=${t.status} (not READY)`);
             } else if (!notBlocked) {
@@ -396,7 +603,7 @@ export class ProgrammingOrchestrator {
             } else {
                 console.log(`  ✅ Task ${t.taskId} (${t.title}): READY (priority: ${t.priority})`);
             }
-            
+
             return isReady && notBlocked && dependenciesMet;
         });
 
@@ -407,9 +614,9 @@ export class ProgrammingOrchestrator {
         };
 
         const sorted = readyTasks.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
-        
+
         console.log(`📊 getReadyTasks() returning ${sorted.length} tasks`);
-        
+
         return sorted;
     }
 
@@ -419,6 +626,10 @@ export class ProgrammingOrchestrator {
     clearQueue(): void {
         this.taskQueue = [];
         this.currentTask = null;
+        // Save to storage
+        this.saveTaskQueue();
+        // Notify TreeView to refresh
+        this.notifyTreeViewUpdate();
     }
 
     /**
@@ -428,6 +639,7 @@ export class ProgrammingOrchestrator {
     setTasks(tasks: Task[]): void {
         this.clearQueue();
         tasks.forEach((task) => this.addTask(task));
+        // notifyTreeViewUpdate already called by clearQueue and addTask
     }
 
     /**
@@ -484,6 +696,142 @@ export class ProgrammingOrchestrator {
      */
     isBusy(): boolean {
         return this.currentTask !== null && this.currentTask.status === TaskStatus.IN_PROGRESS;
+    }
+
+    /**
+     * 🎫 Check if task already exists for a given ticket ID
+     * 
+     * Prevents duplicate tasks from being created for the same ticket.
+     * Useful for ticket routing to avoid double-queueing.
+     * 
+     * @param ticketId - Ticket ID to check
+     * @returns Promise<boolean> True if a task already exists for this ticket
+     */
+    async hasTaskForTicket(ticketId: string): Promise<boolean> {
+        if (!this.taskQueue || !Array.isArray(this.taskQueue)) {
+            return false;
+        }
+
+        const existingTask = this.taskQueue.find((task: Task) =>
+            task.metadata?.ticketId === ticketId
+        );
+
+        return !!existingTask;
+    }
+
+    /**
+     * 📊 Get count of ready tasks
+     * 
+     * Useful for monitoring queue status and UI updates
+     * 
+     * @returns number Count of tasks with status READY
+     */
+    getReadyTasksCount(): number {
+        return this.taskQueue.filter((t) => t.status === TaskStatus.READY).length;
+    }
+
+    /**
+     * 📊 Get count of in-progress tasks
+     * 
+     * @returns number Count of tasks with status IN_PROGRESS
+     */
+    getInProgressTasksCount(): number {
+        return this.taskQueue.filter((t) => t.status === TaskStatus.IN_PROGRESS).length;
+    }
+
+    /**
+     * 📊 Get all tasks
+     * 
+     * @returns Task[] All tasks in queue
+     */
+    getAllTasks(): Task[] {
+        return this.taskQueue;
+    }
+
+    /**
+     * 📊 Get ready tasks count
+     * 
+     * Returns count of tasks with READY status for status bar display.
+     * 
+     * @returns number Count of ready tasks
+     */
+    getReadyCount(): number {
+        if (!this.taskQueue || !Array.isArray(this.taskQueue)) {
+            return 0;
+        }
+        return this.taskQueue.filter((t: Task) => t.status === TaskStatus.READY).length;
+    }
+
+    /**
+     * 💾 Save queue to workspace state
+     * 
+     * Persists tasks across VS Code reloads.
+     * Only saves essential fields to stay under storage limits.
+     * 
+     * @param workspaceState VS Code workspace state
+     * @returns Promise<void>
+     */
+    async saveToStorage(workspaceState: vscode.Memento): Promise<void> {
+        if (!this.taskQueue || !Array.isArray(this.taskQueue)) {
+            return;
+        }
+
+        // Only persist first 50 tasks with minimal data
+        const simplifiedTasks: PersistedTask[] = this.taskQueue.slice(0, this.MAX_TASKS).map((task: Task) => ({
+            taskId: task.taskId,
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+            status: task.status,
+            dependencies: task.dependencies || [],
+            blockedBy: task.blockedBy || [],
+            estimatedHours: task.estimatedHours,
+            acceptanceCriteria: task.acceptanceCriteria,
+            relatedFiles: task.relatedFiles,
+            assignedTo: task.assignedTo,
+            metadata: task.metadata,
+            createdAt: task.createdAt?.toISOString() || new Date().toISOString(),
+        }));
+
+        try {
+            await workspaceState.update(this.STORAGE_KEY, simplifiedTasks);
+            this.logger.info(`💾 Saved ${simplifiedTasks.length} tasks to storage`);
+        } catch (error) {
+            this.logger.error(`Failed to save task queue: ${error}`);
+        }
+    }
+
+    /**
+     * 📂 Load queue from workspace state
+     * 
+     * Restores persisted tasks on extension activation.
+     * 
+     * @param workspaceState VS Code workspace state
+     * @returns Promise<void>
+     */
+    async loadFromStorage(workspaceState: vscode.Memento): Promise<void> {
+        try {
+            const stored = workspaceState.get<PersistedTask[]>(this.STORAGE_KEY);
+
+            if (!stored || !Array.isArray(stored)) {
+                this.logger.info('📂 No persisted tasks found, starting fresh');
+                this.taskQueue = [];
+                return;
+            }
+
+            // Convert stored data back to Task objects
+            this.taskQueue = stored.map((item: PersistedTask) => ({
+                ...item,
+                createdAt: new Date(item.createdAt),
+                fromPlanningTeam: true,
+            } as Task));
+
+            this.logger.info(`📂 Loaded ${this.taskQueue.length} tasks from storage`);
+            this.notifyTreeViewUpdate();
+        } catch (error) {
+            this.logger.error(`Failed to load task queue: ${error}`);
+            this.taskQueue = [];
+        }
     }
 
     // ========================================================================
@@ -951,7 +1299,14 @@ export class SimpleLogger implements ILogger {
     }
 
     error(message: string, ...args: unknown[]): void {
-        console.error(`[${this.name}] ❌ ${message}`, ...args);
+        // Safely serialize error objects to avoid circular reference issues
+        const safeArgs = args.map(arg => {
+            if (arg instanceof Error) {
+                return { name: arg.name, message: arg.message, stack: arg.stack };
+            }
+            return arg;
+        });
+        console.error(`[${this.name}] ❌ ${message}`, ...safeArgs);
     }
 
     debug(message: string, ...args: unknown[]): void {
