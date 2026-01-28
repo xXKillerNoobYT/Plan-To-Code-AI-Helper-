@@ -25,6 +25,7 @@
 
 import { z } from 'zod';
 import * as vscode from 'vscode';
+import { TicketDatabase } from '../db/ticketsDb';
 
 // ============================================================================
 // Logger Interface
@@ -254,6 +255,8 @@ export class ProgrammingOrchestrator {
     private healthCheckInterval: number = 10000; // 10 seconds
     private escalationTimeout: number = 30000; // 30 seconds
     private treeDataProvider: any = null; // Reference to TreeView provider for auto-refresh
+    private completedTasksProvider: any = null; // Reference to CompletedTasksTreeProvider
+    private ticketDb: TicketDatabase; // TicketDatabase instance for orphan detection
     private workspaceState?: vscode.Memento; // VS Code workspace state for persistence
     private saveDebounceTimer?: NodeJS.Timeout; // Debounce timer for saving
     private readonly STORAGE_KEY = 'coe.taskQueue';
@@ -274,6 +277,7 @@ export class ProgrammingOrchestrator {
     ) {
         this.mcpTools = mcpTools;
         this.logger = logger || new SimpleLogger('ProgrammingOrchestrator');
+        this.ticketDb = TicketDatabase.getInstance();
     }
 
     // ========================================================================
@@ -291,6 +295,18 @@ export class ProgrammingOrchestrator {
     setTreeDataProvider(provider: any): void {
         this.treeDataProvider = provider;
         console.log('✅ TreeView provider linked to ProgrammingOrchestrator');
+    }
+
+    /**
+     * 🔗 Set CompletedTasksTreeProvider reference
+     * 
+     * Allows orchestrator to trigger refresh of completed tasks history view.
+     * 
+     * @param provider - CompletedTasksTreeProvider instance
+     */
+    setCompletedTasksProvider(provider: any): void {
+        this.completedTasksProvider = provider;
+        console.log('✅ CompletedTasksTreeProvider linked to ProgrammingOrchestrator');
     }
 
     /**
@@ -316,6 +332,7 @@ export class ProgrammingOrchestrator {
     async initializeWithPersistence(workspaceState: vscode.Memento): Promise<void> {
         this.workspaceState = workspaceState;
         await this.loadPersistedTasks();
+        await this.reconcileTasks(); // Remove orphaned tasks after loading
         console.log('✅ ProgrammingOrchestrator initialized with persistence');
     }
 
@@ -387,6 +404,62 @@ export class ProgrammingOrchestrator {
             console.error('❌ Failed to load persisted tasks:', error);
             console.log('   Starting with empty queue');
             this.taskQueue = [];
+        }
+    }
+
+    /**
+     * 🔄 Reconcile tasks with TicketDb (orphan detection)
+     * 
+     * Removes tasks whose metadata.ticketId has no matching ticket in database.
+     * Called after loadPersistedTasks() to clean up stale references.
+     * 
+     * @private
+     */
+    private async reconcileTasks(): Promise<void> {
+        if (this.taskQueue.length === 0) {
+            console.log('ℹ️ No tasks to reconcile (queue empty)');
+            return;
+        }
+
+        const orphanedTasks: Task[] = [];
+        const validTasks: Task[] = [];
+
+        for (const task of this.taskQueue) {
+            const ticketId = task.metadata?.ticketId;
+
+            if (!ticketId) {
+                // Task has no ticket reference - keep it (might be from plan file)
+                validTasks.push(task);
+                continue;
+            }
+
+            try {
+                const exists = await this.ticketDb.doesTicketExist(ticketId);
+                if (exists) {
+                    validTasks.push(task);
+                } else {
+                    orphanedTasks.push(task);
+                }
+            } catch (error) {
+                // On error, keep task to avoid accidental deletion
+                console.warn(`⚠️ Error checking ticket ${ticketId}, keeping task ${task.taskId}:`, error);
+                validTasks.push(task);
+            }
+        }
+
+        if (orphanedTasks.length > 0) {
+            this.taskQueue = validTasks;
+            await this.saveTaskQueue(); // Save cleaned queue
+
+            console.log(`🔄 Reconciliation: Removed ${orphanedTasks.length} orphaned task(s) (no matching ticket)`);
+            orphanedTasks.forEach(t => {
+                console.log(`   - Removed: ${t.taskId} (${t.title}) - ticket ${t.metadata?.ticketId} not found`);
+            });
+
+            // Trigger UI refresh
+            this.notifyTreeViewUpdate();
+        } else {
+            console.log(`✅ Reconciliation: All ${this.taskQueue.length} task(s) have valid tickets`);
         }
     }
 

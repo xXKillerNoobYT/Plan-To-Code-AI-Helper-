@@ -5,16 +5,16 @@ on:
     branches:
       - main
       - develop
-      - 'feat/**'
+      - "feat/**"
   pull_request:
     branches:
       - main
       - develop
     paths-ignore:
-      - 'Docs/**'
-      - '**.md'
-      - '!PRD.md'
-      - '!PRD.json'
+      - "Docs/**"
+      - "**.md"
+      - "!PRD.md"
+      - "!PRD.json"
   workflow_dispatch:
 
 permissions:
@@ -79,7 +79,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: vscode-extension/package-lock.json
 
       - name: Install dependencies
@@ -179,6 +179,10 @@ jobs:
         run: npm run lint || echo "Linting warnings found but not blocking"
         continue-on-error: true
 
+      - name: Run Quality Gates Tests
+        run: npm run quality:check || echo "Quality gate warnings found but not blocking"
+        continue-on-error: true
+
       - name: Laravel Pint (PHP)
         run: ./vendor/bin/pint --test || echo "PHP linting warnings found but not blocking"
         continue-on-error: true
@@ -199,21 +203,21 @@ jobs:
           echo "" >> coverage-summary.md
           echo "| Component | Coverage | Status |" >> coverage-summary.md
           echo "|-----------|----------|--------|" >> coverage-summary.md
-          
+
           # Context Manager (target: 80%+)
           if [ -f context-manager-coverage/coverage-summary.json ]; then
             CM_COV=$(cat context-manager-coverage/coverage-summary.json | jq -r '.total.statements.pct')
             CM_STATUS=$( [ $(echo "$CM_COV >= 80" | bc -l) -eq 1 ] && echo "✅ Pass" || echo "⚠️ Below Target" )
             echo "| Context Manager | ${CM_COV}% | ${CM_STATUS} |" >> coverage-summary.md
           fi
-          
+
           # Extension (target: 50%+)
           if [ -f extension-coverage/coverage-summary.json ]; then
             EXT_COV=$(cat extension-coverage/coverage-summary.json | jq -r '.total.statements.pct')
             EXT_STATUS=$( [ $(echo "$EXT_COV >= 50" | bc -l) -eq 1 ] && echo "✅ Pass" || echo "⚠️ Below Target" )
             echo "| VS Code Extension | ${EXT_COV}% | ${EXT_STATUS} |" >> coverage-summary.md
           fi
-          
+
           # Laravel (informational only)
           if [ -f laravel-coverage/coverage.txt ]; then
             LARAVEL_COV=$(cat laravel-coverage/coverage.txt | grep "Lines:" | awk '{print $2}')
@@ -237,7 +241,8 @@ jobs:
   quality-gate:
     name: Quality Gate ✅
     runs-on: ubuntu-latest
-    needs: [prd-validation, context-manager-tests, extension-tests, code-quality]
+    needs:
+      [prd-validation, context-manager-tests, extension-tests, code-quality]
     if: always()
     steps:
       - name: Check all jobs

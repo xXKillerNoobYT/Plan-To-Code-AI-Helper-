@@ -40,6 +40,10 @@
             {
                 "command": "coe.testRouteTicket",
                 "title": "COE: Test Boss AI Router"
+            },
+            {
+                "command": "coe.cleanupHistory",
+                "title": "COE: Cleanup Old Completed Tasks"
             }
         ],
         "viewsContainers": {
@@ -66,6 +70,10 @@
                 {
                     "id": "coe.tasksQueue",
                     "name": "COE Tasks Queue"
+                },
+                {
+                    "id": "coe.completedTasks",
+                    "name": "Completed History"
                 }
             ]
         }
@@ -81,7 +89,11 @@
         "test:once": "jest --coverage",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
-        "update-prd": "node -r ts-node/register src/scripts/update-prd.ts"
+        "update-prd": "node -r ts-node/register src/scripts/update-prd.ts",
+        "prepare": "husky",
+        "quality:check": "jest tests/__tests__/quality-gates.test.ts --coverage",
+        "quality:watch": "jest tests/__tests__/quality-gates.test.ts --watch --coverage",
+        "coverage:report": "jest --coverage && node -e \"console.log('Coverage report generated. Check .vscode/quality DIAGNOSTICS-diagnostics.json for details.')\""
     },
     "devDependencies": {
         "@types/glob": "^8.1.0",
@@ -95,7 +107,9 @@
         "@vscode/test-electron": "^2.3.8",
         "eslint": "^8.54.0",
         "glob": "^10.3.10",
+        "husky": "^9.1.7",
         "jest": "^29.7.0",
+        "lint-staged": "^16.2.7",
         "mocha": "^10.8.2",
         "sinon": "^21.0.1",
         "ts-jest": "^29.1.0",
@@ -171,7 +185,35 @@
                 "default": 300,
                 "minimum": 60,
                 "description": "How long to wait for response before timeout (seconds)"
+            },
+            "coe.history.retention": {
+                "type": "object",
+                "default": {
+                    "maxAgeHours": 168,
+                    "maxCount": 0
+                },
+                "description": "Completed tasks retention settings. maxAgeHours: delete tasks older than N hours (0=disabled). maxCount: keep only last N tasks (0=unlimited).",
+                "properties": {
+                    "maxAgeHours": {
+                        "type": "integer",
+                        "default": 168,
+                        "minimum": 0,
+                        "description": "Delete completed tasks older than N hours. Set 0 to disable age-based cleanup."
+                    },
+                    "maxCount": {
+                        "type": "integer",
+                        "default": 0,
+                        "minimum": 0,
+                        "description": "Keep only the last N completed tasks. Set 0 to keep all (unlimited)."
+                    }
+                }
             }
         }
+    },
+    "lint-staged": {
+        "*.ts": [
+            "eslint --fix",
+            "tsc --noEmit"
+        ]
     }
 }

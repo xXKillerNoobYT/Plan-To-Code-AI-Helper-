@@ -98,6 +98,22 @@ export class ThemeIcon {
     }
 }
 
+export class MarkdownString {
+    private value: string = '';
+    constructor(value?: string) {
+        if (value) {
+            this.value = value;
+        }
+    }
+    appendMarkdown(text: string): this {
+        this.value += text;
+        return this;
+    }
+    toString(): string {
+        return this.value;
+    }
+}
+
 export class EventEmitter<T> {
     private listeners: Array<(e: T) => unknown> = [];
     event = (listener: (e: T) => unknown) => {
@@ -113,6 +129,14 @@ export const ProgressLocation = { Notification: 15 } as const;
 
 export const StatusBarAlignment = { Left: 1, Right: 2 } as const;
 
+export const languages = {
+    createDiagnosticCollection: jest.fn(() => ({
+        set: jest.fn(),
+        clear: jest.fn(),
+        dispose: jest.fn(),
+    })),
+};
+
 export class Disposable {
     dispose(): void { }
 }
@@ -125,4 +149,5 @@ export default {
     Uri,
     ProgressLocation,
     Disposable,
+    languages,
 };

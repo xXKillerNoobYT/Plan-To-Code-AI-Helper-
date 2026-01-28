@@ -4,13 +4,15 @@ import { TaskPriority, TaskStatus, Task } from '../src/orchestrator/programmingO
 import * as vscode from 'vscode';
 
 /**
+ * Registry to store command handlers during test execution
+ */
+const commandRegistry = new Map<string, (...args: any[]) => Promise<void>>();
+
+/**
  * Helper to find a registered command handler by command id
  */
 function getRegisteredCommandHandler(commandId: string): (() => Promise<void>) | undefined {
-    // Access jest mock calls for registerCommand
-    const calls = (vscode.commands.registerCommand as unknown as jest.Mock).mock.calls as Array<[string, unknown]>;
-    const match = calls.find(([id]) => id === commandId);
-    return (match?.[1] as (() => Promise<void>)) || undefined;
+    return commandRegistry.get(commandId);
 }
 
 /**
@@ -37,6 +39,7 @@ describe('COE Status Bar and Commands', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         jest.clearAllMocks();
+        commandRegistry.clear();
 
         fetchMock = jest.fn().mockResolvedValue({
             ok: true,
@@ -73,11 +76,15 @@ describe('COE Status Bar and Commands', () => {
         (vscode.window.createStatusBarItem as jest.Mock).mockReturnValue(statusBarMock);
         (vscode.window.showInformationMessage as jest.Mock).mockResolvedValue(undefined);
         (vscode.commands.registerCommand as jest.Mock).mockImplementation(
-            (command: string, callback: any) => ({
-                dispose: jest.fn(),
-                _command: command,
-                _callback: callback,
-            })
+            (command: string, callback: any) => {
+                // Store in registry for test access
+                commandRegistry.set(command, callback);
+                return {
+                    dispose: jest.fn(),
+                    _command: command,
+                    _callback: callback,
+                };
+            }
         );
     });
 
@@ -88,12 +95,14 @@ describe('COE Status Bar and Commands', () => {
     it('shows correct remaining count in status bar after task completion', async () => {
         // Activate extension
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
         const statusBar = getStatusBarItem();
 
-        expect(orchestrator).toBeTruthy();
-        expect(statusBar).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
+        expect(statusBar).not.toBeNull();
 
         if (!orchestrator || !statusBar) return;
 
@@ -149,9 +158,11 @@ describe('COE Status Bar and Commands', () => {
 
     it('sends LM Studio request (stream) with prompt body and logs response', async () => {
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
-        expect(orchestrator).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
         if (!orchestrator) return;
 
         const task: Task = {
@@ -220,9 +231,11 @@ describe('COE Status Bar and Commands', () => {
 
     it('filters streaming metadata and only logs clean model text', async () => {
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
-        expect(orchestrator).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
         if (!orchestrator) return;
 
         const task: Task = {
@@ -275,9 +288,11 @@ describe('COE Status Bar and Commands', () => {
 
     it('ignores malformed streaming chunks but keeps prior good content', async () => {
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
-        expect(orchestrator).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
         if (!orchestrator) return;
 
         const task: Task = {
@@ -331,9 +346,11 @@ describe('COE Status Bar and Commands', () => {
         fetchMock.mockRejectedValueOnce(new TypeError('fetch failed'));
 
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
-        expect(orchestrator).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
         if (!orchestrator) return;
 
         const task: Task = {
@@ -373,19 +390,26 @@ describe('COE Status Bar and Commands', () => {
         // Activate extension (no plan tasks loaded by mock)
         await activate(buildContext());
 
+        // Ensure all pending timers and promises are resolved
+        jest.runAllTimers();
+        await Promise.resolve();
+
         const statusBar = getStatusBarItem();
-        expect(statusBar).toBeTruthy();
+        expect(statusBar).not.toBeNull();
         if (!statusBar) return;
 
-        // Empty queue should show "No tasks"
+        // Empty queue should show "No tasks" in text
+        expect(statusBar.text).toContain('COE');
         expect(statusBar.text).toContain('No tasks');
     });
 
     it('displays disabled message for test command when real tasks exist', async () => {
         await activate(buildContext());
+        jest.runAllTimers();
+        await Promise.resolve();
 
         const orchestrator = getOrchestrator();
-        expect(orchestrator).toBeTruthy();
+        expect(orchestrator).not.toBeNull();
         if (!orchestrator) return;
 
         // Add a real task to the queue

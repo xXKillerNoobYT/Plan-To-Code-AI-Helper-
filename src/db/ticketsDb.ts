@@ -961,4 +961,148 @@ export class TicketDatabase {
      * Used when SQLite is unavailable
      */
     private fallbackCompletedTasks?: Map<string, any>;
+
+    /**
+     * Check if a ticket exists by ID (for orphan detection)
+     * 
+     * @param ticketId - Ticket ID to check
+     * @returns Promise<boolean> - True if ticket exists, false otherwise
+     */
+    async doesTicketExist(ticketId: string): Promise<boolean> {
+        if (this.useFallback) {
+            return this.fallbackStore.has(ticketId);
+        }
+
+        return new Promise((resolve) => {
+            if (!this.db) {
+                console.warn('⚠️ Database not initialized, cannot check ticket existence');
+                resolve(false);
+                return;
+            }
+
+            this.db!.get(
+                `SELECT 1 FROM tickets WHERE ticket_id = ? LIMIT 1`,
+                [ticketId],
+                (err, row) => {
+                    if (err) {
+                        console.error(`❌ Error checking ticket existence for ${ticketId}:`, err);
+                        resolve(false);
+                    } else {
+                        resolve(!!row);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Cleanup old completed tasks based on retention policy (P1.3 - Cleanup)
+     * Supports dual-mode cleanup: age-based OR count-based OR both
+     * 
+     * @param maxAgeHours - Delete tasks older than N hours (0 = disabled)
+     * @param maxCount - Keep only last N tasks (0 = unlimited)
+     * @returns Promise<number> - Number of tasks deleted
+     */
+    async cleanupOldTasks(maxAgeHours: number, maxCount: number): Promise<number> {
+        // Validate inputs
+        const ageHours = Math.max(0, maxAgeHours || 0);
+        const keepCount = Math.max(0, maxCount || 0);
+
+        // Both disabled = no cleanup
+        if (ageHours === 0 && keepCount === 0) {
+            console.log('ℹ️ Cleanup skipped: Both maxAgeHours and maxCount are 0 (unlimited retention)');
+            return 0;
+        }
+
+        if (this.useFallback) {
+            // Fallback cleanup (in-memory)
+            if (!this.fallbackCompletedTasks) {
+                return 0;
+            }
+
+            let deleted = 0;
+            const tasks = Array.from(this.fallbackCompletedTasks.entries());
+
+            // Sort by completed_at DESC (newest first)
+            tasks.sort((a, b) => b[1].completed_at.localeCompare(a[1].completed_at));
+
+            tasks.forEach(([taskId, task], index) => {
+                let shouldDelete = false;
+
+                // Age-based check
+                if (ageHours > 0) {
+                    const cutoffTime = Date.now() - ageHours * 60 * 60 * 1000;
+                    const taskTime = new Date(task.completed_at).getTime();
+                    if (taskTime < cutoffTime) {
+                        shouldDelete = true;
+                    }
+                }
+
+                // Count-based check (keep only newest N)
+                if (keepCount > 0 && index >= keepCount) {
+                    shouldDelete = true;
+                }
+
+                if (shouldDelete) {
+                    this.fallbackCompletedTasks!.delete(taskId);
+                    deleted++;
+                }
+            });
+
+            console.log(`✅ Fallback cleanup: Deleted ${deleted} completed tasks`);
+            return deleted;
+        }
+
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error('Database not initialized'));
+                return;
+            }
+
+            let query = '';
+            const params: any[] = [];
+
+            if (ageHours > 0 && keepCount > 0) {
+                // Both modes enabled: Delete if too old OR beyond count limit
+                const cutoffTime = new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString();
+                query = `
+                    DELETE FROM completed_tasks 
+                    WHERE completed_at < ?
+                       OR task_id IN (
+                           SELECT task_id FROM completed_tasks 
+                           ORDER BY completed_at DESC 
+                           LIMIT -1 OFFSET ?
+                       )
+                `;
+                params.push(cutoffTime, keepCount);
+            } else if (ageHours > 0) {
+                // Age-based only
+                const cutoffTime = new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString();
+                query = `DELETE FROM completed_tasks WHERE completed_at < ?`;
+                params.push(cutoffTime);
+            } else if (keepCount > 0) {
+                // Count-based only: Keep newest N, delete rest
+                query = `
+                    DELETE FROM completed_tasks 
+                    WHERE task_id IN (
+                        SELECT task_id FROM completed_tasks 
+                        ORDER BY completed_at DESC 
+                        LIMIT -1 OFFSET ?
+                    )
+                `;
+                params.push(keepCount);
+            }
+
+            this.db!.run(query, params, function (err) {
+                if (err) {
+                    console.error('❌ Failed to cleanup old tasks:', err);
+                    reject(err);
+                } else {
+                    const deletedCount = this.changes || 0;
+                    console.log(`✅ Cleanup complete: Deleted ${deletedCount} completed tasks (maxAgeHours=${ageHours}, maxCount=${keepCount})`);
+                    resolve(deletedCount);
+                }
+            });
+        });
+    }
 }

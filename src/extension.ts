@@ -11,11 +11,14 @@ import { ProgrammingOrchestrator, SimpleLogger, TaskPriority, TaskStatus, Task }
 import { loadTasksFromPlanFile } from './plans/planningStub';
 import { setupMissingFiles } from './utils/setupFiles';
 import { CoeTaskTreeProvider } from './tree/CoeTaskTreeProvider';
+import { CompletedTasksTreeProvider } from './ui/completedTasksTreeProvider';
 import { FileConfigManager, LLMConfig as FileLLMConfig } from './utils/fileConfig';
 import { callLLMWithStreaming } from './utils/streamingLLM';
 import { PRDGenerator } from './services/prdGenerator';
 import { PlansFileWatcher } from './services/plansWatcher';
 import { TicketDatabase } from './db/ticketsDb';
+import { CoverageDiagnosticProvider } from './diagnostics/coverageProvider';
+import { SkippedTestsDiagnosticProvider } from './diagnostics/skippedTestsProvider';
 
 // ============================================================================
 // Global State
@@ -155,6 +158,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     try {
         let treeDataProvider: CoeTaskTreeProvider | null = null;
+        let completedTasksProvider: CompletedTasksTreeProvider | null = null;
         let planWatcher: vscode.FileSystemWatcher | null = null;
 
         // ====================================================================
@@ -268,6 +272,49 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Link TreeView provider to orchestrator for auto-refresh on queue changes
         programmingOrchestrator.setTreeDataProvider(treeDataProvider);
+
+        // ====================================================================
+        // 3.2.5 Initialize Completed Tasks History Tree View
+        // ====================================================================
+        const ticketDb = TicketDatabase.getInstance();
+        completedTasksProvider = new CompletedTasksTreeProvider(ticketDb);
+        const completedTree = vscode.window.createTreeView('coe.completedTasks', {
+            treeDataProvider: completedTasksProvider
+        });
+        context.subscriptions.push(completedTree);
+
+        // Link CompletedTasksTreeProvider to orchestrator
+        programmingOrchestrator.setCompletedTasksProvider(completedTasksProvider);
+
+        // Read retention config from VS Code settings
+        const config = vscode.workspace.getConfiguration('coe.history');
+        const retentionConfig = config.get('retention', { maxAgeHours: 168, maxCount: 0 });
+        if (typeof retentionConfig === 'object' && 'maxAgeHours' in retentionConfig) {
+            const maxAgeHours = (retentionConfig as any).maxAgeHours || 168;
+            completedTasksProvider.updateRetention(maxAgeHours);
+            orchestratorOutputChannel.appendLine(`✅ Completed Tasks view retention: ${maxAgeHours}h`);
+        }
+
+        orchestratorOutputChannel.appendLine('✅ Completed Tasks Tree View initialized');
+        orchestratorOutputChannel.appendLine('');
+
+        // ====================================================================
+        // 3.2.6 Initialize Quality Gate Diagnostic Providers
+        // ====================================================================
+        orchestratorOutputChannel.appendLine('🔬 Initializing Quality Gate Diagnostic Providers...');
+
+        // Coverage diagnostic provider (monitors coverage files)
+        const coverageProvider = new CoverageDiagnosticProvider();
+        coverageProvider.activate(context);
+        orchestratorOutputChannel.appendLine('✅ Coverage Diagnostic Provider activated');
+
+        // Skipped tests diagnostic provider (monitors test files)
+        const skippedTestsProvider = new SkippedTestsDiagnosticProvider();
+        skippedTestsProvider.activate(context);
+        orchestratorOutputChannel.appendLine('✅ Skipped Tests Diagnostic Provider activated');
+
+        orchestratorOutputChannel.appendLine('💡 Quality warnings will appear in Problems panel');
+        orchestratorOutputChannel.appendLine('');
 
         // ====================================================================
         // 3.3 Load tasks from plan file
@@ -1057,12 +1104,65 @@ export async function activate(context: vscode.ExtensionContext) {
         );
         context.subscriptions.push(testRouteTicketCommand);
 
+        // ====================================================================
+        // Cleanup History Command
+        // ====================================================================
+        const cleanupHistoryCommand = vscode.commands.registerCommand(
+            'coe.cleanupHistory',
+            async () => {
+                if (!completedTasksProvider) {
+                    vscode.window.showErrorMessage('❌ Completed tasks provider not initialized');
+                    return;
+                }
+
+                try {
+                    orchestratorOutputChannel?.appendLine('🧹 Starting completed tasks cleanup...');
+
+                    // Read retention config from VS Code settings
+                    const config = vscode.workspace.getConfiguration('coe.history');
+                    const retentionConfig = config.get('retention', { maxAgeHours: 168, maxCount: 0 });
+
+                    let maxAgeHours = 168;
+                    let maxCount = 0;
+
+                    if (typeof retentionConfig === 'object' && retentionConfig !== null) {
+                        maxAgeHours = (retentionConfig as any).maxAgeHours || 168;
+                        maxCount = (retentionConfig as any).maxCount || 0;
+                    }
+
+                    orchestratorOutputChannel?.appendLine(`   Config: maxAgeHours=${maxAgeHours}, maxCount=${maxCount}`);
+
+                    // Run cleanup
+                    const ticketDb = TicketDatabase.getInstance();
+                    const deletedCount = await ticketDb.cleanupOldTasks(maxAgeHours, maxCount);
+
+                    orchestratorOutputChannel?.appendLine(`✅ Cleanup complete: Deleted ${deletedCount} old completed tasks`);
+
+                    // Refresh completed tasks view
+                    completedTasksProvider.refresh();
+
+                    if (deletedCount > 0) {
+                        vscode.window.showInformationMessage(`✅ Deleted ${deletedCount} old completed task(s)`);
+                    } else {
+                        vscode.window.showInformationMessage('ℹ️ No tasks to cleanup (within retention limits)');
+                    }
+
+                } catch (error) {
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    orchestratorOutputChannel?.appendLine(`❌ Error during cleanup: ${errorMsg}`);
+                    vscode.window.showErrorMessage(`❌ Cleanup failed: ${errorMsg}`);
+                }
+            }
+        );
+        context.subscriptions.push(cleanupHistoryCommand);
+
         orchestratorOutputChannel.appendLine('📋 Commands Registered:');
         orchestratorOutputChannel.appendLine('  • coe.activate - Activate orchestration');
         orchestratorOutputChannel.appendLine('  • coe.regeneratePRD - Regenerate PRD from Plans/ (Command Palette)');
         orchestratorOutputChannel.appendLine('  • coe.testOrchestrator - Test orchestrator (click status bar or use Command Palette)');
         orchestratorOutputChannel.appendLine('  • coe.testCreateTicket - Test ticket creation (Command Palette)');
         orchestratorOutputChannel.appendLine('  • coe.testRouteTicket - Test Boss AI Router (Command Palette)');
+        orchestratorOutputChannel.appendLine('  • coe.cleanupHistory - Cleanup old completed tasks (Command Palette)');
         orchestratorOutputChannel.appendLine('');
         orchestratorOutputChannel.appendLine('Start using COE by running "coe.testOrchestrator" from Command Palette or clicking the status bar!');
 

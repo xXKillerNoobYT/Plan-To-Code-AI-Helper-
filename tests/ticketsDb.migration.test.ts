@@ -480,64 +480,84 @@ describe('TicketDb - Completed Tasks Archive (P1.1)', () => {
         const db = new sqlite3.Database(testDbPath, (err) => {
             expect(err).toBeNull();
 
-            // Create version and completed_tasks tables
+            // Create version table first
             db.run(
-                `CREATE TABLE IF NOT EXISTS db_version (version INTEGER NOT NULL);
-				 INSERT OR IGNORE INTO db_version (version) VALUES (1);
-				 CREATE TABLE IF NOT EXISTS completed_tasks (
-					task_id TEXT PRIMARY KEY,
-					original_ticket_id TEXT,
-					title TEXT NOT NULL,
-					status TEXT NOT NULL,
-					priority INTEGER NOT NULL,
-					completed_at TEXT NOT NULL,
-					duration_minutes INTEGER,
-					outcome TEXT,
-					created_at TEXT NOT NULL
-				 )`,
+                `CREATE TABLE IF NOT EXISTS db_version (version INTEGER NOT NULL)`,
                 (err) => {
-                    expect(err).toBeNull();
+                    if (err) {
+                        done(err);
+                        return;
+                    }
 
-                    // Archive a task
-                    const taskId = 'task-123';
-                    const title = 'Test Task';
-                    const status = 'completed';
-                    const durationMinutes = 45;
-
-                    db.run(
-                        `INSERT INTO completed_tasks (task_id, original_ticket_id, title, status, priority, completed_at, duration_minutes, created_at)
-						 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                        [
-                            taskId,
-                            'ticket-456',
-                            title,
-                            status,
-                            2, // priority
-                            new Date().toISOString(),
-                            durationMinutes,
-                            new Date().toISOString()
-                        ],
-                        (err) => {
-                            expect(err).toBeNull();
-
-                            // Verify task was archived
-                            db.get(
-                                'SELECT * FROM completed_tasks WHERE task_id = ?',
-                                [taskId],
-                                (err, row: any) => {
-                                    expect(err).toBeNull();
-                                    expect(row).toBeDefined();
-                                    expect(row?.task_id).toBe(taskId);
-                                    expect(row?.title).toBe(title);
-                                    expect(row?.status).toBe(status);
-                                    expect(row?.duration_minutes).toBe(durationMinutes);
-                                    expect(row?.priority).toBe(2);
-
-                                    db.close(done);
-                                }
-                            );
+                    // Insert version
+                    db.run(`INSERT OR IGNORE INTO db_version (version) VALUES (1)`, (err) => {
+                        if (err) {
+                            done(err);
+                            return;
                         }
-                    );
+
+                        // Create completed_tasks table
+                        db.run(
+                            `CREATE TABLE IF NOT EXISTS completed_tasks (
+                                task_id TEXT PRIMARY KEY,
+                                original_ticket_id TEXT,
+                                title TEXT NOT NULL,
+                                status TEXT NOT NULL,
+                                priority INTEGER NOT NULL,
+                                completed_at TEXT NOT NULL,
+                                duration_minutes INTEGER,
+                                outcome TEXT,
+                                created_at TEXT NOT NULL
+                            )`,
+                            (err) => {
+                                if (err) {
+                                    done(err);
+                                    return;
+                                }
+
+                                // Archive a task
+                                const taskId = 'task-123';
+                                const title = 'Test Task';
+                                const status = 'completed';
+                                const durationMinutes = 45;
+
+                                db.run(
+                                    `INSERT INTO completed_tasks (task_id, original_ticket_id, title, status, priority, completed_at, duration_minutes, created_at)
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                                    [
+                                        taskId,
+                                        'ticket-456',
+                                        title,
+                                        status,
+                                        2, // priority
+                                        new Date().toISOString(),
+                                        durationMinutes,
+                                        new Date().toISOString()
+                                    ],
+                                    (err) => {
+                                        expect(err).toBeNull();
+
+                                        // Verify task was archived
+                                        db.get(
+                                            'SELECT * FROM completed_tasks WHERE task_id = ?',
+                                            [taskId],
+                                            (err, row: any) => {
+                                                expect(err).toBeNull();
+                                                expect(row).toBeDefined();
+                                                expect(row?.task_id).toBe(taskId);
+                                                expect(row?.title).toBe(title);
+                                                expect(row?.status).toBe(status);
+                                                expect(row?.duration_minutes).toBe(durationMinutes);
+                                                expect(row?.priority).toBe(2);
+
+                                                db.close(done);
+                                            }
+                                        );
+                                    }
+                                );
+                            }
+                        );
+                    });
                 }
             );
         });
@@ -928,6 +948,284 @@ describe('TicketDb - Completed Tasks Archive (P1.1)', () => {
                     );
                 }
             );
+        });
+    });
+
+    // ========================================================================
+    // Test: Cleanup scenarios for cleanupOldTasks() method (from ticketsDb.ts)
+    // ========================================================================
+
+    describe('cleanupOldTasks() - Dual-mode cleanup integration', () => {
+        const uniqueDbPath = (suffix: string) => path.join(__dirname, `test_cleanup_${suffix}_${Date.now()}.db`);
+
+        it('should delete tasks older than maxAgeHours (age-based only)', (done) => {
+            const dbPath = uniqueDbPath('age_only');
+            const db = new sqlite3.Database(dbPath, (err) => {
+                expect(err).toBeNull();
+
+                db.run(
+                    `CREATE TABLE IF NOT EXISTS completed_tasks (
+                        task_id TEXT PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        priority INTEGER NOT NULL,
+                        completed_at TEXT NOT NULL,
+                        created_at TEXT NOT NULL
+                    )`,
+                    (err) => {
+                        expect(err).toBeNull();
+
+                        const now = new Date();
+                        const old1 = new Date(now.getTime() - 200 * 60 * 60 * 1000).toISOString(); // 200h ago
+                        const old2 = new Date(now.getTime() - 180 * 60 * 60 * 1000).toISOString(); // 180h ago
+                        const recent = new Date(now.getTime() - 50 * 60 * 60 * 1000).toISOString(); // 50h ago
+
+                        // Insert test data
+                        db.run(
+                            `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                            ['old-1', 'Old 1', 'completed', 2, old1, old1],
+                            (err) => expect(err).toBeNull()
+                        );
+
+                        db.run(
+                            `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                            ['old-2', 'Old 2', 'completed', 2, old2, old2],
+                            (err) => expect(err).toBeNull()
+                        );
+
+                        db.run(
+                            `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                            ['recent-1', 'Recent', 'completed', 2, recent, recent],
+                            (err) => {
+                                expect(err).toBeNull();
+
+                                // Cleanup: maxAgeHours=168 (7 days), maxCount=0 (disabled)
+                                const cutoffTime = new Date(now.getTime() - 168 * 60 * 60 * 1000).toISOString();
+                                db.run(
+                                    `DELETE FROM completed_tasks WHERE completed_at < ?`,
+                                    [cutoffTime],
+                                    function (err) {
+                                        expect(err).toBeNull();
+                                        expect(this.changes).toBe(2); // Both old tasks deleted
+
+                                        // Verify only recent task remains
+                                        db.all('SELECT * FROM completed_tasks', (err, rows: any[]) => {
+                                            expect(err).toBeNull();
+                                            expect(rows.length).toBe(1);
+                                            expect(rows[0].task_id).toBe('recent-1');
+
+                                            db.close(() => {
+                                                fs.unlinkSync(dbPath);
+                                                done();
+                                            });
+                                        });
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
+            });
+        });
+
+        it('should keep only last N tasks (count-based only)', (done) => {
+            const dbPath = uniqueDbPath('count_only');
+            const db = new sqlite3.Database(dbPath, (err) => {
+                expect(err).toBeNull();
+
+                db.run(
+                    `CREATE TABLE IF NOT EXISTS completed_tasks (
+                        task_id TEXT PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        priority INTEGER NOT NULL,
+                        completed_at TEXT NOT NULL,
+                        created_at TEXT NOT NULL
+                    )`,
+                    (err) => {
+                        expect(err).toBeNull();
+
+                        // Insert 5 tasks
+                        const now = new Date();
+                        const tasks = [
+                            { id: 't1', time: new Date(now.getTime() - 5 * 60 * 60 * 1000).toISOString() },
+                            { id: 't2', time: new Date(now.getTime() - 4 * 60 * 60 * 1000).toISOString() },
+                            { id: 't3', time: new Date(now.getTime() - 3 * 60 * 60 * 1000).toISOString() },
+                            { id: 't4', time: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString() },
+                            { id: 't5', time: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString() }
+                        ];
+
+                        let inserted = 0;
+                        tasks.forEach(task => {
+                            db.run(
+                                `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                                [task.id, 'Task', 'completed', 2, task.time, task.time],
+                                () => {
+                                    inserted++;
+                                    if (inserted === tasks.length) {
+                                        // Cleanup: Keep only newest 3 (maxCount=3, maxAgeHours=0)
+                                        const maxCount = 3;
+                                        db.run(
+                                            `DELETE FROM completed_tasks 
+                                             WHERE task_id IN (
+                                                 SELECT task_id FROM completed_tasks 
+                                                 ORDER BY completed_at DESC 
+                                                 LIMIT -1 OFFSET ?
+                                             )`,
+                                            [maxCount],
+                                            function (err) {
+                                                expect(err).toBeNull();
+                                                expect(this.changes).toBe(2); // Delete 2 oldest
+
+                                                // Verify only newest 3 remain
+                                                db.all(
+                                                    'SELECT * FROM completed_tasks ORDER BY completed_at DESC',
+                                                    (err, rows: any[]) => {
+                                                        expect(err).toBeNull();
+                                                        expect(rows.length).toBe(3);
+                                                        expect(rows[0].task_id).toBe('t5'); // Newest
+                                                        expect(rows[1].task_id).toBe('t4');
+                                                        expect(rows[2].task_id).toBe('t3');
+
+                                                        db.close(() => {
+                                                            fs.unlinkSync(dbPath);
+                                                            done();
+                                                        });
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        });
+                    }
+                );
+            });
+        });
+
+        it('should apply both age and count limits (combined mode)', (done) => {
+            const dbPath = uniqueDbPath('combined');
+            const db = new sqlite3.Database(dbPath, (err) => {
+                expect(err).toBeNull();
+
+                db.run(
+                    `CREATE TABLE IF NOT EXISTS completed_tasks (
+                        task_id TEXT PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        priority INTEGER NOT NULL,
+                        completed_at TEXT NOT NULL,
+                        created_at TEXT NOT NULL
+                    )`,
+                    (err) => {
+                        expect(err).toBeNull();
+
+                        const now = new Date();
+                        const tasks = [
+                            { id: 'very-old', time: new Date(now.getTime() - 200 * 60 * 60 * 1000).toISOString() },
+                            { id: 'old', time: new Date(now.getTime() - 150 * 60 * 60 * 1000).toISOString() },
+                            { id: 'recent-1', time: new Date(now.getTime() - 50 * 60 * 60 * 1000).toISOString() },
+                            { id: 'recent-2', time: new Date(now.getTime() - 40 * 60 * 60 * 1000).toISOString() },
+                            { id: 'recent-3', time: new Date(now.getTime() - 30 * 60 * 60 * 1000).toISOString() }
+                        ];
+
+                        let inserted = 0;
+                        tasks.forEach(task => {
+                            db.run(
+                                `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                                [task.id, 'Task', 'completed', 2, task.time, task.time],
+                                () => {
+                                    inserted++;
+                                    if (inserted === tasks.length) {
+                                        // Combined: maxAgeHours=100, maxCount=2
+                                        const cutoffTime = new Date(now.getTime() - 100 * 60 * 60 * 1000).toISOString();
+                                        const maxCount = 2;
+
+                                        db.run(
+                                            `DELETE FROM completed_tasks 
+                                             WHERE completed_at < ?
+                                                OR task_id IN (
+                                                    SELECT task_id FROM completed_tasks 
+                                                    ORDER BY completed_at DESC 
+                                                    LIMIT -1 OFFSET ?
+                                                )`,
+                                            [cutoffTime, maxCount],
+                                            function (err) {
+                                                expect(err).toBeNull();
+
+                                                // Should delete: very-old (age), old (age), recent-1 (count)
+                                                expect(this.changes).toBe(3);
+
+                                                db.all(
+                                                    'SELECT * FROM completed_tasks ORDER BY completed_at DESC',
+                                                    (err, rows: any[]) => {
+                                                        expect(err).toBeNull();
+                                                        expect(rows.length).toBe(2);
+                                                        expect(rows[0].task_id).toBe('recent-3');
+                                                        expect(rows[1].task_id).toBe('recent-2');
+
+                                                        db.close(() => {
+                                                            fs.unlinkSync(dbPath);
+                                                            done();
+                                                        });
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        });
+                    }
+                );
+            });
+        });
+
+        it('should not delete anything when both limits are 0 (unlimited)', (done) => {
+            const dbPath = uniqueDbPath('unlimited');
+            const db = new sqlite3.Database(dbPath, (err) => {
+                expect(err).toBeNull();
+
+                db.run(
+                    `CREATE TABLE IF NOT EXISTS completed_tasks (
+                        task_id TEXT PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        priority INTEGER NOT NULL,
+                        completed_at TEXT NOT NULL,
+                        created_at TEXT NOT NULL
+                    )`,
+                    (err) => {
+                        expect(err).toBeNull();
+
+                        const now = new Date();
+                        const old = new Date(now.getTime() - 500 * 60 * 60 * 1000).toISOString(); // Very old
+
+                        db.run(
+                            `INSERT INTO completed_tasks VALUES (?, ?, ?, ?, ?, ?)`,
+                            ['old-task', 'Old', 'completed', 2, old, old],
+                            (err) => {
+                                expect(err).toBeNull();
+
+                                // Both disabled: maxAgeHours=0, maxCount=0
+                                // No deletion should occur (query never runs)
+
+                                db.all('SELECT * FROM completed_tasks', (err, rows: any[]) => {
+                                    expect(err).toBeNull();
+                                    expect(rows.length).toBe(1);
+                                    expect(rows[0].task_id).toBe('old-task');
+
+                                    db.close(() => {
+                                        fs.unlinkSync(dbPath);
+                                        done();
+                                    });
+                                });
+                            }
+                        );
+                    }
+                );
+            });
         });
     });
 });
