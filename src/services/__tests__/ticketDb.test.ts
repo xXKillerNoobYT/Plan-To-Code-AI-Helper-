@@ -70,6 +70,9 @@ describe('TicketDb', () => {
   let ticketDb: TicketDb;
   const testDbDir = path.join(__dirname, 'test-tickets');
 
+  // Increase timeout to handle async operations and file system delays
+  jest.setTimeout(15000);
+
   beforeEach(async () => {
     // Clean up test directory
     if (fs.existsSync(testDbDir)) {

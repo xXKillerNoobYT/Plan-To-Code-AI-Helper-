@@ -1,0 +1,12 @@
+{
+    "default": [
+        {
+            "role": "assistant",
+            "promptPath": "./FixTestErrors_Mocha_default_0.md"
+        },
+        {
+            "promptPath": "./FixTestErrors_Mocha_default_1.md"
+        }
+    ],
+    "merge": []
+}

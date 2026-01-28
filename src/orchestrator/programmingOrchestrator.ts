@@ -343,18 +343,42 @@ export class ProgrammingOrchestrator {
                 ['ready', 'in-progress', 'blocked'].includes(t.status)
             );
 
-            // Restore tasks to queue
-            this.taskQueue = activeTasks.map(t => ({
-                ...t,
-                taskId: t.taskId || t.id, // Handle both formats
-                fromPlanningTeam: true // Mark as valid
-            })) as Task[];
+            // Restore tasks to queue with proper Date conversion
+            this.taskQueue = activeTasks.map(t => {
+                // Convert string dates back to Date objects
+                let createdAt: Date;
 
-            console.log(`📦 Loaded ${activeTasks.length} tasks from storage (filtered from ${persistedData.length} total)`);
+                if (t.createdAt) {
+                    const parsed = new Date(t.createdAt);
+                    if (isNaN(parsed.getTime())) {
+                        console.warn(`⚠️ Invalid date for task "${t.title}", using current time`);
+                        createdAt = new Date();
+                    } else {
+                        createdAt = parsed;
+                    }
+                } else {
+                    createdAt = new Date();
+                }
 
-            // Log loaded tasks
-            activeTasks.forEach(task => {
+                return {
+                    ...t,
+                    taskId: t.taskId || t.id, // Handle both formats
+                    fromPlanningTeam: true, // Mark as valid
+                    createdAt // Ensure Date object, not string
+                };
+            }) as Task[];
+
+            console.log(`📦 Loaded and converted ${activeTasks.length} tasks with Date objects (filtered from ${persistedData.length} total)`);
+
+            // Log loaded tasks with validation
+            activeTasks.forEach((task, idx) => {
+                const loadedTask = this.taskQueue[idx];
                 console.log(`   - ${task.taskId || task.id}: ${task.title} (${task.status}, ${task.priority})`);
+
+                // Verify Date conversion
+                if (!(loadedTask.createdAt instanceof Date) || isNaN(loadedTask.createdAt.getTime())) {
+                    console.error(`   ❌ Date conversion failed for task ${loadedTask.taskId}`);
+                }
             });
 
             // Trigger UI refresh
@@ -516,11 +540,15 @@ export class ProgrammingOrchestrator {
      * @throws Error if task is invalid or not from Planning Team
      */
     async addTask(task: Task): Promise<void> {
-        // Prevent duplicate tasks for tickets
+        // Prevent duplicate tasks for tickets (with fallback to title+priority check)
         if (task.metadata?.ticketId) {
-            const exists = await this.hasTaskForTicket(task.metadata.ticketId);
+            const exists = await this.hasTaskForTicket(
+                task.metadata.ticketId,
+                { title: task.title, priority: task.priority }
+            );
             if (exists) {
                 console.warn(`⚠️ Task already exists for ticket ${task.metadata.ticketId}, skipping duplicate`);
+                console.log(`   Task title: "${task.title}", Priority: ${task.priority}`);
                 return;
             }
         }
@@ -704,19 +732,43 @@ export class ProgrammingOrchestrator {
      * Prevents duplicate tasks from being created for the same ticket.
      * Useful for ticket routing to avoid double-queueing.
      * 
+     * Uses two-level duplicate detection:
+     * 1. Primary: Exact ticketId match in metadata
+     * 2. Fallback: title + priority match (if ticket data provided)
+     * 
      * @param ticketId - Ticket ID to check
+     * @param ticket - Optional ticket object for fallback title/priority matching
      * @returns Promise<boolean> True if a task already exists for this ticket
      */
-    async hasTaskForTicket(ticketId: string): Promise<boolean> {
+    async hasTaskForTicket(ticketId: string, ticket?: { title: string; priority: string }): Promise<boolean> {
         if (!this.taskQueue || !Array.isArray(this.taskQueue)) {
+            console.warn('⚠️ Queue not initialized when checking for duplicate ticket');
             return false;
         }
 
+        // Primary check: exact ticketId match in metadata
         const existingTask = this.taskQueue.find((task: Task) =>
             task.metadata?.ticketId === ticketId
         );
 
-        return !!existingTask;
+        if (existingTask) {
+            console.log(`🔍 Found duplicate task by ticketId: ${ticketId}`);
+            return true;
+        }
+
+        // Fallback check: if ticket provided, check title + priority match
+        if (ticket) {
+            const hasSimilarMatch = this.taskQueue.some((task: Task) =>
+                task.title === ticket.title && task.priority === ticket.priority
+            );
+
+            if (hasSimilarMatch) {
+                console.log(`🔍 Found duplicate task by title+priority match for ticket: ${ticketId}`);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -819,14 +871,30 @@ export class ProgrammingOrchestrator {
                 return;
             }
 
-            // Convert stored data back to Task objects
-            this.taskQueue = stored.map((item: PersistedTask) => ({
-                ...item,
-                createdAt: new Date(item.createdAt),
-                fromPlanningTeam: true,
-            } as Task));
+            // Convert stored data back to Task objects with proper Date handling
+            this.taskQueue = stored.map((item: PersistedTask) => {
+                let createdAt: Date;
 
-            this.logger.info(`📂 Loaded ${this.taskQueue.length} tasks from storage`);
+                if (item.createdAt) {
+                    const parsed = new Date(item.createdAt);
+                    if (isNaN(parsed.getTime())) {
+                        this.logger.warn(`Invalid date for task "${item.title}", using current time`);
+                        createdAt = new Date();
+                    } else {
+                        createdAt = parsed;
+                    }
+                } else {
+                    createdAt = new Date();
+                }
+
+                return {
+                    ...item,
+                    createdAt,
+                    fromPlanningTeam: true,
+                } as Task;
+            });
+
+            this.logger.info(`📂 Loaded and converted ${this.taskQueue.length} tasks from storage with Date objects`);
             this.notifyTreeViewUpdate();
         } catch (error) {
             this.logger.error(`Failed to load task queue: ${error}`);

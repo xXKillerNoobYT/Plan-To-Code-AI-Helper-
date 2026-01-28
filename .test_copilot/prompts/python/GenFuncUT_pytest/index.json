@@ -1,0 +1,11 @@
+{
+    "default": [
+        {
+            "promptPath": "./GenFuncUT_pytest_default_0.md"
+        },
+        {
+            "promptPath": "./GenFuncUT_pytest_default_1.md"
+        }
+    ],
+    "merge": []
+}

@@ -843,7 +843,11 @@ export async function activate(context: vscode.ExtensionContext) {
                             orchestratorOutputChannel.appendLine('');
                             orchestratorOutputChannel.appendLine('🔄 TRY RELOADING (Ctrl+R):');
                             orchestratorOutputChannel.appendLine('   → Task should still be in queue after reload');
-                            orchestratorOutputChannel.appendLine('   → Run test again → should skip duplicate');
+                            orchestratorOutputChannel.appendLine('   → Run test again → should skip duplicate (check logs for skip message)');
+                            orchestratorOutputChannel.appendLine('');
+                            orchestratorOutputChannel.appendLine('💡 DUPLICATE DETECTION:');
+                            orchestratorOutputChannel.appendLine('   → If you run this command again, the duplicate will be skipped');
+                            orchestratorOutputChannel.appendLine('   → Check logs for "Task already exists for ticket..." message');
 
                             vscode.window.showInformationMessage(
                                 `✅ Ticket ${ticket.id} created! Check sidebar & status bar (${afterCount} ready).`,
