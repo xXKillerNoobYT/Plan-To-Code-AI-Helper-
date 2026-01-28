@@ -81,3 +81,4 @@ out/
 # Reports and outputs (keep these local)
 reports/
 outputs/
+.vscode/github-issues/sync-state.json
