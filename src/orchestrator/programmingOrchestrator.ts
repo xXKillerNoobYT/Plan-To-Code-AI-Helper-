@@ -294,7 +294,6 @@ export class ProgrammingOrchestrator {
      */
     setTreeDataProvider(provider: any): void {
         this.treeDataProvider = provider;
-        console.log('✅ TreeView provider linked to ProgrammingOrchestrator');
     }
 
     /**
@@ -306,7 +305,6 @@ export class ProgrammingOrchestrator {
      */
     setCompletedTasksProvider(provider: any): void {
         this.completedTasksProvider = provider;
-        console.log('✅ CompletedTasksTreeProvider linked to ProgrammingOrchestrator');
     }
 
     /**
@@ -316,7 +314,6 @@ export class ProgrammingOrchestrator {
      */
     private notifyTreeViewUpdate(): void {
         if (this.treeDataProvider?.refresh) {
-            console.log('🌲 TreeView refreshed after queue change');
             this.treeDataProvider.refresh();
         }
     }
@@ -333,7 +330,6 @@ export class ProgrammingOrchestrator {
         this.workspaceState = workspaceState;
         await this.loadPersistedTasks();
         await this.reconcileTasks(); // Remove orphaned tasks after loading
-        console.log('✅ ProgrammingOrchestrator initialized with persistence');
     }
 
     /**
@@ -343,7 +339,6 @@ export class ProgrammingOrchestrator {
      */
     private async loadPersistedTasks(): Promise<void> {
         if (!this.workspaceState) {
-            console.warn('⚠️ No workspace state available, skipping task load');
             return;
         }
 
@@ -351,7 +346,6 @@ export class ProgrammingOrchestrator {
             const persistedData = this.workspaceState.get<any[]>(this.STORAGE_KEY);
 
             if (!persistedData || !Array.isArray(persistedData)) {
-                console.log('📦 No persisted tasks found, starting fresh');
                 return;
             }
 
@@ -368,7 +362,6 @@ export class ProgrammingOrchestrator {
                 if (t.createdAt) {
                     const parsed = new Date(t.createdAt);
                     if (isNaN(parsed.getTime())) {
-                        console.warn(`⚠️ Invalid date for task "${t.title}", using current time`);
                         createdAt = new Date();
                     } else {
                         createdAt = parsed;
@@ -385,24 +378,19 @@ export class ProgrammingOrchestrator {
                 };
             }) as Task[];
 
-            console.log(`📦 Loaded and converted ${activeTasks.length} tasks with Date objects (filtered from ${persistedData.length} total)`);
 
             // Log loaded tasks with validation
             activeTasks.forEach((task, idx) => {
                 const loadedTask = this.taskQueue[idx];
-                console.log(`   - ${task.taskId || task.id}: ${task.title} (${task.status}, ${task.priority})`);
 
                 // Verify Date conversion
                 if (!(loadedTask.createdAt instanceof Date) || isNaN(loadedTask.createdAt.getTime())) {
-                    console.error(`   ❌ Date conversion failed for task ${loadedTask.taskId}`);
                 }
             });
 
             // Trigger UI refresh
             this.notifyTreeViewUpdate();
         } catch (error) {
-            console.error('❌ Failed to load persisted tasks:', error);
-            console.log('   Starting with empty queue');
             this.taskQueue = [];
         }
     }
@@ -417,7 +405,6 @@ export class ProgrammingOrchestrator {
      */
     private async reconcileTasks(): Promise<void> {
         if (this.taskQueue.length === 0) {
-            console.log('ℹ️ No tasks to reconcile (queue empty)');
             return;
         }
 
@@ -442,7 +429,6 @@ export class ProgrammingOrchestrator {
                 }
             } catch (error) {
                 // On error, keep task to avoid accidental deletion
-                console.warn(`⚠️ Error checking ticket ${ticketId}, keeping task ${task.taskId}:`, error);
                 validTasks.push(task);
             }
         }
@@ -451,15 +437,12 @@ export class ProgrammingOrchestrator {
             this.taskQueue = validTasks;
             await this.saveTaskQueue(); // Save cleaned queue
 
-            console.log(`🔄 Reconciliation: Removed ${orphanedTasks.length} orphaned task(s) (no matching ticket)`);
             orphanedTasks.forEach(t => {
-                console.log(`   - Removed: ${t.taskId} (${t.title}) - ticket ${t.metadata?.ticketId} not found`);
             });
 
             // Trigger UI refresh
             this.notifyTreeViewUpdate();
         } else {
-            console.log(`✅ Reconciliation: All ${this.taskQueue.length} task(s) have valid tickets`);
         }
     }
 
@@ -481,7 +464,6 @@ export class ProgrammingOrchestrator {
         // Debounce save operation
         this.saveDebounceTimer = setTimeout(async () => {
             if (!this.workspaceState) {
-                console.warn('⚠️ No workspace state available, cannot save tasks');
                 return;
             }
 
@@ -514,18 +496,14 @@ export class ProgrammingOrchestrator {
                 const tasksToSave = persistedTasks.slice(-this.MAX_TASKS);
 
                 if (persistedTasks.length > this.MAX_TASKS) {
-                    console.warn(`⚠️ Task queue exceeded max size (${persistedTasks.length}), trimming to ${this.MAX_TASKS}`);
                 }
 
                 await this.workspaceState.update(this.STORAGE_KEY, tasksToSave);
 
-                console.log(`💾 Queue saved to storage (${tasksToSave.length} tasks)`);
             } catch (error) {
-                console.error('❌ Failed to save task queue:', error);
 
                 // If storage quota exceeded, trim completed tasks and retry
                 if (error instanceof Error && error.message.includes('quota')) {
-                    console.log('   Storage quota exceeded, trimming completed tasks...');
                     const activeTasks = this.taskQueue.filter((t: Task) => t.status !== 'completed');
                     this.taskQueue = activeTasks;
 
@@ -618,40 +596,39 @@ export class ProgrammingOrchestrator {
      * @param task - Task to add (must be from Planning Team)
      * @throws Error if task is invalid or not from Planning Team
      */
-    async addTask(task: Task): Promise<void> {
+    async addTask(task: Task): Promise<boolean> {
         // Prevent duplicate ACTIVE tasks for tickets (exact match only)
         // Note: Archived/completed tasks are ignored - allows reuse
         if (task.metadata?.ticketId) {
             const exists = await this.hasTaskForTicket(task.metadata.ticketId);
             if (exists) {
-                console.debug(`ℹ️ Task for ticket ${task.metadata.ticketId} already in queue (skipping)`);
-                return;
+                this.logger.debug(`Duplicate ticketId detected, skipping task: ${task.metadata.ticketId}`);
+                return false;
             }
         }
 
         // Enforce max task limit
         if (this.taskQueue.length >= this.MAX_TASKS) {
-            console.warn(`⚠️ Task queue at capacity (${this.MAX_TASKS}), removing oldest completed task`);
             const completedIndex = this.taskQueue.findIndex((t: Task) => t.status === 'completed');
             if (completedIndex >= 0) {
                 this.taskQueue.splice(completedIndex, 1);
             } else {
-                console.error('❌ Cannot add task: queue full and no completed tasks to remove');
-                return;
+                this.logger.warn('Task queue full; unable to add task with no completed tasks to remove');
+                return false;
             }
         }
 
         // Add to queue
         this.taskQueue.push(task);
 
-        console.log(`📋 Task added to queue: ${task.taskId} (Priority: ${task.priority}, Status: ${task.status})`);
         if (task.metadata?.ticketId) {
-            console.log(`   Linked to ticket: ${task.metadata.ticketId} (Team: ${task.metadata.routedTeam})`);
         }
 
         // Save to storage and trigger UI refresh
         await this.saveTaskQueue();
         this.notifyTreeViewUpdate();
+
+        return true;
     }
 
     /**
@@ -691,7 +668,6 @@ export class ProgrammingOrchestrator {
      * @returns Ready tasks ordered by priority (P1 → P2 → P3)
      */
     getReadyTasks(): Task[] {
-        console.log(`🔍 getReadyTasks() called - Total queue size: ${this.taskQueue.length}`);
 
         const readyTasks = this.taskQueue.filter((t) => {
             const isReady = t.status === TaskStatus.READY;
@@ -699,13 +675,9 @@ export class ProgrammingOrchestrator {
             const dependenciesMet = this.areDependenciesMet(t);
 
             if (!isReady) {
-                console.log(`  ❌ Task ${t.taskId} (${t.title}): status=${t.status} (not READY)`);
             } else if (!notBlocked) {
-                console.log(`  ⛔ Task ${t.taskId} (${t.title}): blocked by ${t.blockedBy?.join(', ')}`);
             } else if (!dependenciesMet) {
-                console.log(`  🔗 Task ${t.taskId} (${t.title}): dependencies not met`);
             } else {
-                console.log(`  ✅ Task ${t.taskId} (${t.title}): READY (priority: ${t.priority})`);
             }
 
             return isReady && notBlocked && dependenciesMet;
@@ -719,7 +691,6 @@ export class ProgrammingOrchestrator {
 
         const sorted = readyTasks.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
 
-        console.log(`📊 getReadyTasks() returning ${sorted.length} tasks`);
 
         return sorted;
     }
@@ -838,7 +809,6 @@ export class ProgrammingOrchestrator {
         );
 
         if (existingTask) {
-            console.debug(`ℹ️ Task for ticket ${ticketId} already queued (skipping duplicate)`);
             return true;
         }
 
@@ -1433,11 +1403,9 @@ export class SimpleLogger implements ILogger {
     constructor(private name: string) { }
 
     info(message: string, ...args: unknown[]): void {
-        console.log(`[${this.name}] ℹ️ ${message}`, ...args);
     }
 
     warn(message: string, ...args: unknown[]): void {
-        console.warn(`[${this.name}] ⚠️ ${message}`, ...args);
     }
 
     error(message: string, ...args: unknown[]): void {
@@ -1448,11 +1416,9 @@ export class SimpleLogger implements ILogger {
             }
             return arg;
         });
-        console.error(`[${this.name}] ❌ ${message}`, ...safeArgs);
     }
 
     debug(message: string, ...args: unknown[]): void {
-        console.debug(`[${this.name}] 🐛 ${message}`, ...args);
     }
 }
 
@@ -1461,3 +1427,5 @@ export class SimpleLogger implements ILogger {
 // ============================================================================
 
 // All types, classes, and enums are exported via their declarations above
+
+

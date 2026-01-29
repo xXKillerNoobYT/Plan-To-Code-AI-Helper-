@@ -12,14 +12,12 @@ describe('PlanningTeam', () => {
   /** @aiContributed-2026-01-28 */
     describe('refineTask', () => {
     /** @aiContributed-2026-01-28 */
-        it('should log the correct message when refining a task', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+        it('should process task refinement', async () => {
       const taskId = '12345';
 
-      await planningTeam.refineTask(taskId);
+      const result = await planningTeam.refineTask(taskId);
 
-      expect(consoleSpy).toHaveBeenCalledWith(`Planning Team: Refining task ${taskId}`);
-      consoleSpy.mockRestore();
+      expect(result).toBeNull();
     });
 
     /** @aiContributed-2026-01-28 */

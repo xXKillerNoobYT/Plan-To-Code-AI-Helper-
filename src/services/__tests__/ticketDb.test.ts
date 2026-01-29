@@ -85,7 +85,6 @@ describe('TicketDb', () => {
         } catch (err) {
           retries--;
           if (retries === 0) {
-            console.warn('Could not delete test directory:', err);
           } else {
             await new Promise(resolve => setTimeout(resolve, 500));
           }
@@ -100,7 +99,6 @@ describe('TicketDb', () => {
     try {
       await ticketDb.close();
     } catch (err) {
-      console.warn('Error closing ticketDb:', err);
     }
 
     // Wait a bit for file lock to be fully released
@@ -116,7 +114,6 @@ describe('TicketDb', () => {
         } catch (err) {
           retries--;
           if (retries === 0) {
-            console.warn('Could not delete test directory after test:', err);
           } else {
             await new Promise(resolve => setTimeout(resolve, 500));
           }
@@ -884,3 +881,5 @@ describe('TicketDb', () => {
     });
   });
 });
+
+

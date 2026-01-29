@@ -50,14 +50,14 @@ export function migrateSchema(db: any): void {
 
 			// Update schema version
 			db.exec(`UPDATE db_version SET version = 1`);
-			console.log('[TicketDb] ✅ Schema migrated: v0 → v1 (completed_tasks table added)');
 		}
 
 		// Future migrations here: if (currentVersion < 2) { ... }
 
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
-		console.error('[TicketDb] ❌ Schema migration failed:', message);
 		throw new Error(`Database migration error: ${message}`);
 	}
 }
+
+

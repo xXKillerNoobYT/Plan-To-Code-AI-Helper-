@@ -31,7 +31,6 @@ interface FileToCreate {
 export async function setupMissingFiles(): Promise<void> {
     const ws = vscode.workspace.workspaceFolders?.[0]?.uri;
     if (!ws) {
-        console.log('ℹ️  No workspace folder found – skipping file setup');
         return;
     }
 
@@ -78,7 +77,6 @@ Edit this file to add your own tasks. Each task should follow the format:
         try {
             // Try to stat the file (throws if doesn't exist)
             await vscode.workspace.fs.stat(file.path);
-            console.log(`✅ File already exists: ${file.description}`);
         } catch {
             // File doesn't exist – create parent folders + file
             try {
@@ -89,11 +87,9 @@ Edit this file to add your own tasks. Each task should follow the format:
                 const fileContent = encoder.encode(file.defaultContent);
                 await vscode.workspace.fs.writeFile(file.path, fileContent);
 
-                console.log(`📝 Created ${file.description}`);
                 createdFiles.push(file);
             } catch (createError) {
                 const errorMsg = createError instanceof Error ? createError.message : String(createError);
-                console.error(`❌ Failed to create ${file.description}: ${errorMsg}`);
             }
         }
     }
@@ -117,10 +113,11 @@ Edit this file to add your own tasks. Each task should follow the format:
                             await vscode.window.showTextDocument(doc, { preserveFocus: false });
                         } catch (openError) {
                             const errorMsg = openError instanceof Error ? openError.message : String(openError);
-                            console.error(`❌ Failed to open file: ${errorMsg}`);
                         }
                     }
                 }
             });
     }
 }
+
+

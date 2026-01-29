@@ -79,3 +79,5 @@ export class StatusBarManager {
         this.syncStatusItem.dispose();
     }
 }
+
+

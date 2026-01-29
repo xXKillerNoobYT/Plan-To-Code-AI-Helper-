@@ -4,23 +4,52 @@
  */
 
 import { Octokit } from '@octokit/rest';
+import * as vscode from 'vscode';
+import { ConfigManager } from '../utils/config';
 
 export class GitHubAPI {
     private octokit: Octokit | null = null;
     private isAuthenticated: boolean = false;
+    private context: vscode.ExtensionContext | null = null;
+
+    /**
+     * Set extension context for secure token access
+     */
+    setContext(context: vscode.ExtensionContext): void {
+        this.context = context;
+    }
 
     /**
      * Initialize GitHub API with authentication
+     * Uses SecretStorage for secure token retrieval
      */
     async authenticate(token?: string): Promise<boolean> {
-        console.log('GitHub API: Authenticating...');
 
-        // TODO: Get token from VS Code secrets storage
-        // TODO: Initialize Octokit client
-        // TODO: Verify authentication
+        try {
+            // Get token from SecretStorage if not provided
+            if (!token && this.context) {
+                token = await ConfigManager.getGitHubToken(this.context);
+            }
 
-        this.isAuthenticated = false;
-        return this.isAuthenticated;
+            if (!token) {
+                this.isAuthenticated = false;
+                return false;
+            }
+
+            // Initialize Octokit client
+            this.octokit = new Octokit({
+                auth: token,
+            });
+
+            // Verify authentication by getting user info
+            await this.octokit.users.getAuthenticated();
+
+            this.isAuthenticated = true;
+            return true;
+        } catch (error) {
+            this.isAuthenticated = false;
+            return false;
+        }
     }
 
     /**
@@ -55,3 +84,5 @@ export class GitHubAPI {
         return [];
     }
 }
+
+

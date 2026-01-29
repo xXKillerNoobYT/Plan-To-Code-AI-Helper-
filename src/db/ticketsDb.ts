@@ -90,7 +90,6 @@ export class TicketDatabase {
      */
     async initialize(workspaceRoot: string, customConfig?: Partial<TicketDbConfig>): Promise<void> {
         if (this.initialized) {
-            console.log('TicketDatabase already initialized');
             return;
         }
 
@@ -108,7 +107,6 @@ export class TicketDatabase {
             // Create .coe directory if missing
             if (!fs.existsSync(coeDir)) {
                 fs.mkdirSync(coeDir, { recursive: true });
-                console.log(`Created .coe directory: ${coeDir}`);
             }
 
             // Initialize SQLite database
@@ -127,14 +125,11 @@ export class TicketDatabase {
             // **Strategy B**: If NEW database, add placeholder task (unless skipPlaceholder is set)
             if (isNewDatabase && !this.useFallback && !this.config.skipPlaceholder) {
                 await this.createPlaceholderTicket();
-                console.log('ℹ️ Created placeholder ticket for new database');
             }
             // **Strategy C**: If EXISTING database, do nothing (leave empty or as-is)
 
             this.initialized = true;
-            console.log(`TicketDatabase initialized at: ${dbPath} (fallback: ${this.useFallback}, isNew: ${isNewDatabase})`);
         } catch (error) {
-            console.error('Failed to initialize TicketDatabase, using in-memory fallback:', error);
             this.useFallback = true;
             this.initialized = true;
         }
@@ -148,16 +143,13 @@ export class TicketDatabase {
             try {
                 this.db = new sqlite3.Database(dbPath, (err) => {
                     if (err) {
-                        console.error('SQLite connection error:', err);
                         this.useFallback = true;
                         resolve(); // Don't reject, fall back to in-memory
                     } else {
-                        console.log(`SQLite connected: ${dbPath}`);
                         resolve();
                     }
                 });
             } catch (error) {
-                console.error('SQLite initialization error:', error);
                 this.useFallback = true;
                 resolve();
             }
@@ -170,7 +162,6 @@ export class TicketDatabase {
      */
     private async runMigrations(): Promise<void> {
         if (!this.db) {
-            console.warn('No database connection, skipping migrations');
             return;
         }
 
@@ -189,7 +180,6 @@ export class TicketDatabase {
 
             this.db.run(versionTableSql, (err) => {
                 if (err) {
-                    console.warn('⚠️ Could not create version table:', err);
                     this.useFallback = true;
                     resolve();
                     return;
@@ -198,7 +188,7 @@ export class TicketDatabase {
                 // Step 2: Initialize version if not already set
                 this.db?.run(`INSERT OR IGNORE INTO db_version (version) VALUES (0)`, (err) => {
                     if (err) {
-                        console.warn('⚠️ Could not initialize version:', err);
+                        // Ignore initialization errors
                     }
 
                     // Step 3: Create tickets table
@@ -222,7 +212,6 @@ export class TicketDatabase {
 
                     this.db?.run(createTicketsTableSql, (err) => {
                         if (err) {
-                            console.error('❌ Tickets table migration failed:', err);
                             this.useFallback = true;
                             resolve();
                             return;
@@ -231,7 +220,6 @@ export class TicketDatabase {
                         // Step 4: Check schema version and run v1 migration if needed
                         this.getDbVersion((err, version) => {
                             if (err || version === undefined) {
-                                console.warn('⚠️ Could not read DB version:', err);
                                 resolve();
                                 return;
                             }
@@ -256,7 +244,6 @@ export class TicketDatabase {
 
                                 this.db?.run(createCompletedTableSql, (err) => {
                                     if (err) {
-                                        console.warn('⚠️ Completed tasks table migration failed:', err);
                                         resolve();
                                         return;
                                     }
@@ -264,15 +251,14 @@ export class TicketDatabase {
                                     // Update schema version
                                     this.db?.run(`UPDATE db_version SET version = 1`, (err) => {
                                         if (err) {
-                                            console.warn('⚠️ Could not update DB version:', err);
+                                            // Ignore version update errors
                                         } else {
-                                            console.log('[TicketDb] ✅ Schema migrated: v0 → v1 (completed_tasks table added)');
+                                            // Version updated successfully
                                         }
                                         resolve();
                                     });
                                 });
                             } else {
-                                console.log('[TicketDb] ✅ Migrations completed successfully (current version: ' + version + ')');
                                 resolve();
                             }
                         });
@@ -364,7 +350,6 @@ export class TicketDatabase {
 
             this.db.run(sql, values, (err) => {
                 if (err) {
-                    console.error('Failed to create ticket in SQLite:', err);
                     // Fallback to in-memory
                     this.fallbackStore.set(ticketId, ticket);
                     resolve(ticket);
@@ -396,7 +381,6 @@ export class TicketDatabase {
 
             this.db.get(sql, [ticketId], (err, row: any) => {
                 if (err) {
-                    console.error('Failed to get ticket from SQLite:', err);
                     // Try fallback
                     resolve(this.fallbackStore.get(ticketId) || null);
                 } else if (!row) {
@@ -434,7 +418,6 @@ export class TicketDatabase {
 
             this.db.all(sql, params, (err, rows: any[]) => {
                 if (err) {
-                    console.error('Failed to get tickets from SQLite:', err);
                     resolve(Array.from(this.fallbackStore.values()));
                 } else {
                     resolve(rows.map(row => this.rowToTicket(row)));
@@ -494,7 +477,6 @@ export class TicketDatabase {
 
             this.db.run(sql, values, (err) => {
                 if (err) {
-                    console.error('Failed to update ticket in SQLite:', err);
                     // Update fallback anyway
                     this.fallbackStore.set(ticket.ticket_id, ticket);
                     resolve(ticket);
@@ -553,7 +535,6 @@ export class TicketDatabase {
 
             this.db.run(sql, values, (err) => {
                 if (err) {
-                    console.error('Failed to add reply in SQLite:', err);
                     // Update fallback anyway
                     this.fallbackStore.set(ticket.ticket_id, ticket);
                     resolve(ticket);
@@ -572,7 +553,6 @@ export class TicketDatabase {
         try {
             thread = JSON.parse(row.thread || '[]');
         } catch (error) {
-            console.error('Failed to parse ticket thread JSON:', error);
             thread = [];
         }
 
@@ -637,7 +617,6 @@ export class TicketDatabase {
         for (let attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 await this.closeAsync();
-                console.log('✅ Ticket DB connection closed successfully');
                 this.db = null;
                 this.useFallback = true; // Switch to fallback Map for any further operations
                 return;
@@ -646,14 +625,10 @@ export class TicketDatabase {
                 const isEBUSY = errMsg.includes('EBUSY') || errMsg.includes('locked');
 
                 if (attempt < maxAttempts) {
-                    console.warn(
-                        `⚠️  DB close attempt ${attempt}/${maxAttempts} failed: ${errMsg}${isEBUSY ? ' (file lock - retrying)' : ''}`
-                    );
+                    // Retry with exponential backoff
                     await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
                 } else {
-                    console.warn(
-                        `⚠️  DB close failed after ${maxAttempts} attempts: ${errMsg}${isEBUSY ? ' (file may be locked by OneDrive)' : ''} - abandoning but fallback Map still available`
-                    );
+                    // Give up but keep fallback available
                     this.db = null; // Null it anyway so we don't try again
                     this.useFallback = true; // Ensure fallback is used
                 }
@@ -723,7 +698,7 @@ export class TicketDatabase {
                 description: 'This is a temporary placeholder ticket created on first run. You can safely delete this ticket by changing its status to resolved or updating any field.'
             });
         } catch (error) {
-            console.warn('⚠️ Failed to create placeholder ticket (non-blocking):', error);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -765,16 +740,15 @@ export class TicketDatabase {
                     [cutoffDate],
                     (err) => {
                         if (err) {
-                            console.warn(`⚠️ Cleanup: Failed to remove old tasks (>  ${retentionDays} days):`, err);
+                            // eslint-disable-next-line no-empty
                         } else {
-                            console.log(`🗑️ Cleanup: Removed completed tasks older than ${retentionDays} days`);
+                            // eslint-disable-next-line no-empty
                         }
                         resolve();
                     }
                 );
             });
         } catch (error) {
-            console.warn('⚠️ Cleanup: Unexpected error during old task removal:', error);
         }
     }
 
@@ -878,10 +852,8 @@ export class TicketDatabase {
                 [taskId, originalTicketId || null, title, status, 2, now, durationMinutes || null, now],
                 (err) => {
                     if (err) {
-                        console.error(`❌ Failed to archive task ${taskId}:`, err);
                         reject(err);
                     } else {
-                        console.log(`✅ Task archived: ${taskId}`);
                         resolve();
                     }
                 }
@@ -946,10 +918,8 @@ export class TicketDatabase {
 
             this.db!.all(query, params, (err, rows: any[]) => {
                 if (err) {
-                    console.error('❌ Failed to get completed tasks:', err);
                     reject(err);
                 } else {
-                    console.log(`✅ Retrieved ${rows.length} completed tasks`);
                     resolve(rows);
                 }
             });
@@ -975,7 +945,6 @@ export class TicketDatabase {
 
         return new Promise((resolve) => {
             if (!this.db) {
-                console.warn('⚠️ Database not initialized, cannot check ticket existence');
                 resolve(false);
                 return;
             }
@@ -985,7 +954,6 @@ export class TicketDatabase {
                 [ticketId],
                 (err, row) => {
                     if (err) {
-                        console.error(`❌ Error checking ticket existence for ${ticketId}:`, err);
                         resolve(false);
                     } else {
                         resolve(!!row);
@@ -1010,7 +978,6 @@ export class TicketDatabase {
 
         // Both disabled = no cleanup
         if (ageHours === 0 && keepCount === 0) {
-            console.log('ℹ️ Cleanup skipped: Both maxAgeHours and maxCount are 0 (unlimited retention)');
             return 0;
         }
 
@@ -1049,7 +1016,6 @@ export class TicketDatabase {
                 }
             });
 
-            console.log(`✅ Fallback cleanup: Deleted ${deleted} completed tasks`);
             return deleted;
         }
 
@@ -1095,14 +1061,14 @@ export class TicketDatabase {
 
             this.db!.run(query, params, function (err) {
                 if (err) {
-                    console.error('❌ Failed to cleanup old tasks:', err);
                     reject(err);
                 } else {
                     const deletedCount = this.changes || 0;
-                    console.log(`✅ Cleanup complete: Deleted ${deletedCount} completed tasks (maxAgeHours=${ageHours}, maxCount=${keepCount})`);
                     resolve(deletedCount);
                 }
             });
         });
     }
 }
+
+

@@ -121,7 +121,6 @@ export class PlansReader {
                         });
                     } catch (error) {
                         const errMsg = error instanceof Error ? error.message : String(error);
-                        console.warn(`⚠️  Failed to read ${fullPath}: ${errMsg}`);
                     }
                 }
             }
@@ -164,3 +163,5 @@ export class PlansReader {
         return labels[category || 'general'] || 'Unknown';
     }
 }
+
+

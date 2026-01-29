@@ -15,7 +15,6 @@ export class IssuesSync {
      * Start the sync process
      */
     startSync(githubAPI: GitHubAPI): void {
-        console.log('Issues Sync: Starting (5-minute interval)...');
 
         // Initial sync
         this.performSync(githubAPI);
@@ -25,7 +24,6 @@ export class IssuesSync {
             this.performSync(githubAPI);
         }, this.SYNC_INTERVAL_MS);
 
-        console.log('Issues Sync: Started');
     }
 
     /**
@@ -36,14 +34,12 @@ export class IssuesSync {
             clearInterval(this.syncInterval);
             this.syncInterval = null;
         }
-        console.log('Issues Sync: Stopped');
     }
 
     /**
      * Perform a single sync operation
      */
     private async performSync(githubAPI: GitHubAPI): Promise<void> {
-        console.log('Issues Sync: Syncing...');
 
         try {
             // TODO: Fetch latest issues from GitHub
@@ -52,9 +48,7 @@ export class IssuesSync {
             // TODO: Pull remote changes to local
             // TODO: Resolve conflicts
 
-            console.log('Issues Sync: Completed');
         } catch (error) {
-            console.error('Issues Sync: Error:', error);
             vscode.window.showErrorMessage(`GitHub sync failed: ${error}`);
         }
     }
@@ -66,3 +60,5 @@ export class IssuesSync {
         await this.performSync(githubAPI);
     }
 }
+
+

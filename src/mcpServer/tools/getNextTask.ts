@@ -29,7 +29,7 @@ export const GetNextTaskRequestSchema = z.object({
     includeContext: z.boolean().optional(),
     includeDetailedPrompt: z.boolean().optional(),
     includeRelatedFiles: z.boolean().optional(),
-});
+}).strict();
 
 export type GetNextTaskRequest = z.infer<typeof GetNextTaskRequestSchema>;
 
@@ -252,6 +252,14 @@ export async function getNextTask(
     // Get all tasks from queue
     const allTasks = taskQueue.getAllTasks();
 
+    if (!Array.isArray(allTasks)) {
+        throw new MCPProtocolError(
+            MCPErrorCode.INTERNAL_ERROR,
+            'Task queue returned invalid task list',
+            { receivedType: typeof allTasks }
+        );
+    }
+
     // Apply filters
     const filteredTasks = filterTasks(
         allTasks,
@@ -302,3 +310,5 @@ export async function getNextTask(
         nextTasksPreview,
     };
 }
+
+

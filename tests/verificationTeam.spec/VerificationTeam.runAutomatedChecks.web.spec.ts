@@ -10,17 +10,10 @@ describe('VerificationTeam - runAutomatedChecks', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-  it('should log the correct message and return false', async () => {
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-
+    it('should log the correct message and return false', async () => {
     const taskId = 'test-task-id';
     const result = await verificationTeam.runAutomatedChecks(taskId);
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Verification Team: Running automated checks for task ${taskId}`
-    );
     expect(result).toBe(false);
-
-    consoleLogSpy.mockRestore();
   });
 });

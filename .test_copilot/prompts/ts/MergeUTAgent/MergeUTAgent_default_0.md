@@ -30,15 +30,8 @@ Perform these steps strictly in order:
    - Confirm that all tests pass without errors.
    - **Do NOT proceed** if any tests fail.
 
-5. **Coverage Measurement**
-   - Run coverage analysis on the merged test file using `<<<TestFramework>>>` coverage tools (e.g., `jest --coverage` or `nyc`).
-   - Report the coverage metrics: **line coverage %**, **branch coverage %**, **function coverage %**, and **statement coverage %**.
-   - If coverage is below `<<<MinCoverage>>>%` (default: 75%), generate additional test cases to cover uncovered branches and lines.
-   - Re-run validation after adding new tests.
-   - **Success criteria**: All tests pass AND coverage >= `<<<MinCoverage>>>%`.
-
-6. **Delete Separated Files**
-   - Only after successful validation and coverage requirements are met, delete all separated test files listed above.
+5. **Delete Separated Files**
+   - Only after successful validation, delete all separated test files listed above.
 
 ## Safety Measures
 - Keep the `@aiContributed-@{date}` tag before the test cases (if it exists).

@@ -97,7 +97,7 @@
     },
     "devDependencies": {
         "@types/glob": "^8.1.0",
-        "@types/jest": "^29.5.0",
+        "@types/jest": "^29.5.14",
         "@types/mocha": "^10.0.6",
         "@types/node": "^20.x",
         "@types/sqlite3": "^3.1.11",
@@ -112,16 +112,17 @@
         "lint-staged": "^16.2.7",
         "mocha": "^10.8.2",
         "sinon": "^21.0.1",
-        "ts-jest": "^29.1.0",
+        "ts-jest": "^29.4.6",
         "ts-node": "^10.9.2",
-        "typescript": "^5.3.0"
+        "typescript": "^5.9.3"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.25.2",
         "@octokit/rest": "^20.0.2",
         "json-rpc-2.0": "^1.6.0",
         "sqlite3": "^5.1.7",
-        "ws": "^8.16.0"
+        "ws": "^8.16.0",
+        "zod": "^3.22.4"
     },
     "configuration": {
         "title": "COE Extension",

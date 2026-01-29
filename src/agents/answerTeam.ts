@@ -8,7 +8,6 @@ export class AnswerTeam {
      * Answer a question about the plan or codebase
      */
     async answerQuestion(question: string): Promise<string> {
-        console.log('Answer Team: Processing question...');
 
         // TODO: Search plan.json for relevant context
         // TODO: Search codebase for related code
@@ -22,7 +21,6 @@ export class AnswerTeam {
      * Find relevant context for a task
      */
     async findContext(taskId: string): Promise<any> {
-        console.log(`Answer Team: Finding context for task ${taskId}`);
 
         // TODO: Locate related plan sections
         // TODO: Find related files
@@ -35,8 +33,6 @@ export class AnswerTeam {
      * Search the plan for specific information
      */
     async searchPlan(query: string): Promise<any[]> {
-        console.log(`Answer Team: Searching plan for "${query}"`);
-
         // TODO: Full-text search in plan.json
         // TODO: Semantic search
         // TODO: Return ranked results
@@ -44,3 +40,5 @@ export class AnswerTeam {
         return [];
     }
 }
+
+

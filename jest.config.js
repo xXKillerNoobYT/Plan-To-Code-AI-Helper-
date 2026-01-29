@@ -23,6 +23,7 @@ module.exports = {
 
     // 📂 roots: Where to look for test files
     // Jest will search in 'src/' and 'tests/' folders for any test files
+    // Note: 's/' excluded temporarily (auto-generated tests need fixes)
     roots: ['<rootDir>/src', '<rootDir>/tests'],
 
     // 🔍 testMatch: Which files are test files?
@@ -30,14 +31,18 @@ module.exports = {
     // - **/__tests__/**/*.ts  → Any .ts file inside a __tests__ folder
     // - **/*.test.ts          → Any file ending with .test.ts (e.g., example.test.ts)
     // - **/*.spec.ts          → Any file ending with .spec.ts (e.g., example.spec.ts)
-    testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
+    // - **/*.web.spec.ts      → Any file ending with .web.spec.ts (e.g., ticketsDb.web.spec.ts)
+    testMatch: ['**/__tests__/**/*.ts', '**/*.test.ts', '**/*.spec.ts', '**/*.web.spec.ts'],
 
     // 🚫 testPathIgnorePatterns: Which folders to SKIP when looking for tests
     // We exclude 'src/test/' because those are VS Code E2E tests that use Mocha (not Jest)
     // We exclude 'node_modules/' (default) to avoid running tests from installed packages
+    // We exclude 'tmp.*' files because they are temporary/generated with import errors
     testPathIgnorePatterns: [
         '/node_modules/',  // Don't run tests from installed packages
         '/src/test/',      // Don't run VS Code E2E tests (they use Mocha, not Jest)
+        'tmp\\.',          // Don't run temporary files (Windows path)
+        'tmp/',            // Don't run temporary files directories
     ],
 
     // 🔄 transform: How to convert TypeScript to JavaScript

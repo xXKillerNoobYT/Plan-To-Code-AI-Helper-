@@ -54,7 +54,11 @@ export const commands = {
 };
 
 export const workspace = {
-    getConfiguration: jest.fn(() => ({ get: noop, update: noop })),
+    getConfiguration: jest.fn(() => ({ 
+        get: jest.fn((_key: string, defaultValue?: any) => defaultValue),
+        has: jest.fn(() => false),
+        update: jest.fn() 
+    })),
     onDidChangeConfiguration: jest.fn(() => ({ dispose: noop })),
     onDidSaveTextDocument: jest.fn(() => ({ dispose: noop })),
     workspaceFolders: [] as unknown[],

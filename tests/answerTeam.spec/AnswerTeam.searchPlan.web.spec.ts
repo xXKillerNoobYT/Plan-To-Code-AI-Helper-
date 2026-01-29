@@ -10,15 +10,11 @@ describe('AnswerTeam - searchPlan', () => {
     });
 
     /** @aiContributed-2026-01-28 */
-    it('should log the search query and return an empty array', async () => {
-        const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    it('should return an empty array when searching plan', async () => {
         const query = 'test query';
 
         const result = await answerTeam.searchPlan(query);
 
-        expect(consoleSpy).toHaveBeenCalledWith(`Answer Team: Searching plan for "${query}"`);
         expect(result).toEqual([]);
-
-        consoleSpy.mockRestore();
     });
 });

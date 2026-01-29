@@ -14,7 +14,7 @@ describe('PRDGenerator Integration', () => {
             try {
                 const result = await PRDGenerator.generate(
                     { tokenLimit: 2000 },
-                    (status) => console.log(status)
+                    (status) => { /* process status */ }
                 );
 
                 // Should either succeed or fail gracefully
@@ -31,7 +31,7 @@ describe('PRDGenerator Integration', () => {
             try {
                 const result = await PRDGenerator.generate(
                     { tokenLimit: 1000 },
-                    (status) => console.log(status)
+                    (status) => { /* process status */ }
                 );
 
                 if (result.success && result.tokenCount) {
@@ -72,3 +72,5 @@ describe('PRDGenerator Integration', () => {
         });
     });
 });
+
+

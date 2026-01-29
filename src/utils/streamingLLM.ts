@@ -148,22 +148,6 @@ function createInactivityTimer(
  * 
  * @param options Streaming configuration
  * @returns Result with success flag and content
- * 
- * @example
- * const result = await callLLMWithStreaming({
- *   config: llmConfig,
- *   systemPrompt: 'You are a helpful assistant',
- *   userPrompt: 'Explain streaming',
- *   temperature: 0.7,
- *   maxTokens: 2000,
- *   onToken: (token) => console.log(token),
- * });
- * 
- * if (result.success) {
- *   console.log('Full reply:', result.content);
- * } else {
- *   console.error('Error:', result.error);
- * }
  */
 export async function callLLMWithStreaming(options: StreamOptions): Promise<StreamResult> {
     const {
@@ -446,3 +430,5 @@ export async function callLLMFallback(
         };
     }
 }
+
+

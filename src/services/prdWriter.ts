@@ -71,9 +71,6 @@ export class PRDWriter {
         const mdPath = mdUri.fsPath;
         const jsonPath = jsonUri.fsPath;
 
-        console.log(`📝 Writing PRD files to workspace root:`);
-        console.log(`   PRD.md: ${mdPath}`);
-        console.log(`   PRD.json: ${jsonPath}`);
 
         try {
             // Create backup of existing PRD.md
@@ -84,10 +81,8 @@ export class PRDWriter {
                 backupPath = path.join(workspaceRootUri.fsPath, `PRD.backup-${timestamp}.md`);
                 const existingContent = await fs.readFile(mdPath, 'utf-8');
                 await fs.writeFile(backupPath, existingContent, 'utf-8');
-                console.log(`✅ Created backup: ${backupPath}`);
             } catch {
                 // No existing PRD or backup failed - that's OK
-                console.log('ℹ️  No existing PRD.md to backup');
             }
 
             // Write markdown file with frontmatter
@@ -99,7 +94,6 @@ export class PRDWriter {
 `;
             const mdContent = frontmatter + prdContent;
             await fs.writeFile(mdPath, mdContent, 'utf-8');
-            console.log(`✅ Wrote PRD.md to: ${mdPath}`);
 
             // Write JSON file (machine-readable, can be parsed by agents)
             const prdjson: PRDJSON = {
@@ -108,14 +102,11 @@ export class PRDWriter {
                 sections: this.extractSections(prdContent),
             };
             await fs.writeFile(jsonPath, JSON.stringify(prdjson, null, 2), 'utf-8');
-            console.log(`✅ Wrote PRD.json to: ${jsonPath}`);
 
             // Refresh VS Code explorer so files appear immediately
             try {
                 await vscode.commands.executeCommand('workbench.files.action.refreshFilesExplorer');
-                console.log('✅ Refreshed VS Code explorer');
             } catch (error) {
-                console.warn('⚠️  Failed to refresh explorer:', error);
                 // Non-critical, continue
             }
 
@@ -130,7 +121,6 @@ export class PRDWriter {
             };
         } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error);
-            console.error(`❌ Failed to write PRD: ${errMsg}`);
             throw new Error(`Failed to write PRD: ${errMsg}`);
         }
     }
@@ -185,7 +175,6 @@ export class PRDWriter {
             await vscode.commands.executeCommand('vscode.diff', oldUri, newUri, 'PRD Changes Preview');
         } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error);
-            console.warn(`Failed to show diff preview: ${errMsg}`);
         }
     }
 
@@ -218,3 +207,5 @@ export class PRDWriter {
         return prdContent.substring(0, maxChars) + '\n... [truncated for display]';
     }
 }
+
+

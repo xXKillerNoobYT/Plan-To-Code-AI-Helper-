@@ -88,7 +88,6 @@ export class Logger {
         }
 
         // Also log to console for debugging
-        console.log(formattedMessage, ...args);
     }
 
     /**
@@ -108,3 +107,5 @@ export class Logger {
 
 // Export singleton instance
 export const logger = Logger.getInstance();
+
+

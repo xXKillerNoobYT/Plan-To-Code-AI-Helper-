@@ -113,7 +113,7 @@ export class CoverageDiagnosticProvider {
             }
 
         } catch (error) {
-            console.error('Failed to parse coverage data:', error);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -160,7 +160,7 @@ export class CoverageDiagnosticProvider {
             }
 
         } catch (error) {
-            console.error('Failed to parse quality diagnostics:', error);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -172,3 +172,5 @@ export class CoverageDiagnosticProvider {
         this.fileWatcher?.dispose();
     }
 }
+
+

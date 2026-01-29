@@ -23,7 +23,6 @@ export class TaskQueue {
      */
     addTask(task: Task): void {
         this.tasks.set(task.taskId, task);
-        console.log(`Task Queue: Added task ${task.taskId}`);
     }
 
     /**
@@ -53,7 +52,6 @@ export class TaskQueue {
         if (task) {
             task.status = status;
             task.updatedAt = new Date();
-            console.log(`Task Queue: Updated task ${taskId} status to ${status}`);
         }
     }
 
@@ -78,3 +76,5 @@ export class TaskQueue {
         };
     }
 }
+
+

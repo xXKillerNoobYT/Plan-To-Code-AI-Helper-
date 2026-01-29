@@ -1,4 +1,4 @@
-// ./verificationTeam.VerificationTeam.generateVisualChecklist.gptgen.web.spec.ts
+// ./verificationTeam.web.spec.ts
 import { VerificationTeam } from '../../src/agents/verificationTeam';
 
 /** @aiContributed-2026-01-28 */
@@ -23,16 +23,12 @@ describe('VerificationTeam - generateVisualChecklist', () => {
     });
 
     /** @aiContributed-2026-01-28 */
-    it('should log the correct message when generating the checklist', () => {
+    it('should generate checklist for different task IDs', () => {
         const taskId = '67890';
-        const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
-        verificationTeam.generateVisualChecklist(taskId);
+        const checklist = verificationTeam.generateVisualChecklist(taskId);
 
-        expect(consoleSpy).toHaveBeenCalledWith(
-            `Verification Team: Generating visual checklist for task ${taskId}`
-        );
-
-        consoleSpy.mockRestore();
+        expect(checklist).toBeDefined();
+        expect(checklist.length).toBeGreaterThan(0);
     });
 });

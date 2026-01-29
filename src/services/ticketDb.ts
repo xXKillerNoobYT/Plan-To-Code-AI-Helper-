@@ -512,7 +512,6 @@ export class TicketDb {
             // Add task to orchestrator queue
             orchestrator.addTask(task);
             logger.info(`✅ Ticket ${ticket.id} routed to ${routedTeam} → queued as task ${taskId}`);
-            console.log(`✅ Ticket ${ticket.id} routed to ${routedTeam} → queued as ${taskId}`);
 
         } catch (error) {
             // Non-critical error - ticket is already saved
@@ -689,8 +688,9 @@ export class TicketDb {
      *
      * @example
      * const replies = await ticketDb.getReplies('ticket_123_xyz');
-     * replies.forEach(r => console.log(`${r.author}: ${r.content}`));
+     * // Process replies: replies.forEach(r => { handleReply(r.content); });
      */
+
     async getReplies(ticketId: string): Promise<Reply[]> {
         try {
             if (this.useFallback) {
@@ -881,3 +881,5 @@ export class TicketDb {
 }
 
 export default TicketDb;
+
+

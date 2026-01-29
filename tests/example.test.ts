@@ -96,15 +96,12 @@ describe('COE Extension Activation', () => {
         // 🚀 Call the activate function with our mock context
         activate(mockContext as any);
 
-        // ✅ Check if activation message was logged
-        // toHaveBeenCalledWith() checks if console.log was called with this exact text
-        expect(consoleLogSpy).toHaveBeenCalledWith('🚀 COE Activated');
-
         // ✅ Check if at least one command was registered
         // The activate function should add commands to context.subscriptions
         expect(mockContext.subscriptions.length).toBeGreaterThan(0);
 
         // 🧹 Clean up: restore console.log to normal
+        console.log('Activation test passed - console logging removed from production');
         consoleLogSpy.mockRestore();
     });
 });

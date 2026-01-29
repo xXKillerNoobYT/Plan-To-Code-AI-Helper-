@@ -183,7 +183,6 @@ export async function run(): Promise<void> {
     const updates = mapIssuesToUpdates(issues);
 
     if (updates.length === 0) {
-        console.log('No categorized issues found (bug/feature labels missing). Nothing to update.');
         return;
     }
 
@@ -198,7 +197,6 @@ export async function run(): Promise<void> {
     const { content: nextPrd, added } = appendIssueUpdatesToPrd(prdContent, updates);
 
     if (added.length === 0) {
-        console.log('All issues already recorded in PRD.md. No new entries added.');
         return;
     }
 
@@ -209,12 +207,11 @@ export async function run(): Promise<void> {
         saveFile(statusLogPath, nextStatusLog),
     ]);
 
-    console.log(`Updated PRD.md with ${added.length} issue update(s) and logged to Status/status-log.md.`);
 }
 
 if (require.main === module) {
     run().catch((error) => {
-        console.error('Failed to update PRD/Status from GitHub issues:', error);
         process.exitCode = 1;
     });
 }
+

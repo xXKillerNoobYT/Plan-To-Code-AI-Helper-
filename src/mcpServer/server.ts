@@ -269,7 +269,7 @@ export class MCPServer {
         if (this.logChannel) {
             this.logChannel.appendLine(logMessage);
         } else {
-            console.log(logMessage);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -298,3 +298,5 @@ export class MCPServer {
         };
     }
 }
+
+

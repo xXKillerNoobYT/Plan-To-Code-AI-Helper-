@@ -13,6 +13,7 @@ describe('TicketDatabase - createTicket', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
   /** @aiContributed-2026-01-28 */

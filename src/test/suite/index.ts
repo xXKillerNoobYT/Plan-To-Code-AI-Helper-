@@ -33,7 +33,6 @@ export function run(): Promise<void> {
                         }
                     });
                 } catch (err) {
-                    console.error(err);
                     reject(err);
                 }
             })
@@ -42,3 +41,5 @@ export function run(): Promise<void> {
             });
     });
 }
+
+

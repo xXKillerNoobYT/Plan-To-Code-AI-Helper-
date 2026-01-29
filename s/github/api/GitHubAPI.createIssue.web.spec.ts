@@ -1,5 +1,5 @@
 // ./api.GitHubAPI.createIssue.gptgen.web.spec.ts
-import { GitHubAPI } from '../../../src/github/api.ts';
+import { GitHubAPI } from '../../../src/github/api';
 import { Octokit } from '@octokit/rest';
 
 jest.mock('@octokit/rest', () => {

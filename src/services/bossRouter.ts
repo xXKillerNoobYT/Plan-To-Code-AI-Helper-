@@ -138,11 +138,6 @@ export class BossRouter {
         }
 
         if (!ticket.ticket_id || !ticket.type || ticket.priority === undefined) {
-            console.warn(`BossRouter: Invalid ticket data`, {
-                ticket_id: ticket.ticket_id,
-                type: ticket.type,
-                priority: ticket.priority
-            });
             return AgentTeamType.Escalate;
         }
 
@@ -151,17 +146,13 @@ export class BossRouter {
 
         for (const rule of sortedRules) {
             if (rule.condition(ticket)) {
-                console.log(`🎯 Routing ticket ${ticket.ticket_id} → ${rule.team} (Rule: ${rule.name})`);
                 return rule.team;
             }
         }
 
         // No rule matched - escalate for human decision
-        console.warn(`⚠️  No routing rule matched for ticket ${ticket.ticket_id}, escalating`);
         return AgentTeamType.Escalate;
-    }
-
-    /**
+    }    /**
      * Check if text contains planning keywords
      */
     private containsPlanningKeywords(text: string): boolean {
@@ -234,7 +225,7 @@ export class BossRouter {
         });
 
         if (matched) {
-            //console.log(`[DEBUG] Matched keyword "${matched}" in text: "${text.substring(0, 50)}..."`);
+            // Keyword matched
         }
 
         return matched !== undefined;
@@ -254,7 +245,6 @@ export class BossRouter {
      */
     public addRule(rule: RoutingRule): void {
         this.rules.push(rule);
-        console.log(`BossRouter: Added custom rule "${rule.name}" with priority ${rule.priority}`);
     }
 
     /**
@@ -264,3 +254,5 @@ export class BossRouter {
         this.rules = this.initializeRules();
     }
 }
+
+

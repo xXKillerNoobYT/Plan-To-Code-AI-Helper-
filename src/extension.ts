@@ -13,12 +13,14 @@ import { setupMissingFiles } from './utils/setupFiles';
 import { CoeTaskTreeProvider } from './tree/CoeTaskTreeProvider';
 import { CompletedTasksTreeProvider } from './ui/completedTasksTreeProvider';
 import { FileConfigManager, LLMConfig as FileLLMConfig } from './utils/fileConfig';
+import { LLMConfigManager } from './services/llmConfigManager';
 import { callLLMWithStreaming } from './utils/streamingLLM';
 import { PRDGenerator } from './services/prdGenerator';
 import { PlansFileWatcher } from './services/plansWatcher';
 import { TicketDatabase } from './db/ticketsDb';
 import { CoverageDiagnosticProvider } from './diagnostics/coverageProvider';
 import { SkippedTestsDiagnosticProvider } from './diagnostics/skippedTestsProvider';
+import { ConfigManager } from './utils/config';
 
 // ============================================================================
 // Global State
@@ -50,26 +52,6 @@ let statusBarItem: vscode.StatusBarItem | null = null;
 let currentProcessingTask: { taskId: string; title: string; priority: string } | null = null;
 
 /**
- * ⚙️  Global LLM Configuration
- * Loaded from .coe/config.json (workspace), VS Code settings, or defaults
- * Used by all LLM calls throughout the extension
- */
-interface LLMConfig {
-    url: string;
-    model: string;
-    inputTokenLimit: number;
-    maxOutputTokens: number;
-    timeoutSeconds: number;
-}
-let llmConfig: LLMConfig = {
-    url: 'http://192.168.1.205:1234/v1/chat/completions',
-    model: 'mistralai/ministral-3-14b-reasoning',
-    inputTokenLimit: 4000,
-    maxOutputTokens: 2000,
-    timeoutSeconds: 300,
-};
-
-/**
  * 🎫 Global TicketDb instance
  * Manages ticket persistence with SQLite + fallback Map
  */
@@ -93,10 +75,10 @@ export function getStatusBarItem(): vscode.StatusBarItem | null {
 
 /**
  * 🔧 Get the current LLM configuration
- * Reads from .coe/config.json (tool-agnostic, no VS Code dependency)
+ * Reads from .coe/config.json (tool-agnostic, no hardcoded defaults)
  */
-export function getLLMConfig(): LLMConfig {
-    return { ...llmConfig };
+export function getLLMConfig(): FileLLMConfig {
+    return FileConfigManager.getLLMConfig();
 }
 
 // ============================================================================
@@ -154,12 +136,13 @@ function updateStatusBar(): void {
  * @param context - VS Code provides this to help manage the extension's lifecycle
  */
 export async function activate(context: vscode.ExtensionContext) {
-    console.log('🚀 COE Activated');
 
     try {
         let treeDataProvider: CoeTaskTreeProvider | null = null;
         let completedTasksProvider: CompletedTasksTreeProvider | null = null;
         let planWatcher: vscode.FileSystemWatcher | null = null;
+        let explorerTree: vscode.TreeView<any> | undefined = undefined;
+        let sidebarTree: vscode.TreeView<any> | undefined = undefined;
 
         // ====================================================================
         // 1. Create Output Channel for COE logging
@@ -199,18 +182,30 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         // ====================================================================
-        // 2.6 Load LLM configuration from .coe/config.json
+        // 2.6 Validate and Load LLM configuration (VS Code settings > .coe/config.json > defaults)
         // ====================================================================
-        llmConfig = FileConfigManager.getLLMConfig();
-        orchestratorOutputChannel.appendLine(`🔧 LLM config loaded from .coe/config.json`);
-        orchestratorOutputChannel.appendLine(
-            `Using LLM: ${llmConfig.model} @ ${llmConfig.url} (input limit ${llmConfig.inputTokenLimit} tokens, output max ${llmConfig.maxOutputTokens}, timeout ${llmConfig.timeoutSeconds}s)`
-        );
+        try {
+            const llmConfig = await LLMConfigManager.getConfigOrDefault();
+            const configSources = LLMConfigManager.getConfigSources();
+            orchestratorOutputChannel.appendLine(`✅ LLM config validated and loaded (${configSources.source})`);
+            orchestratorOutputChannel.appendLine(
+                `Using LLM: ${llmConfig.model} @ ${llmConfig.url} (input limit ${llmConfig.inputTokenLimit} tokens, output max ${llmConfig.maxOutputTokens}, timeout ${llmConfig.timeoutSeconds}s)`
+            );
+        } catch (llmError) {
+            const errorMsg = llmError instanceof Error ? llmError.message : String(llmError);
+            orchestratorOutputChannel.appendLine(`⚠️  LLM config validation failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Using safe defaults (localhost:1234, mistral-7b)');
+        }
 
-        // Subscribe to config changes - update llmConfig when file changes
+        // Subscribe to config changes - re-validate when file changes
         const configUnsubscribe = FileConfigManager.onConfigChange((config) => {
-            llmConfig = config.llm;
-            orchestratorOutputChannel?.appendLine('📝 Config file changed - LLM config reloaded');
+            LLMConfigManager.getConfig()
+                .then((validConfig) => {
+                    orchestratorOutputChannel?.appendLine('📝 LLM config file changed and re-validated');
+                })
+                .catch((error) => {
+                    orchestratorOutputChannel?.appendLine(`⚠️  LLM config re-validation failed: ${error.message}`);
+                });
         });
         context.subscriptions.push({ dispose: configUnsubscribe });
 
@@ -249,69 +244,100 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         // 3. Initialize Programming Orchestrator
         // ====================================================================
-        const logger = new SimpleLogger('COE.Extension');
-        programmingOrchestrator = new ProgrammingOrchestrator(undefined, logger);
+        try {
+            const logger = new SimpleLogger('COE.Extension');
+            programmingOrchestrator = new ProgrammingOrchestrator(undefined, logger);
 
-        orchestratorOutputChannel.appendLine('📝 Initializing Programming Orchestrator...');
-        await programmingOrchestrator.init();
+            orchestratorOutputChannel.appendLine('📝 Initializing Programming Orchestrator...');
+            await programmingOrchestrator.init();
 
-        // Initialize persistence to load previously saved tasks
-        orchestratorOutputChannel.appendLine('💾 Loading persisted tasks from workspace state...');
-        await programmingOrchestrator.initializeWithPersistence(context.workspaceState);
+            // Initialize persistence to load previously saved tasks
+            orchestratorOutputChannel.appendLine('💾 Loading persisted tasks from workspace state...');
+            await programmingOrchestrator.initializeWithPersistence(context.workspaceState);
 
-        orchestratorOutputChannel.appendLine('✅ Programming Orchestrator initialized – waiting for tasks…');
-        orchestratorOutputChannel.appendLine('');
+            orchestratorOutputChannel.appendLine('✅ Programming Orchestrator initialized – waiting for tasks…');
+            orchestratorOutputChannel.appendLine('');
+        } catch (orchestratorError) {
+            const errorMsg = orchestratorError instanceof Error ? orchestratorError.message : String(orchestratorError);
+            orchestratorOutputChannel.appendLine(`❌ Programming Orchestrator initialization failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Extension will continue with limited functionality');
+            // Create minimal orchestrator for fallback
+            const logger = new SimpleLogger('COE.Extension');
+            programmingOrchestrator = new ProgrammingOrchestrator(undefined, logger);
+        }
 
         // ====================================================================
         // 3.2 Initialize Tasks Tree View
         // ====================================================================
-        treeDataProvider = new CoeTaskTreeProvider(programmingOrchestrator);
-        const explorerTree = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
-        const sidebarTree = vscode.window.createTreeView('coe-tasks', { treeDataProvider });
-        context.subscriptions.push(explorerTree, sidebarTree);
+        try {
+            treeDataProvider = new CoeTaskTreeProvider(programmingOrchestrator);
+            explorerTree = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
+            sidebarTree = vscode.window.createTreeView('coe-tasks', { treeDataProvider });
+            context.subscriptions.push(explorerTree, sidebarTree);
 
-        // Link TreeView provider to orchestrator for auto-refresh on queue changes
-        programmingOrchestrator.setTreeDataProvider(treeDataProvider);
+            // Link TreeView provider to orchestrator for auto-refresh on queue changes
+            programmingOrchestrator.setTreeDataProvider(treeDataProvider);
+        } catch (treeError) {
+            const errorMsg = treeError instanceof Error ? treeError.message : String(treeError);
+            orchestratorOutputChannel.appendLine(`❌ Tasks Tree View initialization failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Task queue will work but UI may not update');
+        }
 
         // ====================================================================
         // 3.2.5 Initialize Completed Tasks History Tree View
         // ====================================================================
-        const ticketDb = TicketDatabase.getInstance();
-        completedTasksProvider = new CompletedTasksTreeProvider(ticketDb);
-        const completedTree = vscode.window.createTreeView('coe.completedTasks', {
-            treeDataProvider: completedTasksProvider
-        });
-        context.subscriptions.push(completedTree);
+        try {
+            const ticketDb = TicketDatabase.getInstance();
+            completedTasksProvider = new CompletedTasksTreeProvider(ticketDb);
+            const completedTree = vscode.window.createTreeView('coe.completedTasks', {
+                treeDataProvider: completedTasksProvider
+            });
+            context.subscriptions.push(completedTree);
 
-        // Link CompletedTasksTreeProvider to orchestrator
-        programmingOrchestrator.setCompletedTasksProvider(completedTasksProvider);
+            // Link CompletedTasksTreeProvider to orchestrator
+            programmingOrchestrator.setCompletedTasksProvider(completedTasksProvider);
 
-        // Read retention config from VS Code settings
-        const config = vscode.workspace.getConfiguration('coe.history');
-        const retentionConfig = config.get('retention', { maxAgeHours: 168, maxCount: 0 });
-        if (typeof retentionConfig === 'object' && 'maxAgeHours' in retentionConfig) {
-            const maxAgeHours = (retentionConfig as any).maxAgeHours || 168;
-            completedTasksProvider.updateRetention(maxAgeHours);
-            orchestratorOutputChannel.appendLine(`✅ Completed Tasks view retention: ${maxAgeHours}h`);
+            // Read retention config from VS Code settings
+            const config = vscode.workspace.getConfiguration('coe.history');
+            const retentionConfig = config?.get('retention', { maxAgeHours: 168, maxCount: 0 }) || { maxAgeHours: 168, maxCount: 0 };
+            if (typeof retentionConfig === 'object' && 'maxAgeHours' in retentionConfig) {
+                const maxAgeHours = (retentionConfig as any).maxAgeHours || 168;
+                completedTasksProvider.updateRetention(maxAgeHours);
+                orchestratorOutputChannel.appendLine(`✅ Completed Tasks view retention: ${maxAgeHours}h`);
+            }
+
+            orchestratorOutputChannel.appendLine('✅ Completed Tasks Tree View initialized');
+            orchestratorOutputChannel.appendLine('');
+        } catch (completedTasksError) {
+            const errorMsg = completedTasksError instanceof Error ? completedTasksError.message : String(completedTasksError);
+            orchestratorOutputChannel.appendLine(`❌ Completed Tasks Tree View initialization failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   History tracking will be unavailable');
         }
-
-        orchestratorOutputChannel.appendLine('✅ Completed Tasks Tree View initialized');
-        orchestratorOutputChannel.appendLine('');
 
         // ====================================================================
         // 3.2.6 Initialize Quality Gate Diagnostic Providers
         // ====================================================================
         orchestratorOutputChannel.appendLine('🔬 Initializing Quality Gate Diagnostic Providers...');
 
-        // Coverage diagnostic provider (monitors coverage files)
-        const coverageProvider = new CoverageDiagnosticProvider();
-        coverageProvider.activate(context);
-        orchestratorOutputChannel.appendLine('✅ Coverage Diagnostic Provider activated');
+        try {
+            // Coverage diagnostic provider (monitors coverage files)
+            const coverageProvider = new CoverageDiagnosticProvider();
+            coverageProvider.activate(context);
+            orchestratorOutputChannel.appendLine('✅ Coverage Diagnostic Provider activated');
+        } catch (coverageError) {
+            const errorMsg = coverageError instanceof Error ? coverageError.message : String(coverageError);
+            orchestratorOutputChannel.appendLine(`❌ Coverage Diagnostic Provider failed: ${errorMsg}`);
+        }
 
-        // Skipped tests diagnostic provider (monitors test files)
-        const skippedTestsProvider = new SkippedTestsDiagnosticProvider();
-        skippedTestsProvider.activate(context);
-        orchestratorOutputChannel.appendLine('✅ Skipped Tests Diagnostic Provider activated');
+        try {
+            // Skipped tests diagnostic provider (monitors test files)
+            const skippedTestsProvider = new SkippedTestsDiagnosticProvider();
+            skippedTestsProvider.activate(context);
+            orchestratorOutputChannel.appendLine('✅ Skipped Tests Diagnostic Provider activated');
+        } catch (skippedTestsError) {
+            const errorMsg = skippedTestsError instanceof Error ? skippedTestsError.message : String(skippedTestsError);
+            orchestratorOutputChannel.appendLine(`❌ Skipped Tests Diagnostic Provider failed: ${errorMsg}`);
+        }
 
         orchestratorOutputChannel.appendLine('💡 Quality warnings will appear in Problems panel');
         orchestratorOutputChannel.appendLine('');
@@ -319,71 +345,77 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         // 3.3 Load tasks from plan file
         // ====================================================================
-        orchestratorOutputChannel.appendLine('📂 Loading tasks from plan file...');
-        const planTasks = await loadTasksFromPlanFile();
-        if (planTasks.length > 0) {
-            planTasks.forEach((task) => programmingOrchestrator?.addTask(task));
-            orchestratorOutputChannel.appendLine(`✅ Loaded and added ${planTasks.length} tasks from plan file`);
-            console.log(`✅ Added ${planTasks.length} tasks to orchestrator`);
-            console.log(`📊 Queue status after load:`, programmingOrchestrator?.getQueueStatus());
-        } else {
-            orchestratorOutputChannel.appendLine('ℹ️  No tasks loaded from plan file – using test mode only');
-            console.log('ℹ️  No tasks loaded from plan file');
+        try {
+            orchestratorOutputChannel.appendLine('📂 Loading tasks from plan file...');
+            const planTasks = await loadTasksFromPlanFile();
+            if (planTasks.length > 0) {
+                planTasks.forEach((task) => programmingOrchestrator?.addTask(task));
+                orchestratorOutputChannel.appendLine(`✅ Loaded and added ${planTasks.length} tasks from plan file`);
+            } else {
+                orchestratorOutputChannel.appendLine('ℹ️  No tasks loaded from plan file – using test mode only');
+            }
+            orchestratorOutputChannel.appendLine('');
+        } catch (planLoadError) {
+            const errorMsg = planLoadError instanceof Error ? planLoadError.message : String(planLoadError);
+            orchestratorOutputChannel.appendLine(`❌ Failed to load tasks from plan file: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Continuing with empty task queue');
         }
-        orchestratorOutputChannel.appendLine('');
+
         updateStatusBar();
-        console.log('🔄 Calling treeDataProvider.refresh() after loading tasks');
-        treeDataProvider.refresh();
+        if (treeDataProvider) {
+            treeDataProvider.refresh();
+        }
 
         // ====================================================================
         // 3.3.5 Debug Summary: Tree View Status
         // ====================================================================
-        console.log('═══════════════════════════════════════════════════════════');
-        console.log('🔍 TREE VIEW DEBUG SUMMARY');
-        console.log('═══════════════════════════════════════════════════════════');
-        console.log(`📊 Total tasks in orchestrator: ${programmingOrchestrator?.getQueueStatus()?.totalTasks || 0}`);
-        console.log(`✅ Ready tasks: ${programmingOrchestrator?.getReadyTasks()?.length || 0}`);
-        console.log(`🌳 Tree provider initialized: ${treeDataProvider !== null}`);
-        console.log(`📺 Tree views created: ${explorerTree !== undefined && sidebarTree !== undefined}`);
         if (programmingOrchestrator) {
             const readyTasks = programmingOrchestrator.getReadyTasks();
             if (readyTasks.length > 0) {
-                console.log('📋 Ready task details:');
                 readyTasks.forEach(t => {
-                    console.log(`   - ${t.taskId}: "${t.title}" [${t.priority}] status=${t.status}`);
+                    // eslint-disable-next-line no-empty
                 });
             } else {
-                console.log('⚠️  No ready tasks found! Check task status in orchestrator.');
+                // eslint-disable-next-line no-empty
             }
         }
-        console.log('═══════════════════════════════════════════════════════════');
-        console.log('');
 
         // ====================================================================
         // 3.4 Watch plan file for changes and refresh queue/tree
         // ====================================================================
-        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-        if (workspaceFolder) {
-            planWatcher = vscode.workspace.createFileSystemWatcher('**/Docs/Plans/current-plan.md');
-            const reloadTasks = async () => {
-                orchestratorOutputChannel?.appendLine('🔄 Plan file changed — reloading tasks...');
-                const tasks = await loadTasksFromPlanFile();
-                programmingOrchestrator?.setTasks(tasks);
-                treeDataProvider?.refresh();
-                updateStatusBar();
-            };
-            planWatcher.onDidChange(reloadTasks, null, context.subscriptions);
-            planWatcher.onDidCreate(reloadTasks, null, context.subscriptions);
-            planWatcher.onDidDelete(reloadTasks, null, context.subscriptions);
-            context.subscriptions.push(planWatcher);
+        try {
+            const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+            if (workspaceFolder) {
+                planWatcher = vscode.workspace.createFileSystemWatcher('**/Docs/Plans/current-plan.md');
+                const reloadTasks = async () => {
+                    try {
+                        orchestratorOutputChannel?.appendLine('🔄 Plan file changed — reloading tasks...');
+                        const tasks = await loadTasksFromPlanFile();
+                        programmingOrchestrator?.setTasks(tasks);
+                        treeDataProvider?.refresh();
+                        updateStatusBar();
+                    } catch (reloadError) {
+                        const errorMsg = reloadError instanceof Error ? reloadError.message : String(reloadError);
+                        orchestratorOutputChannel?.appendLine(`❌ Failed to reload tasks: ${errorMsg}`);
+                    }
+                };
+                planWatcher.onDidChange(reloadTasks, null, context.subscriptions);
+                planWatcher.onDidCreate(reloadTasks, null, context.subscriptions);
+                planWatcher.onDidDelete(reloadTasks, null, context.subscriptions);
+                context.subscriptions.push(planWatcher);
 
-            const planSaveListener = vscode.workspace.onDidSaveTextDocument((doc) => {
-                const normalizedPath = doc.uri.fsPath.replace(/\\/g, '/');
-                if (normalizedPath.endsWith('Docs/Plans/current-plan.md')) {
-                    reloadTasks();
-                }
-            });
-            context.subscriptions.push(planSaveListener);
+                const planSaveListener = vscode.workspace.onDidSaveTextDocument((doc) => {
+                    const normalizedPath = doc.uri.fsPath.replace(/\\/g, '/');
+                    if (normalizedPath.endsWith('Docs/Plans/current-plan.md')) {
+                        reloadTasks();
+                    }
+                });
+                context.subscriptions.push(planSaveListener);
+            }
+        } catch (watcherError) {
+            const errorMsg = watcherError instanceof Error ? watcherError.message : String(watcherError);
+            orchestratorOutputChannel.appendLine(`❌ Plan file watcher setup failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   Plan files won\'t auto-reload on changes');
         }
 
         // ====================================================================
@@ -391,9 +423,53 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         const activateCommand = vscode.commands.registerCommand('coe.activate', () => {
             vscode.window.showInformationMessage('COE: Orchestration system ready!');
-            console.log('COE: Manual activation triggered');
         });
         context.subscriptions.push(activateCommand);
+
+        // ====================================================================
+        // 5.1 Register GitHub token management command
+        // ====================================================================
+        const setGitHubTokenCommand = vscode.commands.registerCommand('coe.setGitHubToken', async () => {
+            const token = await vscode.window.showInputBox({
+                prompt: 'Enter your GitHub Personal Access Token',
+                password: true,
+                placeHolder: 'ghp_xxxxxxxxxxxxxxxxxxxx',
+                ignoreFocusOut: true,
+                validateInput: (value) => {
+                    if (!value || value.trim().length === 0) {
+                        return 'Token cannot be empty';
+                    }
+                    if (!value.startsWith('ghp_') && !value.startsWith('github_pat_')) {
+                        return 'Invalid token format. Should start with ghp_ or github_pat_';
+                    }
+                    return null;
+                }
+            });
+
+            if (token) {
+                await ConfigManager.setGitHubToken(context, token);
+                vscode.window.showInformationMessage('✅ GitHub token saved securely');
+                orchestratorOutputChannel?.appendLine('✅ GitHub token updated via SecretStorage');
+            }
+        });
+        context.subscriptions.push(setGitHubTokenCommand);
+
+        // Check for GitHub token on activation
+        orchestratorOutputChannel.appendLine('🔑 Checking GitHub token...');
+        const existingToken = await ConfigManager.getGitHubToken(context);
+        if (!existingToken) {
+            orchestratorOutputChannel.appendLine('⚠️  No GitHub token found');
+            const response = await vscode.window.showWarningMessage(
+                'GitHub token not configured. Required for GitHub Issues sync.',
+                'Set Token Now',
+                'Later'
+            );
+            if (response === 'Set Token Now') {
+                await vscode.commands.executeCommand('coe.setGitHubToken');
+            }
+        } else {
+            orchestratorOutputChannel.appendLine('✅ GitHub token found in SecretStorage');
+        }
 
         const executeTask = async (nextTask: Task): Promise<void> => {
             orchestratorOutputChannel?.appendLine('');
@@ -424,19 +500,20 @@ export async function activate(context: vscode.ExtensionContext) {
 
             const fullPromptFromRouteTask = directive.contextBundle ?? JSON.stringify(directive, null, 2);
             const estimatedInputTokens = Math.ceil(fullPromptFromRouteTask.length / 4);
+            const config = getLLMConfig();
             orchestratorOutputChannel?.appendLine(
-                `📊 Estimated input tokens: ${estimatedInputTokens} / ${llmConfig.inputTokenLimit}`
+                `📊 Estimated input tokens: ${estimatedInputTokens} / ${config.inputTokenLimit}`
             );
 
             let finalPrompt = fullPromptFromRouteTask;
-            if (estimatedInputTokens > llmConfig.inputTokenLimit) {
-                const maxChars = llmConfig.inputTokenLimit * 4;
+            if (estimatedInputTokens > config.inputTokenLimit) {
+                const maxChars = config.inputTokenLimit * 4;
                 finalPrompt = fullPromptFromRouteTask.slice(-maxChars);
                 orchestratorOutputChannel?.appendLine(
-                    `⚠️ Prompt truncated from ${estimatedInputTokens} to ${llmConfig.inputTokenLimit} tokens`
+                    `⚠️ Prompt truncated from ${estimatedInputTokens} to ${config.inputTokenLimit} tokens`
                 );
                 vscode.window.showWarningMessage(
-                    `⚠️ Prompt truncated from ${estimatedInputTokens} to ${llmConfig.inputTokenLimit} tokens`
+                    `⚠️ Prompt truncated from ${estimatedInputTokens} to ${config.inputTokenLimit} tokens`
                 );
             }
 
@@ -465,13 +542,14 @@ export async function activate(context: vscode.ExtensionContext) {
                 }
             };
 
+            const llm = getLLMConfig();
             orchestratorOutputChannel?.appendLine(
-                `🌊 Streaming from ${llmConfig.model} (inactivity timeout: ${llmConfig.timeoutSeconds}s)...`
+                `🌊 Streaming from ${llm.model} (inactivity timeout: ${llm.timeoutSeconds}s)...`
             );
 
             try {
                 if (statusBarItem) {
-                    statusBarItem.text = `$(sync~spin) Receiving from ${llmConfig.model}...`;
+                    statusBarItem.text = `$(sync~spin) Receiving from ${llm.model}...`;
                     statusBarItem.color = '#ffff00';
                     statusBarItem.show();
                 }
@@ -479,11 +557,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 const start = Date.now();
 
                 const result = await callLLMWithStreaming({
-                    config: llmConfig,
+                    config: llm,
                     systemPrompt: 'You are a senior TypeScript developer helping build a VS Code extension.',
                     userPrompt: finalPrompt,
                     temperature: 0.7,
-                    maxTokens: llmConfig.maxOutputTokens,
+                    maxTokens: llm.maxOutputTokens,
                     onToken: () => {
                         // Callback exists for future use with advanced logging
                     },
@@ -518,7 +596,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 orchestratorOutputChannel?.appendLine(fullReply);
                 orchestratorOutputChannel?.appendLine('─'.repeat(60));
 
-                await completeTaskAndNotify(`Task completed via ${llmConfig.model}`);
+                await completeTaskAndNotify(`Task completed via ${getLLMConfig().model}`);
             } catch (error) {
                 const message = error instanceof Error ? error.message : String(error);
                 orchestratorOutputChannel?.appendLine(`❌ Error while calling model: ${message}`);
@@ -565,36 +643,29 @@ export async function activate(context: vscode.ExtensionContext) {
         // 6.1 Register processTask command for specific task execution
         // ====================================================================
         const processTaskCommand = vscode.commands.registerCommand('coe.processTask', async (taskId: string) => {
-            console.log(`🎯 coe.processTask command triggered for taskId: ${taskId}`);
 
             if (!programmingOrchestrator || !orchestratorOutputChannel) {
-                console.log('❌ Orchestrator not initialized');
                 vscode.window.showErrorMessage('❌ COE Orchestrator not initialized');
                 return;
             }
 
             if (programmingOrchestrator.isBusy()) {
-                console.log('⏳ Orchestrator is busy');
                 vscode.window.showInformationMessage('⏳ Busy processing current task — try again in a few seconds');
                 return;
             }
 
             const target = programmingOrchestrator.getTaskById(taskId);
             if (!target) {
-                console.log(`❌ Task not found: ${taskId}`);
                 vscode.window.showWarningMessage(`Task not found: ${taskId}`);
                 return;
             }
 
-            console.log(`✅ Found task: ${target.title} - Status: ${target.status}`);
 
             if (target.status !== TaskStatus.READY) {
-                console.log(`⚠️ Task not ready - status: ${target.status}`);
                 vscode.window.showWarningMessage(`Task ${taskId} is not ready (status: ${target.status})`);
                 return;
             }
 
-            console.log(`🚀 Executing task from tree: ${target.title}`);
             await executeTask(target);
         });
         context.subscriptions.push(processTaskCommand);
@@ -619,16 +690,17 @@ export async function activate(context: vscode.ExtensionContext) {
                     async (progress) => {
                         progress.report({ message: 'Reading Plans/ folder...' });
 
+                        const llmCfg = getLLMConfig();
                         const llmConfigCopy = {
-                            url: llmConfig.url,
-                            model: llmConfig.model,
-                            maxOutputTokens: llmConfig.maxOutputTokens,
-                            timeoutSeconds: llmConfig.timeoutSeconds,
+                            url: llmCfg.url,
+                            model: llmCfg.model,
+                            maxOutputTokens: llmCfg.maxOutputTokens,
+                            timeoutSeconds: llmCfg.timeoutSeconds,
                         };
 
                         const result = await PRDGenerator.generate(
                             {
-                                tokenLimit: llmConfig.inputTokenLimit,
+                                tokenLimit: llmCfg.inputTokenLimit,
                                 retryOnFailure: true,
                                 showPreview: false,
                                 llmConfig: llmConfigCopy,
@@ -688,8 +760,14 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         // 7.5 Start PRD Auto-Regeneration Watcher
         // ====================================================================
-        orchestratorOutputChannel.appendLine('🔧 Setting up Plans/ folder watcher...');
-        PlansFileWatcher.startWatching(context, true, orchestratorOutputChannel);
+        try {
+            orchestratorOutputChannel.appendLine('🔧 Setting up Plans/ folder watcher...');
+            PlansFileWatcher.startWatching(context, true, orchestratorOutputChannel);
+        } catch (prdWatcherError) {
+            const errorMsg = prdWatcherError instanceof Error ? prdWatcherError.message : String(prdWatcherError);
+            orchestratorOutputChannel.appendLine(`❌ Plans/ folder watcher setup failed: ${errorMsg}`);
+            orchestratorOutputChannel.appendLine('   PRD auto-regeneration will be unavailable');
+        }
 
         // ====================================================================
         // 8. Register test command for quick verification (backward compat)
@@ -1120,7 +1198,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
                     // Read retention config from VS Code settings
                     const config = vscode.workspace.getConfiguration('coe.history');
-                    const retentionConfig = config.get('retention', { maxAgeHours: 168, maxCount: 0 });
+                    const retentionConfig = config?.get('retention', { maxAgeHours: 168, maxCount: 0 }) || { maxAgeHours: 168, maxCount: 0 };
 
                     let maxAgeHours = 168;
                     let maxCount = 0;
@@ -1172,12 +1250,9 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         // 7. Log successful initialization
         // ====================================================================
-        console.log('COE: Extension setup complete ✅');
-        console.log('Programming Orchestrator instance available via getOrchestrator()');
 
     } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
-        console.error('❌ COE Activation failed:', errorMsg);
 
         if (orchestratorOutputChannel) {
             orchestratorOutputChannel.appendLine(`❌ ACTIVATION FAILED: ${errorMsg}`);
@@ -1193,7 +1268,6 @@ export async function activate(context: vscode.ExtensionContext) {
  */
 export async function deactivate() {
     try {
-        console.log('COE: Extension deactivating...');
 
         // Stop PRD watcher
         PlansFileWatcher.stopWatching();
@@ -1208,9 +1282,8 @@ export async function deactivate() {
             try {
                 await globalTicketDb.close();
                 globalTicketDb = null;
-                console.log('✅ TicketDb closed and handle nulled');
             } catch (error) {
-                console.error('❌ Error closing TicketDb:', error);
+                // eslint-disable-next-line no-empty
             }
         }
 
@@ -1218,14 +1291,12 @@ export async function deactivate() {
         if (statusBarItem) {
             statusBarItem.dispose();
             statusBarItem = null;
-            console.log('✅ Status Bar Item disposed');
         }
 
         // Shutdown Programming Orchestrator gracefully
         if (programmingOrchestrator) {
             await programmingOrchestrator.shutdown();
             programmingOrchestrator = null;
-            console.log('✅ Programming Orchestrator shutdown complete');
         }
 
         // Dispose output channel
@@ -1239,9 +1310,9 @@ export async function deactivate() {
         // Small delay for OneDrive sync if needed (non-blocking)
         await new Promise(resolve => setTimeout(resolve, 200));
 
-        console.log('✅ COE: Extension deactivated');
     } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
-        console.error('❌ Error during deactivation:', errorMsg);
     }
 }
+
+

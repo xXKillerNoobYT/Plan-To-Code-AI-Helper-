@@ -12,6 +12,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { z } from 'zod';
 
 /**
  * LLM Configuration interface
@@ -42,12 +43,35 @@ export interface COEFileConfig {
 }
 
 /**
+ * Zod schemas for runtime validation (project-by-project configuration)
+ */
+export const LLMConfigSchema = z.object({
+    url: z.string().url('Invalid LLM URL format'),
+    model: z.string().min(1, 'Model name cannot be empty'),
+    inputTokenLimit: z.number().int().positive('Input token limit must be positive'),
+    maxOutputTokens: z.number().int().positive('Max output tokens must be positive'),
+    timeoutSeconds: z.number().int().positive('Timeout must be positive'),
+    temperature: z.number().min(0).max(2).optional(),
+});
+
+export const ExtensionConfigSchema = z.object({
+    autoRegeneratePRD: z.boolean().optional(),
+    debugMode: z.boolean().optional(),
+}).optional();
+
+export const COEFileConfigSchema = z.object({
+    llm: LLMConfigSchema,
+    extension: ExtensionConfigSchema,
+});
+
+/**
  * Default configuration (fallback if .coe/config.json is missing or invalid)
+ * Uses localhost:1234 and mistral-7b as defaults (project-by-project)
  */
 const DEFAULT_CONFIG: COEFileConfig = {
     llm: {
-        url: 'http://192.168.1.205:1234/v1/chat/completions',
-        model: 'mistralai/ministral-3-14b-reasoning',
+        url: 'http://localhost:1234/v1/chat/completions',
+        model: 'mistral-7b',
         inputTokenLimit: 4000,
         maxOutputTokens: 2000,
         timeoutSeconds: 300,
@@ -83,7 +107,6 @@ export class FileConfigManager {
             // Get workspace root
             const root = workspaceRoot || this.getWorkspaceRoot();
             if (!root) {
-                console.warn('No workspace root found, using defaults');
                 this.instance = DEFAULT_CONFIG;
                 return;
             }
@@ -101,7 +124,6 @@ export class FileConfigManager {
             // Watch for changes
             this.watch();
         } catch (error) {
-            console.error('Failed to initialize FileConfigManager:', error);
             this.instance = DEFAULT_CONFIG;
         }
     }
@@ -126,9 +148,8 @@ export class FileConfigManager {
                 fs.mkdirSync(dir, { recursive: true });
             }
             fs.writeFileSync(this.configPath, JSON.stringify(DEFAULT_CONFIG, null, 2));
-            console.log(`Created default config at ${this.configPath}`);
         } catch (error) {
-            console.error('Failed to create default config:', error);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -138,7 +159,6 @@ export class FileConfigManager {
     static async reload(): Promise<void> {
         try {
             if (!fs.existsSync(this.configPath)) {
-                console.warn(`Config file not found at ${this.configPath}, using defaults`);
                 this.instance = DEFAULT_CONFIG;
                 return;
             }
@@ -148,7 +168,6 @@ export class FileConfigManager {
 
             // Validate required fields
             if (!parsed.llm || !parsed.llm.url || !parsed.llm.model) {
-                console.warn('Invalid config file, using defaults');
                 this.instance = DEFAULT_CONFIG;
                 return;
             }
@@ -165,10 +184,8 @@ export class FileConfigManager {
                 },
             };
 
-            console.log('Config reloaded from', this.configPath);
             this.notifyWatchers();
         } catch (error) {
-            console.error('Failed to reload config:', error);
             this.instance = DEFAULT_CONFIG;
         }
     }
@@ -194,7 +211,7 @@ export class FileConfigManager {
                 }, 500);
             });
         } catch (error) {
-            console.warn('Failed to watch config file:', error);
+            // eslint-disable-next-line no-empty
         }
     }
 
@@ -234,7 +251,6 @@ export class FileConfigManager {
             this.instance.llm = { ...this.instance.llm, ...update };
             await this.save();
         } catch (error) {
-            console.error('Failed to update LLM config:', error);
             throw error;
         }
     }
@@ -247,7 +263,6 @@ export class FileConfigManager {
             this.instance.extension = { ...(this.instance.extension || {}), ...update };
             await this.save();
         } catch (error) {
-            console.error('Failed to update extension config:', error);
             throw error;
         }
     }
@@ -267,10 +282,8 @@ export class FileConfigManager {
             }
 
             fs.writeFileSync(this.configPath, JSON.stringify(this.instance, null, 2));
-            console.log('Config saved to', this.configPath);
             this.notifyWatchers();
         } catch (error) {
-            console.error('Failed to save config:', error);
             throw error;
         }
     }
@@ -301,3 +314,5 @@ export class FileConfigManager {
         return this.configPath;
     }
 }
+
+

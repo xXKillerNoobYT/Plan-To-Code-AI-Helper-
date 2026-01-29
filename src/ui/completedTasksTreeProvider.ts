@@ -107,7 +107,6 @@ export class CompletedTasksTreeProvider implements vscode.TreeDataProvider<Compl
             });
 
         } catch (error) {
-            console.error('❌ Error loading completed tasks:', error);
 
             // Show error placeholder
             return [
@@ -199,3 +198,5 @@ export class CompletedTaskTreeItem extends vscode.TreeItem {
         }
     }
 }
+
+

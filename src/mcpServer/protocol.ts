@@ -178,3 +178,5 @@ export function parseStdioMessage(rawMessage: string): MCPRequest {
 export function formatStdioResponse(response: MCPResponse): string {
     return JSON.stringify(response) + '\n';
 }
+
+

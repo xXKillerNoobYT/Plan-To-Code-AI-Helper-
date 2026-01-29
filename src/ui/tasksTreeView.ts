@@ -107,3 +107,5 @@ export function registerTasksTreeView(context: vscode.ExtensionContext, tasks: T
     // TODO: Add click handlers for tasks
     // TODO: Add context menu actions (edit, delete, mark done)
 }
+
+

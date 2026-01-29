@@ -26,7 +26,6 @@ export async function loadTasksFromPlanFile(): Promise<Task[]> {
         // Get workspace root folder
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
-            console.warn('⚠️ No workspace folder found – using test mode only');
             return [];
         }
 
@@ -62,12 +61,10 @@ export async function loadTasksFromPlanFile(): Promise<Task[]> {
 
         // Parse tasks from markdown lines
         const tasks = parseTasksFromMarkdown(fileText);
-        console.log(`✅ Loaded ${tasks.length} tasks from plan file`);
 
         return tasks;
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error(`❌ Error loading plan file: ${errorMessage}`);
         return [];
     }
 }
@@ -97,10 +94,8 @@ async function createStarterPlanFile(workspaceUri: vscode.Uri, planFileUri: vsco
         const encoder = new TextEncoder();
         const fileContent = encoder.encode(starterContent);
         await vscode.workspace.fs.writeFile(planFileUri, fileContent);
-        console.log(`📝 Created starter plan file at Docs/Plans/current-plan.md`);
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error(`❌ Failed to create starter plan file: ${errorMessage}`);
         throw error;
     }
 }
@@ -185,3 +180,5 @@ export function isValidTask(task: Task): boolean {
 
     return validPriorities.includes(task.priority) && validStatuses.includes(task.status);
 }
+
+

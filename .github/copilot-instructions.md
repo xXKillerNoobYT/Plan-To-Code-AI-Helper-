@@ -375,7 +375,7 @@ END CHECKLIST
 BEGIN SAFETY SYSTEMS
 The AI will protect you from common mistakes:
 - **20-min rule** → AI suggests breakdown if task too big ⭐
-- **TO-DO tracking** → `manage_todo_list` keeps you organized ⭐
+- **TO-DO tracking** → `manage_todo_list` keeps you organized ⭐ Always use it for multi-step work So the user can see whats going on.
 - **Memory system** → `reportObservation` logs discoveries ⭐
 - **Ask questions** → Use `askQuestion` MCP tool liberally
 END SAFETY SYSTEMS

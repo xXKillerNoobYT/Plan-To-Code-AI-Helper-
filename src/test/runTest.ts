@@ -21,9 +21,10 @@ async function main() {
             launchArgs: ['--disable-extensions'] // Disable other extensions during tests
         });
     } catch (err) {
-        console.error('Failed to run tests:', err);
         process.exit(1);
     }
 }
 
 main();
+
+

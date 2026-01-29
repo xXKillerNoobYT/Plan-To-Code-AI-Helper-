@@ -1,5 +1,5 @@
 // ./api.web.spec.ts
-import { GitHubAPI } from '../../../src/github/api.ts';
+import { GitHubAPI } from '../../../src/github/api';
 import { jest } from '@jest/globals';
 import { Octokit } from '@octokit/rest';
 

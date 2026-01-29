@@ -1,0 +1,1553 @@
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:97:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:97:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:97:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:97:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:97:9)
+
+  console.log
+    ≡ƒôï Task added to queue: T-1 (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒôï Task added to queue: T-2 (Priority: P2, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:160:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:160:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:160:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:160:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:160:9)
+
+  console.log
+    ≡ƒôï Task added to queue: LM-1 (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:233:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:233:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:233:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:233:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:233:9)
+
+  console.log
+    ≡ƒôï Task added to queue: LM-meta-1 (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:290:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:290:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:290:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:290:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:290:9)
+
+  console.log
+    ≡ƒôï Task added to queue: LM-malformed-1 (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:348:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:348:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:348:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:348:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:348:9)
+
+  console.log
+    ≡ƒôï Task added to queue: LM-FAIL (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:391:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:391:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:391:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:391:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:391:9)
+
+  console.log
+    ≡ƒÜÇ COE Activated
+
+      at activate (src/extension.ts:139:13)
+
+  console.warn
+    No workspace root found, using defaults
+
+    [0m [90m 108 |[39m             [36mconst[39m root [33m=[39m workspaceRoot [33m||[39m [36mthis[39m[33m.[39mgetWorkspaceRoot()[33m;[39m
+     [90m 109 |[39m             [36mif[39m ([33m![39mroot) {
+    [31m[1m>[22m[39m[90m 110 |[39m                 console[33m.[39mwarn([32m'No workspace root found, using defaults'[39m)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 111 |[39m                 [36mthis[39m[33m.[39minstance [33m=[39m [33mDEFAULT_CONFIG[39m[33m;[39m
+     [90m 112 |[39m                 [36mreturn[39m[33m;[39m
+     [90m 113 |[39m             }[0m
+
+      at FileConfigManager.initialize (src/utils/fileConfig.ts:110:25)
+      at activate (src/extension.ts:177:37)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:407:23)
+
+  console.warn
+    ΓÜá∩╕Å  LLM config error: vscodeConfig.has is not a function - Using defaults
+
+    [0m [90m  95 |[39m             [90m// Handle other errors[39m
+     [90m  96 |[39m             [36mconst[39m message [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [32m'Unknown config error'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m             console[33m.[39mwarn([32m`ΓÜá∩╕Å  LLM config error: ${message} - Using defaults`[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m  98 |[39m             [36mthrow[39m [36mnew[39m [33mConfigValidationError[39m(message)[33m;[39m
+     [90m  99 |[39m         }
+     [90m 100 |[39m     }[0m
+
+      at LLMConfigManager.getConfig (src/services/llmConfigManager.ts:97:21)
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:110:31)
+      at activate (src/extension.ts:189:54)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:407:9)
+
+  console.info
+    Γ£ô Loaded default LLM config (localhost:1234, mistral-7b)
+
+      at LLMConfigManager.getConfigOrDefault (src/services/llmConfigManager.ts:114:21)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Programming Orchestrator: Initializing...
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.log
+    [COE.Extension] Γä╣∩╕Å Γ£à Programming Orchestrator: Ready (one-thing-at-a-time enforced)
+
+      at SimpleLogger.info (src/orchestrator/programmingOrchestrator.ts:1436:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace state available, skipping task load
+
+    [0m [90m 344 |[39m     [36mprivate[39m [36masync[39m loadPersistedTasks()[33m:[39m [33mPromise[39m[33m<[39m[36mvoid[39m[33m>[39m {
+     [90m 345 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39mworkspaceState) {
+    [31m[1m>[22m[39m[90m 346 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace state available, skipping task load'[39m)[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 347 |[39m             [36mreturn[39m[33m;[39m
+     [90m 348 |[39m         }
+     [90m 349 |[39m[0m
+
+      at ProgrammingOrchestrator.loadPersistedTasks (src/orchestrator/programmingOrchestrator.ts:346:21)
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:334:20)
+      at activate (src/extension.ts:257:43)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:407:9)
+
+  console.log
+    Γä╣∩╕Å No tasks to reconcile (queue empty)
+
+      at ProgrammingOrchestrator.reconcileTasks (src/orchestrator/programmingOrchestrator.ts:420:21)
+
+  console.log
+    Γ£à ProgrammingOrchestrator initialized with persistence
+
+      at ProgrammingOrchestrator.initializeWithPersistence (src/orchestrator/programmingOrchestrator.ts:336:17)
+
+  console.log
+    Γ£à TreeView provider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setTreeDataProvider (src/orchestrator/programmingOrchestrator.ts:297:17)
+
+  console.log
+    Γ£à CompletedTasksTreeProvider linked to ProgrammingOrchestrator
+
+      at ProgrammingOrchestrator.setCompletedTasksProvider (src/orchestrator/programmingOrchestrator.ts:309:17)
+
+  console.warn
+    ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only
+
+    [0m [90m 27 |[39m         [36mconst[39m workspaceFolder [33m=[39m vscode[33m.[39mworkspace[33m.[39mworkspaceFolders[33m?[39m[33m.[39m[[35m0[39m][33m;[39m
+     [90m 28 |[39m         [36mif[39m ([33m![39mworkspaceFolder) {
+    [31m[1m>[22m[39m[90m 29 |[39m             console[33m.[39mwarn([32m'ΓÜá∩╕Å No workspace folder found ΓÇô using test mode only'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 30 |[39m             [36mreturn[39m [][33m;[39m
+     [90m 31 |[39m         }
+     [90m 32 |[39m[0m
+
+      at loadTasksFromPlanFile (src/plans/planningStub.ts:29:21)
+      at activate (src/extension.ts:351:58)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:407:9)
+
+  console.log
+    Γä╣∩╕Å  No tasks loaded from plan file
+
+      at activate (src/extension.ts:359:25)
+
+  console.log
+    ≡ƒöä Calling treeDataProvider.refresh() after loading tasks
+
+      at activate (src/extension.ts:370:21)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:377:17)
+
+  console.log
+    ≡ƒöì TREE VIEW DEBUG SUMMARY
+
+      at activate (src/extension.ts:378:17)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:379:17)
+
+  console.log
+    ≡ƒôè Total tasks in orchestrator: 0
+
+      at activate (src/extension.ts:380:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    Γ£à Ready tasks: 0
+
+      at activate (src/extension.ts:381:17)
+
+  console.log
+    ≡ƒî│ Tree provider initialized: true
+
+      at activate (src/extension.ts:382:17)
+
+  console.log
+    ≡ƒô║ Tree views created: true
+
+      at activate (src/extension.ts:383:17)
+
+  console.log
+    ≡ƒöì getReadyTasks() called - Total queue size: 0
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:694:17)
+
+  console.log
+    ≡ƒôè getReadyTasks() returning 0 tasks
+
+      at ProgrammingOrchestrator.getReadyTasks (src/orchestrator/programmingOrchestrator.ts:722:17)
+
+  console.log
+    ΓÜá∩╕Å  No ready tasks found! Check task status in orchestrator.
+
+      at activate (src/extension.ts:392:25)
+
+  console.log
+    ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+      at activate (src/extension.ts:395:17)
+
+  console.log
+
+
+      at activate (src/extension.ts:396:17)
+
+  console.error
+    Γ¥î COE Activation failed: Cannot read properties of undefined (reading 'get')
+
+    [0m [90m 1279 |[39m     } [36mcatch[39m (error) {
+     [90m 1280 |[39m         [36mconst[39m errorMsg [33m=[39m error [36minstanceof[39m [33mError[39m [33m?[39m error[33m.[39mmessage [33m:[39m [33mString[39m(error)[33m;[39m
+    [31m[1m>[22m[39m[90m 1281 |[39m         console[33m.[39merror([32m'Γ¥î COE Activation failed:'[39m[33m,[39m errorMsg)[33m;[39m
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1282 |[39m
+     [90m 1283 |[39m         [36mif[39m (orchestratorOutputChannel) {
+     [90m 1284 |[39m             orchestratorOutputChannel[33m.[39mappendLine([32m`Γ¥î ACTIVATION FAILED: ${errorMsg}`[39m)[33m;[39m[0m
+
+      at activate (src/extension.ts:1281:17)
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:407:9)
+
+  console.log
+    ≡ƒôï Task added to queue: REAL-1 (Priority: P1, Status: ready)
+
+      at ProgrammingOrchestrator.addTask (src/orchestrator/programmingOrchestrator.ts:647:17)
+
+  console.log
+    ≡ƒî▓ TreeView refreshed after queue change
+
+      at ProgrammingOrchestrator.notifyTreeViewUpdate (src/orchestrator/programmingOrchestrator.ts:319:21)
+
+FAIL tests/extension.statusBar.test.ts
+  COE Status Bar and Commands
+    ├ù shows correct remaining count in status bar after task completion (96 ms)
+    ├ù sends LM Studio request (stream) with prompt body and logs response (56 ms)
+    ├ù filters streaming metadata and only logs clean model text (116 ms)
+    ├ù ignores malformed streaming chunks but keeps prior good content (31 ms)
+    ├ù does not complete task and shows error when LM Studio is unreachable (30 ms)
+    ΓêÜ shows "No tasks" in status bar when queue is empty (26 ms)
+    ├ù displays disabled message for test command when real tasks exist (35 ms)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ shows correct remaining count in status bar after task completion
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      145 |         // Execute processNextTask command
+      146 |         const processHandler = getRegisteredCommandHandler('coe.processNextTask');
+    > 147 |         expect(processHandler).toBeTruthy();
+          |                                ^
+      148 |         if (!processHandler) return;
+      149 |
+      150 |         await processHandler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:147:32)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ sends LM Studio request (stream) with prompt body and logs response
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      198 |
+      199 |         const handler = getRegisteredCommandHandler('coe.processNextTask');
+    > 200 |         expect(handler).toBeTruthy();
+          |                         ^
+      201 |         if (!handler) return;
+      202 |
+      203 |         await handler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:200:25)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ filters streaming metadata and only logs clean model text
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      272 |
+      273 |         const handler = getRegisteredCommandHandler('coe.processNextTask');
+    > 274 |         expect(handler).toBeTruthy();
+          |                         ^
+      275 |         if (!handler) return;
+      276 |
+      277 |         await handler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:274:25)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ ignores malformed streaming chunks but keeps prior good content
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      330 |
+      331 |         const handler = getRegisteredCommandHandler('coe.processNextTask');
+    > 332 |         expect(handler).toBeTruthy();
+          |                         ^
+      333 |         if (!handler) return;
+      334 |
+      335 |         await handler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:332:25)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ does not complete task and shows error when LM Studio is unreachable
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      371 |
+      372 |         const handler = getRegisteredCommandHandler('coe.processNextTask');
+    > 373 |         expect(handler).toBeTruthy();
+          |                         ^
+      374 |         if (!handler) return;
+      375 |
+      376 |         await handler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:373:25)
+
+  ΓùÅ COE Status Bar and Commands ΓÇ║ displays disabled message for test command when real tasks exist
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      429 |
+      430 |         const testHandler = getRegisteredCommandHandler('coe.testOrchestrator');
+    > 431 |         expect(testHandler).toBeTruthy();
+          |                             ^
+      432 |         if (!testHandler) return;
+      433 |
+      434 |         await testHandler();
+
+      at Object.<anonymous> (tests/extension.statusBar.test.ts:431:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 1 passed, 7 total
+Snapshots:   0 total
+Time:        2.893 s, estimated 4 s
+Ran all test suites matching /tests\\extension.statusBar.test.ts/i.

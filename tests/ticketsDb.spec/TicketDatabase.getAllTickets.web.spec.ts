@@ -16,10 +16,10 @@ describe('TicketDatabase.getAllTickets', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-  it('should return tickets from fallbackStore when useFallback is true', async () => {
+    it('should return tickets from fallbackStore when useFallback is true', async () => {
     const mockTickets = [
-      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date(), updated_at: new Date() },
-      { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date(), updated_at: new Date() },
+      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
+      { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date('2023-01-02T00:00:00Z'), updated_at: new Date('2023-01-02T00:00:00Z') },
     ];
     (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
     (ticketDb as unknown as { fallbackStore: Map<string, typeof mockTickets[0]> }).fallbackStore = new Map(
@@ -32,10 +32,10 @@ describe('TicketDatabase.getAllTickets', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-  it('should query the database when useFallback is false', async () => {
+    it('should query the database when useFallback is false', async () => {
     const mockRows = [
-      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date(), updated_at: new Date() },
-      { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date(), updated_at: new Date() },
+      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
+      { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date('2023-01-02T00:00:00Z'), updated_at: new Date('2023-01-02T00:00:00Z') },
     ];
     const mockDb = {
       all: jest.fn((sql: string, params: unknown[], callback: (err: Error | null, rows: typeof mockRows | null) => void) => {
@@ -57,9 +57,9 @@ describe('TicketDatabase.getAllTickets', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-  it('should return fallbackStore tickets if database query fails', async () => {
+    it('should return fallbackStore tickets if database query fails', async () => {
     const mockTickets = [
-      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date(), updated_at: new Date() },
+      { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
     ];
     const mockDb = {
       all: jest.fn((sql: string, params: unknown[], callback: (err: Error | null, rows: null) => void) => {
@@ -78,7 +78,7 @@ describe('TicketDatabase.getAllTickets', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-  it('should reject with an error if the database is not initialized', async () => {
+    it('should reject with an error if the database is not initialized', async () => {
     (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
     (ticketDb as unknown as { db: null }).db = null;
 

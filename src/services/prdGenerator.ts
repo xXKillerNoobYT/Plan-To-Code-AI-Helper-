@@ -303,7 +303,6 @@ export class PRDGenerator {
         try {
             const fileConfig = FileConfigManager.getLLMConfig();
             const timeoutSeconds = fileConfig.timeoutSeconds || 300;
-            console.log(`🕐 Using PRD generation timeout: ${timeoutSeconds} seconds from config`);
 
             return {
                 url: fileConfig.url,
@@ -315,7 +314,6 @@ export class PRDGenerator {
         } catch (error) {
             // Fallback to hardcoded defaults if config unavailable
             const fallbackTimeout = 300;
-            console.log(`⚠️  Config unavailable, using fallback timeout: ${fallbackTimeout} seconds`);
             return {
                 url: 'http://192.168.1.205:1234/v1/chat/completions',
                 model: 'mistralai/ministral-3-14b-reasoning',
@@ -326,3 +324,5 @@ export class PRDGenerator {
         }
     }
 }
+
+

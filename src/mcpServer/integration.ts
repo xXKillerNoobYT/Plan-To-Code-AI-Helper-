@@ -128,15 +128,14 @@ export async function exampleUsage(): Promise<void> {
     // Process request
     const responseMessage = await server.processMessage(requestMessage);
 
-    console.log('Request:', requestMessage);
-    console.log('Response:', responseMessage);
 
     // Parse response
     const response = JSON.parse(responseMessage.trim());
     if (response.result) {
-        console.log('Next task:', response.result.task?.title);
-        console.log('Queue length:', response.result.queueLength);
+        // eslint-disable-next-line no-empty
     }
 
     await server.stop();
 }
+
+

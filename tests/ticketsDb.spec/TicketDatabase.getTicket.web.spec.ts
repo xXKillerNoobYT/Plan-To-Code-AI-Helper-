@@ -71,7 +71,7 @@ describe('TicketDatabase - getTicket', () => {
 
         (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
         (ticketDb as unknown as { db: typeof mockDb }).db = mockDb;
-        jest.spyOn(ticketDb as unknown as { rowToTicket: () => unknown }, 'rowToTicket').mockReturnValue({
+        jest.spyOn(ticketDb as unknown as { rowToTicket: (row: typeof mockRow) => unknown }, 'rowToTicket').mockReturnValue({
             ...mockRow,
             thread: [],
             created_at: new Date(mockRow.created_at),

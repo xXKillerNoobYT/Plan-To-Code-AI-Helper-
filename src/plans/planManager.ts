@@ -31,10 +31,8 @@ export class PlanManager {
         try {
             const content = await fs.readFile(this.planPath, 'utf-8');
             this.currentPlan = JSON.parse(content);
-            console.log('Plan Manager: Plan loaded successfully');
             return this.currentPlan;
         } catch (error) {
-            console.error('Plan Manager: Failed to load plan', error);
             return null;
         }
     }
@@ -46,10 +44,8 @@ export class PlanManager {
         try {
             await fs.writeFile(this.planPath, JSON.stringify(plan, null, 2), 'utf-8');
             this.currentPlan = plan;
-            console.log('Plan Manager: Plan saved successfully');
             return true;
         } catch (error) {
-            console.error('Plan Manager: Failed to save plan', error);
             return false;
         }
     }
@@ -66,6 +62,7 @@ export class PlanManager {
      */
     setPlanPath(newPath: string): void {
         this.planPath = newPath;
-        console.log(`Plan Manager: Plan path updated to ${newPath}`);
     }
 }
+
+

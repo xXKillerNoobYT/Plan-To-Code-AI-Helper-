@@ -37,7 +37,7 @@ export type StatusDetails = z.infer<typeof StatusDetailsSchema>;
  * Testing results schema
  */
 export const TestingSchema = z.object({
-    testsAdded: z.boolean(),
+    testsAdded: z.boolean().optional().default(false),
     testFileCreated: z.string().optional(),
     testsPassed: z.boolean(),
     testsFailed: z.number().min(0),
@@ -408,11 +408,7 @@ export async function reportTaskStatus(
 
     // Check if task is already done
     if (task.status === 'done' && validatedParams.status === 'done') {
-        throw new MCPProtocolError(
-            MCPErrorCode.TASK_ALREADY_IN_PROGRESS,
-            `Task ${validatedParams.taskId} is already marked as done`,
-            { taskId: validatedParams.taskId, currentStatus: task.status }
-        );
+        // Idempotent update: allow repeated completion reports without error
     }
 
     // Update task status in queue
@@ -460,3 +456,5 @@ export async function reportTaskStatus(
         dashboardUpdate,
     };
 }
+
+

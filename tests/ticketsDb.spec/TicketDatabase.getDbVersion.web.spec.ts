@@ -77,4 +77,18 @@ describe('TicketDatabase - getDbVersion', () => {
             done();
         });
     });
+
+    /** @aiContributed-2026-01-28 */
+    it('should return version 0 if the row has no version property', (done) => {
+        mockDb.get.mockImplementation((query: string, callback: (err: Error | null, row: Record<string, unknown>) => void) => {
+            callback(null, {});
+            return mockDb;
+        });
+
+        (ticketDb as unknown as { getDbVersion: (callback: (err: Error | null, version?: number) => void) => void }).getDbVersion((err: Error | null, version?: number) => {
+            expect(err).toBeNull();
+            expect(version).toBe(0);
+            done();
+        });
+    });
 });

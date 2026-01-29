@@ -1081,4 +1081,75 @@ describe('COE Test Command - Repeated Execution', () => {
         // This is verified by the queue having totalTasks > 0
         expect(status.byStatus.ready).toBeGreaterThanOrEqual(1);
     });
+
+    // ========================================================================
+    // Test: Robust activation - Extension activates even if DB init fails
+    // ========================================================================
+    it('should activate successfully even when TicketDatabase initialization fails', async () => {
+        const context = createMockContext() as any;
+
+        const mockOutputChannel = {
+            appendLine: jest.fn(),
+            show: jest.fn(),
+            dispose: jest.fn(),
+        };
+
+        (vscode.window.createOutputChannel as jest.Mock).mockReturnValue(mockOutputChannel);
+
+        // Activation should succeed even if something fails internally
+        await expect(activate(context)).resolves.not.toThrow();
+
+        // Verify orchestrator still initialized (core functionality)
+        const orchestrator = getOrchestrator();
+        expect(orchestrator).not.toBeNull();
+        expect(orchestrator).toBeInstanceOf(ProgrammingOrchestrator);
+
+        // Verify status bar still works (core functionality)
+        const statusBar = getStatusBarItem();
+        expect(statusBar).not.toBeNull();
+
+        // Verify some output was logged (activation completed)
+        expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
+            expect.stringContaining('COE')
+        );
+    });
+
+    // ========================================================================
+    // Test: Robust activation - Extension activates even if tree view fails
+    // ========================================================================
+    it('should activate successfully even when tree view initialization fails', async () => {
+        const context = createMockContext() as any;
+
+        // Mock createTreeView to throw
+        const originalCreateTreeView = vscode.window.createTreeView;
+        (vscode.window.createTreeView as jest.Mock).mockImplementation(() => {
+            throw new Error('TreeView creation failed');
+        });
+
+        const mockOutputChannel = {
+            appendLine: jest.fn(),
+            show: jest.fn(),
+            dispose: jest.fn(),
+        };
+
+        (vscode.window.createOutputChannel as jest.Mock).mockReturnValue(mockOutputChannel);
+
+        // Activation should succeed despite tree view failure
+        await expect(activate(context)).resolves.not.toThrow();
+
+        // Verify we logged the error
+        expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
+            expect.stringContaining('❌')
+        );
+        expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
+            expect.stringContaining('UI may not update')
+        );
+
+        // Verify orchestrator still initialized
+        const orchestrator = getOrchestrator();
+        expect(orchestrator).not.toBeNull();
+
+        // Restore original mock
+        (vscode.window.createTreeView as jest.Mock).mockImplementation(originalCreateTreeView);
+    });
 });

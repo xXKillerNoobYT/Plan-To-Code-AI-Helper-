@@ -16,21 +16,17 @@ export class FileWatcher {
         this.watcher = vscode.workspace.createFileSystemWatcher(pattern);
 
         this.watcher.onDidChange(uri => {
-            console.log(`File Watcher: File changed - ${uri.fsPath}`);
             this.notifyHandlers(uri);
         });
 
         this.watcher.onDidCreate(uri => {
-            console.log(`File Watcher: File created - ${uri.fsPath}`);
             this.notifyHandlers(uri);
         });
 
         this.watcher.onDidDelete(uri => {
-            console.log(`File Watcher: File deleted - ${uri.fsPath}`);
             this.notifyHandlers(uri);
         });
 
-        console.log('File Watcher: Started watching plan files');
     }
 
     /**
@@ -41,7 +37,6 @@ export class FileWatcher {
             this.watcher.dispose();
             this.watcher = null;
         }
-        console.log('File Watcher: Stopped watching');
     }
 
     /**
@@ -59,7 +54,6 @@ export class FileWatcher {
             try {
                 handler(uri);
             } catch (error) {
-                console.error('File Watcher: Error in change handler', error);
             }
         }
     }
@@ -71,3 +65,5 @@ export class FileWatcher {
         this.stopWatching();
     }
 }
+
+
