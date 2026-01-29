@@ -259,33 +259,25 @@ export class FileConfigManager {
      * Update extension config
      */
     static async updateExtensionConfig(update: Partial<ExtensionConfig>): Promise<void> {
-        try {
-            this.instance.extension = { ...(this.instance.extension || {}), ...update };
-            await this.save();
-        } catch (error) {
-            throw error;
-        }
+        this.instance.extension = { ...(this.instance.extension || {}), ...update };
+        await this.save();
     }
 
     /**
      * Save config to file
      */
     private static async save(): Promise<void> {
-        try {
-            if (!this.configPath) {
-                throw new Error('Config path not initialized');
-            }
-
-            const dir = path.dirname(this.configPath);
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
-            }
-
-            fs.writeFileSync(this.configPath, JSON.stringify(this.instance, null, 2));
-            this.notifyWatchers();
-        } catch (error) {
-            throw error;
+        if (!this.configPath) {
+            throw new Error('Config path not initialized');
         }
+
+        const dir = path.dirname(this.configPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+
+        fs.writeFileSync(this.configPath, JSON.stringify(this.instance, null, 2));
+        this.notifyWatchers();
     }
 
     /**
