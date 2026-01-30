@@ -23,8 +23,8 @@ describe('GitHubAPI - setContext', () => {
       delete: jest.fn(),
       clear: jest.fn(),
       forEach: jest.fn(),
-      [Symbol.iterator]: jest.fn(function* () {
-        return undefined as unknown as IterableIterator<[string, unknown]>;
+      [Symbol.iterator]: jest.fn(() => {
+        return [][Symbol.iterator]() as IterableIterator<[string, unknown]>;
       }),
     } as vscode.EnvironmentVariableCollection;
 
@@ -72,8 +72,8 @@ describe('GitHubAPI - setContext', () => {
         delete: jest.fn(),
         clear: jest.fn(),
         forEach: jest.fn(),
-        [Symbol.iterator]: jest.fn(function* () {
-          return undefined as unknown as IterableIterator<[string, unknown]>;
+        [Symbol.iterator]: jest.fn(() => {
+          return [][Symbol.iterator]() as IterableIterator<[string, unknown]>;
         }),
         getScoped: jest.fn(() => scopedEnvironmentCollection),
       },

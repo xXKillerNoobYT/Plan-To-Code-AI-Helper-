@@ -212,9 +212,15 @@
         }
     },
     "lint-staged": {
-        "*.ts": [
+        "src/**/*.ts": [
             "eslint --fix",
             "tsc --noEmit"
+        ],
+        "tests/**/*.ts": [
+            "eslint --fix"
+        ],
+        "*.ts": [
+            "eslint --fix"
         ]
     }
 }

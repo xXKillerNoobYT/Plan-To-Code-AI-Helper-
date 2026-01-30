@@ -89,7 +89,8 @@ describe('GitHubAPI - SecretStorage Integration', () => {
     // Test 4: Handle authentication failure
     // ========================================================================
     it('should handle authentication failure gracefully', async () => {
-        const Octokit = require('@octokit/rest').Octokit;
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { Octokit } = require('@octokit/rest');
         Octokit.mockImplementationOnce(() => ({
             users: {
                 getAuthenticated: jest.fn().mockRejectedValue(new Error('Bad credentials')),
@@ -139,7 +140,8 @@ describe('GitHubAPI - SecretStorage Integration', () => {
         });
 
         it('should successfully update issue when authenticated', async () => {
-            const Octokit = require('@octokit/rest').Octokit;
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const { Octokit } = require('@octokit/rest');
             Octokit.mockImplementationOnce(() => ({
                 users: {
                     getAuthenticated: jest.fn().mockResolvedValue({ data: { login: 'testuser' } }),
@@ -178,7 +180,8 @@ describe('GitHubAPI - SecretStorage Integration', () => {
         });
 
         it('should successfully list issues when authenticated', async () => {
-            const Octokit = require('@octokit/rest').Octokit;
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const { Octokit } = require('@octokit/rest');
             Octokit.mockImplementationOnce(() => ({
                 users: {
                     getAuthenticated: jest.fn().mockResolvedValue({ data: { login: 'testuser' } }),
@@ -203,7 +206,8 @@ describe('GitHubAPI - SecretStorage Integration', () => {
         });
 
         it('should pass filters to listForRepo', async () => {
-            const Octokit = require('@octokit/rest').Octokit;
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const { Octokit } = require('@octokit/rest');
             const mockListForRepo = jest.fn().mockResolvedValue({ data: [] });
 
             Octokit.mockImplementationOnce(() => ({

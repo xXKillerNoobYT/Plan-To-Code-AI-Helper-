@@ -15,7 +15,9 @@
         "resolveJsonModule": true,
         "moduleResolution": "node",
         "noEmit": true,
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "downlevelIteration": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*"
@@ -23,6 +25,9 @@
     "exclude": [
         "node_modules",
         ".vscode-test",
-        "src/**/tmp.*.web.spec.ts"
+        "src/**/tmp.*.web.spec.ts",
+        "tests/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts"
     ]
 }
