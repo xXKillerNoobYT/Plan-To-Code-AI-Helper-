@@ -113,4 +113,150 @@ describe('GitHubAPI - SecretStorage Integration', () => {
 
         expect(result).toBe(true);
     });
+
+    // ========================================================================
+    // Branch Coverage Tests for updateIssue and listIssues
+    // ========================================================================
+
+    describe('updateIssue', () => {
+        it('should throw error when not authenticated', async () => {
+            const apiNotAuth = new GitHubAPI();
+
+            await expect(
+                apiNotAuth.updateIssue('owner', 'repo', 1, { title: 'Updated' })
+            ).rejects.toThrow('Not authenticated');
+        });
+
+        it('should throw error when octokit is null', async () => {
+            const api = new GitHubAPI();
+            // Authenticate but then set octokit to null to test branch
+            await api.authenticate('ghp_token');
+            (api as any).octokit = null;
+
+            await expect(
+                api.updateIssue('owner', 'repo', 1, { title: 'Updated' })
+            ).rejects.toThrow('Not authenticated');
+        });
+
+        it('should successfully update issue when authenticated', async () => {
+            const Octokit = require('@octokit/rest').Octokit;
+            Octokit.mockImplementationOnce(() => ({
+                users: {
+                    getAuthenticated: jest.fn().mockResolvedValue({ data: { login: 'testuser' } }),
+                },
+                issues: {
+                    update: jest.fn().mockResolvedValue({ data: { id: 1, title: 'Updated Issue' } }),
+                },
+            }));
+
+            const api = new GitHubAPI();
+            await api.authenticate('ghp_token');
+
+            const result = await api.updateIssue('owner', 'repo', 1, { title: 'Updated Issue' });
+
+            expect(result).toEqual({ id: 1, title: 'Updated Issue' });
+        });
+    });
+
+    describe('listIssues', () => {
+        it('should throw error when not authenticated', async () => {
+            const apiNotAuth = new GitHubAPI();
+
+            await expect(
+                apiNotAuth.listIssues('owner', 'repo')
+            ).rejects.toThrow('Not authenticated');
+        });
+
+        it('should throw error when octokit is null but isAuthenticated is true', async () => {
+            const api = new GitHubAPI();
+            (api as any).isAuthenticated = true; // Force true
+            (api as any).octokit = null; // But octokit is null
+
+            await expect(
+                api.listIssues('owner', 'repo')
+            ).rejects.toThrow('Not authenticated');
+        });
+
+        it('should successfully list issues when authenticated', async () => {
+            const Octokit = require('@octokit/rest').Octokit;
+            Octokit.mockImplementationOnce(() => ({
+                users: {
+                    getAuthenticated: jest.fn().mockResolvedValue({ data: { login: 'testuser' } }),
+                },
+                issues: {
+                    listForRepo: jest.fn().mockResolvedValue({
+                        data: [
+                            { id: 1, title: 'Issue 1' },
+                            { id: 2, title: 'Issue 2' }
+                        ]
+                    }),
+                },
+            }));
+
+            const api = new GitHubAPI();
+            await api.authenticate('ghp_token');
+
+            const result = await api.listIssues('owner', 'repo');
+
+            expect(result).toHaveLength(2);
+            expect(result[0].title).toBe('Issue 1');
+        });
+
+        it('should pass filters to listForRepo', async () => {
+            const Octokit = require('@octokit/rest').Octokit;
+            const mockListForRepo = jest.fn().mockResolvedValue({ data: [] });
+
+            Octokit.mockImplementationOnce(() => ({
+                users: {
+                    getAuthenticated: jest.fn().mockResolvedValue({ data: { login: 'testuser' } }),
+                },
+                issues: {
+                    listForRepo: mockListForRepo,
+                },
+            }));
+
+            const api = new GitHubAPI();
+            await api.authenticate('ghp_token');
+
+            await api.listIssues('owner', 'repo', { state: 'open', labels: 'bug' });
+
+            expect(mockListForRepo).toHaveBeenCalledWith({
+                owner: 'owner',
+                repo: 'repo',
+                state: 'open',
+                labels: 'bug'
+            });
+        });
+    });
+
+    describe('getIssue', () => {
+        it('should throw Not implemented error', async () => {
+            const api = new GitHubAPI();
+
+            await expect(
+                api.getIssue('owner', 'repo', 1)
+            ).rejects.toThrow('Not implemented');
+        });
+    });
+
+    describe('createIssue', () => {
+        it('should throw Not implemented error', async () => {
+            const api = new GitHubAPI();
+
+            await expect(
+                api.createIssue('owner', 'repo', 'Title', 'Body')
+            ).rejects.toThrow('Not implemented');
+        });
+    });
+
+    describe('setContext', () => {
+        it('should set context correctly', () => {
+            const api = new GitHubAPI();
+            const context = {} as vscode.ExtensionContext;
+
+            api.setContext(context);
+
+            expect((api as any).context).toBe(context);
+        });
+    });
 });

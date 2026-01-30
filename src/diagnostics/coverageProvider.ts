@@ -85,7 +85,7 @@ export class CoverageDiagnosticProvider {
                 const lineCoverage = totalLines > 0 ? (coveredLines / totalLines) * 100 : 100;
 
                 if (lineCoverage < this.coverageThreshold) {
-                    const fileUri = vscode.Uri.file(filePath);
+                    const _fileUri = vscode.Uri.file(filePath);
                     const gap = this.coverageThreshold - lineCoverage;
 
                     const diagnostic = new vscode.Diagnostic(

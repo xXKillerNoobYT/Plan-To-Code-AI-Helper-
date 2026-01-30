@@ -13,7 +13,9 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "noEmit": true,
+        "allowImportingTsExtensions": true
     },
     "include": [
         "src/**/*"

@@ -192,9 +192,7 @@ function filterTasks(
     // Apply status filter
     switch (filter) {
         case 'ready':
-            filtered = filtered.filter(t =>
-                t.status === 'ready' || t.status === 'pending'
-            );
+            filtered = filtered.filter(t => t.status === 'ready');
             break;
         case 'blocked':
             filtered = filtered.filter(t => t.status === 'blocked');

@@ -1,4 +1,4 @@
-// ./integration.initializeMCPServer.gptgen.web.spec.ts
+// ./integration.web.spec.ts
 import * as vscode from 'vscode';
 import { initializeMCPServer } from '../../src/mcpServer/integration';
 import { MCPServer } from '../../src/mcpServer/server';
@@ -13,7 +13,7 @@ jest.mock('vscode', () => ({
     },
 }));
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('initializeMCPServer', () => {
     let context: vscode.ExtensionContext;
 
@@ -23,11 +23,11 @@ describe('initializeMCPServer', () => {
         } as unknown as vscode.ExtensionContext;
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should initialize the MCP server and register tools', async () => {
         const mockStart = jest.fn();
         const mockRegisterTool = jest.fn();
-        const mockGetRegisteredTools = jest.fn(() => ['getNextTask', 'reportTaskStatus']);
+        const mockGetRegisteredTools = jest.fn(() => ['getNextTask', 'getErrors', 'reportTaskStatus']);
         const mockStop = jest.fn();
 
         (MCPServer as jest.Mock).mockImplementation(() => ({
@@ -40,8 +40,9 @@ describe('initializeMCPServer', () => {
         const server = await initializeMCPServer(context);
 
         expect(vscode.window.createOutputChannel).toHaveBeenCalledWith('COE MCP Server');
-        expect(mockRegisterTool).toHaveBeenCalledTimes(6);
+        expect(mockRegisterTool).toHaveBeenCalledTimes(7);
         expect(mockRegisterTool).toHaveBeenCalledWith('getNextTask', expect.any(Function));
+        expect(mockRegisterTool).toHaveBeenCalledWith('getErrors', expect.any(Function));
         expect(mockRegisterTool).toHaveBeenCalledWith('reportTaskStatus', expect.any(Function));
         expect(mockRegisterTool).toHaveBeenCalledWith('askQuestion', expect.any(Function));
         expect(mockRegisterTool).toHaveBeenCalledWith('reportTestFailure', expect.any(Function));
@@ -50,10 +51,10 @@ describe('initializeMCPServer', () => {
         expect(mockStart).toHaveBeenCalled();
         expect(mockGetRegisteredTools).toHaveBeenCalled();
         expect(context.subscriptions).toHaveLength(2);
-        expect(server).toEqual(expect.objectContaining({ start: expect.any(Function) })); // Corrected assertion
+        expect(server).toEqual(expect.objectContaining({ start: expect.any(Function) }));
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should add server stop to context subscriptions', async () => {
         const mockStop = jest.fn();
         (MCPServer as jest.Mock).mockImplementation(() => ({

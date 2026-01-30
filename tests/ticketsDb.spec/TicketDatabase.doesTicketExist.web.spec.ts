@@ -12,7 +12,7 @@ jest.mock('sqlite3', () => {
     };
 });
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase - doesTicketExist', () => {
     let ticketDb: TicketDatabase;
     let mockDb: jest.Mocked<Database>;
@@ -29,7 +29,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         jest.clearAllMocks();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return true if the ticket exists in the database', async () => {
         mockDb.get.mockImplementation((sql: string, params: unknown[], callback: (err: Error | null, row: unknown) => void) => {
             callback(null, { exists: 1 });
@@ -45,7 +45,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return false if the ticket does not exist in the database', async () => {
         mockDb.get.mockImplementation((sql: string, params: unknown[], callback: (err: Error | null, row: unknown) => void) => {
             callback(null, null);
@@ -61,7 +61,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return false if there is a database error', async () => {
         mockDb.get.mockImplementation((sql: string, params: unknown[], callback: (err: Error | null, row: unknown) => void) => {
             callback(new Error('Database error'), null);
@@ -72,7 +72,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         expect(result).toBe(false);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return false if the database is not initialized', async () => {
         (ticketDb as unknown as { db: null }).db = null;
 
@@ -80,7 +80,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         expect(result).toBe(false);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return true if the ticket exists in the fallback store when useFallback is true', async () => {
         (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
         (ticketDb as unknown as { fallbackStore: Map<string, unknown> }).fallbackStore = new Map([['ticket123', {}]]);
@@ -89,7 +89,7 @@ describe('TicketDatabase - doesTicketExist', () => {
         expect(result).toBe(true);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return false if the ticket does not exist in the fallback store when useFallback is true', async () => {
         (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
         (ticketDb as unknown as { fallbackStore: Map<string, unknown> }).fallbackStore = new Map();

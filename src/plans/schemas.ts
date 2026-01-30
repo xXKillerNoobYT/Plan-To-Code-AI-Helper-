@@ -56,7 +56,7 @@ export interface Metadata {
  */
 export function validatePlan(plan: any): plan is PlanSchema {
     // TODO: Implement comprehensive validation
-    return (
+    return Boolean(
         plan &&
         typeof plan.version === 'string' &&
         typeof plan.project === 'object' &&

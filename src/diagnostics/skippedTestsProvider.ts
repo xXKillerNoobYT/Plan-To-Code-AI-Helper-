@@ -105,7 +105,7 @@ export class SkippedTestsDiagnosticProvider {
     /**
      * Scan file content for skipped test patterns
      */
-    private scanForSkippedTests(content: string, uri: vscode.Uri): vscode.Diagnostic[] {
+    private scanForSkippedTests(content: string, _uri: vscode.Uri): vscode.Diagnostic[] {
         const diagnostics: vscode.Diagnostic[] = [];
         const lines = content.split('\n');
 
@@ -177,7 +177,7 @@ export class SkippedTestsDiagnosticProvider {
 
             for (const { file, line, pattern, match } of skippedTests) {
                 const fullPath = path.join(workspaceRoot, file);
-                const fileUri = vscode.Uri.file(fullPath);
+                const _fileUri = vscode.Uri.file(fullPath);
 
                 const severity = pattern === '.only'
                     ? vscode.DiagnosticSeverity.Error

@@ -1,7 +1,7 @@
 // ./server.web.spec.ts
 import { MCPServer } from '../../src/mcpServer/server';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('MCPServer - getDiagnostics', () => {
     let server: MCPServer;
     const mockConfig = {
@@ -14,7 +14,7 @@ describe('MCPServer - getDiagnostics', () => {
         server = new MCPServer(mockConfig);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return correct diagnostics when the server is not running and no tools are registered', () => {
         const diagnostics = server.getDiagnostics();
 
@@ -30,9 +30,10 @@ describe('MCPServer - getDiagnostics', () => {
         });
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return correct diagnostics when the server is running and tools are registered', () => {
-        server['isRunning'] = true; // Accessing private property for testing
+        // Use type assertion to avoid using 'any'
+        (server as unknown as { isRunning: boolean }).isRunning = true;
         server.registerTool('tool1', jest.fn());
         server.registerTool('tool2', jest.fn());
 

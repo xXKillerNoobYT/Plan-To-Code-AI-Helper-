@@ -54,6 +54,8 @@ export class FileWatcher {
             try {
                 handler(uri);
             } catch (error) {
+                // Handler error - continue with other handlers
+                void error;
             }
         }
     }

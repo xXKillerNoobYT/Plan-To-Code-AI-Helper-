@@ -25,7 +25,6 @@ import {
     MCPResponse,
     MCPErrorCode,
     MCPProtocolError,
-    validateRequest,
     createSuccessResponse,
     createErrorResponse,
     errorToResponse,

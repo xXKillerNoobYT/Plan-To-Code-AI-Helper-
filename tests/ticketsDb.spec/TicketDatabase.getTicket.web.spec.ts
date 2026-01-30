@@ -2,7 +2,7 @@
 import { TicketDatabase } from '../../src/db/ticketsDb';
 import { jest } from '@jest/globals';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase - getTicket', () => {
     let ticketDb: TicketDatabase;
 
@@ -15,7 +15,7 @@ describe('TicketDatabase - getTicket', () => {
         jest.restoreAllMocks();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return a ticket from the fallback store if useFallback is true', async () => {
         const mockTicket = {
             ticket_id: '123',
@@ -38,7 +38,7 @@ describe('TicketDatabase - getTicket', () => {
         expect(result).toEqual(mockTicket);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return null if the ticket is not found in the fallback store when useFallback is true', async () => {
         (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
         (ticketDb as unknown as { fallbackStore: Map<string, unknown> }).fallbackStore = new Map();
@@ -47,7 +47,7 @@ describe('TicketDatabase - getTicket', () => {
         expect(result).toBeNull();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return a ticket from the database if useFallback is false and the ticket exists', async () => {
         const mockRow = {
             ticket_id: '123',
@@ -71,7 +71,7 @@ describe('TicketDatabase - getTicket', () => {
 
         (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
         (ticketDb as unknown as { db: typeof mockDb }).db = mockDb;
-        jest.spyOn(ticketDb as unknown as { rowToTicket: (row: typeof mockRow) => unknown }, 'rowToTicket').mockReturnValue({
+        jest.spyOn(ticketDb as unknown as { rowToTicket: () => unknown }, 'rowToTicket').mockReturnValue({
             ...mockRow,
             thread: [],
             created_at: new Date(mockRow.created_at),
@@ -92,7 +92,7 @@ describe('TicketDatabase - getTicket', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return null if the ticket does not exist in the database', async () => {
         const mockDb = {
             get: jest.fn((sql: string, params: unknown[], callback: (err: Error | null, row: unknown) => void) => {
@@ -112,7 +112,7 @@ describe('TicketDatabase - getTicket', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return a ticket from the fallback store if the database query fails', async () => {
         const mockTicket = {
             ticket_id: '123',
@@ -147,7 +147,7 @@ describe('TicketDatabase - getTicket', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should reject with an error if the database is not initialized', async () => {
         (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
         (ticketDb as unknown as { db: null }).db = null;

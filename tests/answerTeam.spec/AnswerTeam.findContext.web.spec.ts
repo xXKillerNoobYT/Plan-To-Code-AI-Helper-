@@ -1,7 +1,7 @@
 // ./answerTeam.AnswerTeam.findContext.gptgen.web.spec.ts
 import { AnswerTeam } from '../../src/agents/answerTeam';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('AnswerTeam - findContext', () => {
   let answerTeam: AnswerTeam;
 
@@ -9,18 +9,25 @@ describe('AnswerTeam - findContext', () => {
     answerTeam = new AnswerTeam();
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should log the correct message when findContext is called', async () => {
-    const taskId = '12345';
+  /** @aiContributed-2026-01-29 */
+    it('should return null when findContext is called with a valid taskId', async () => {
+    const taskId = 'validTaskId';
     const result = await answerTeam.findContext(taskId);
 
-    // Verify function executes without error
     expect(result).toBeNull();
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should return null as the default implementation', async () => {
-    const taskId = '12345';
+  /** @aiContributed-2026-01-29 */
+    it('should handle empty taskId gracefully and return null', async () => {
+    const taskId = '';
+    const result = await answerTeam.findContext(taskId);
+
+    expect(result).toBeNull();
+  });
+
+  /** @aiContributed-2026-01-29 */
+    it('should handle undefined taskId gracefully and return null', async () => {
+    const taskId = undefined as unknown as string;
     const result = await answerTeam.findContext(taskId);
 
     expect(result).toBeNull();

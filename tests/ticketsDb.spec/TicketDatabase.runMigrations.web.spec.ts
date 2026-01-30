@@ -42,7 +42,7 @@ type MockDatabase = {
     get: jest.Mock;
 };
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase - runMigrations', () => {
     let ticketDb: TicketDatabase;
 
@@ -56,16 +56,17 @@ describe('TicketDatabase - runMigrations', () => {
         jest.clearAllMocks();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should skip migrations if no database connection exists', async () => {
         (ticketDb as unknown as { db: MockDatabase | null }).db = null;
 
         await (ticketDb as unknown as { runMigrations: () => Promise<void> }).runMigrations();
 
-        // Migration skipped when database is null
+        const db = (ticketDb as unknown as { db: MockDatabase | null }).db;
+        expect(db).toBeNull();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should create version tracking table and initialize version', async () => {
         await (ticketDb as unknown as { runMigrations: () => Promise<void> }).runMigrations();
 
@@ -80,7 +81,7 @@ describe('TicketDatabase - runMigrations', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should create tickets table', async () => {
         await (ticketDb as unknown as { runMigrations: () => Promise<void> }).runMigrations();
 
@@ -91,7 +92,7 @@ describe('TicketDatabase - runMigrations', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should create completed_tasks table and update version if version is 0', async () => {
         await (ticketDb as unknown as { runMigrations: () => Promise<void> }).runMigrations();
 
@@ -106,7 +107,7 @@ describe('TicketDatabase - runMigrations', () => {
         );
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should complete migrations successfully', async () => {
         await (ticketDb as unknown as { runMigrations: () => Promise<void> }).runMigrations();
 

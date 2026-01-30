@@ -54,10 +54,10 @@ export const commands = {
 };
 
 export const workspace = {
-    getConfiguration: jest.fn(() => ({ 
+    getConfiguration: jest.fn(() => ({
         get: jest.fn((_key: string, defaultValue?: any) => defaultValue),
         has: jest.fn(() => false),
-        update: jest.fn() 
+        update: jest.fn()
     })),
     onDidChangeConfiguration: jest.fn(() => ({ dispose: noop })),
     onDidSaveTextDocument: jest.fn(() => ({ dispose: noop })),
@@ -78,7 +78,29 @@ export const workspace = {
 
 export const env = { openExternal: jest.fn() };
 
-export const Uri = { parse: (value: string) => ({ fsPath: value }) };
+export const Uri = {
+    parse: (value: string) => ({
+        fsPath: value,
+        path: value,
+        toString: () => value
+    }),
+    file: (path: string) => ({
+        fsPath: path,
+        path: path,
+        scheme: 'file',
+        toString: () => `file://${path}`
+    }),
+    joinPath: (base: any, ...pathSegments: string[]) => {
+        const basePath = base.fsPath || base.path || base.toString();
+        const joined = [basePath, ...pathSegments].join('/').replace(/\/+/g, '/');
+        return {
+            fsPath: joined,
+            path: joined,
+            scheme: base.scheme || 'file',
+            toString: () => joined
+        };
+    }
+};
 
 export const TreeItemCollapsibleState = { None: 0, Collapsed: 1, Expanded: 2 } as const;
 
@@ -133,6 +155,17 @@ export const ProgressLocation = { Notification: 15 } as const;
 
 export const StatusBarAlignment = { Left: 1, Right: 2 } as const;
 
+export const ExtensionMode = {
+    Production: 1,
+    Development: 2,
+    Test: 3,
+} as const;
+
+export const ExtensionKind = {
+    UI: 1,
+    Workspace: 2,
+} as const;
+
 export const languages = {
     createDiagnosticCollection: jest.fn(() => ({
         set: jest.fn(),
@@ -154,4 +187,7 @@ export default {
     ProgressLocation,
     Disposable,
     languages,
+    StatusBarAlignment,
+    ExtensionMode,
+    ExtensionKind,
 };

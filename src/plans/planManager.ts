@@ -7,11 +7,30 @@ import * as vscode from 'vscode';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+export interface PlanTask {
+    taskId?: string;
+    title?: string;
+    description?: string;
+    priority?: string;
+    status?: string;
+    dependencies?: string[];
+    subtasks?: string[];
+    [key: string]: unknown;
+}
+
+export interface PlanMetadata {
+    created?: string;
+    author?: string;
+    version?: string;
+    totalTasks?: number;
+    [key: string]: unknown;
+}
+
 export interface PlanData {
     version: string;
     project: string;
-    tasks: any[];
-    metadata?: any;
+    tasks: PlanTask[];
+    metadata?: PlanMetadata;
 }
 
 export class PlanManager {

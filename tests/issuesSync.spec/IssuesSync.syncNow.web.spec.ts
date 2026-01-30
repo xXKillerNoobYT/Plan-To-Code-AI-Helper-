@@ -6,12 +6,15 @@ jest.mock('../../src/github/api', () => {
   return {
     ...jest.requireActual('../../src/github/api'),
     GitHubAPI: jest.fn().mockImplementation(() => ({
-      performSync: jest.fn(),
+      getIssue: jest.fn(),
+      createIssue: jest.fn(),
+      updateIssue: jest.fn(),
+      listIssues: jest.fn(),
     })),
   };
 });
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('IssuesSync', () => {
   let issuesSync: IssuesSync;
   let githubAPI: GitHubAPI;
@@ -21,7 +24,7 @@ describe('IssuesSync', () => {
     githubAPI = new GitHubAPI();
   });
 
-  /** @aiContributed-2026-01-28 */
+  /** @aiContributed-2026-01-29 */
   it('should call performSync when syncNow is invoked', async () => {
     const performSyncSpy = jest
       .spyOn(issuesSync as unknown as { performSync: (api: GitHubAPI) => Promise<void> }, 'performSync')

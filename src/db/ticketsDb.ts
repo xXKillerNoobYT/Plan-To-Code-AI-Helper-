@@ -139,7 +139,7 @@ export class TicketDatabase {
      * Initialize SQLite database connection
      */
     private async initializeSqlite(dbPath: string): Promise<void> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             try {
                 this.db = new sqlite3.Database(dbPath, (err) => {
                     if (err) {
@@ -622,7 +622,7 @@ export class TicketDatabase {
                 return;
             } catch (error) {
                 const errMsg = error instanceof Error ? error.message : String(error);
-                const isEBUSY = errMsg.includes('EBUSY') || errMsg.includes('locked');
+                const _isEBUSY = errMsg.includes('EBUSY') || errMsg.includes('locked');
 
                 if (attempt < maxAttempts) {
                     // Retry with exponential backoff
@@ -749,6 +749,8 @@ export class TicketDatabase {
                 );
             });
         } catch (error) {
+            // Fallback error handler - connection cleanup
+            void error;
         }
     }
 

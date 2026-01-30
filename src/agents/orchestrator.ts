@@ -16,7 +16,7 @@ export class ProgrammingOrchestrator {
     /**
      * Coordinate task execution across teams
      */
-    async executeTask(taskId: string): Promise<void> {
+    async executeTask(_taskId: string): Promise<void> {
 
         // TODO: Route to appropriate team
         // TODO: Monitor progress

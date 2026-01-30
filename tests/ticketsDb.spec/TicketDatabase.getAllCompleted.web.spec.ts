@@ -2,7 +2,7 @@
 import { TicketDatabase } from '../../src/db/ticketsDb';
 import { jest } from '@jest/globals';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase - getAllCompleted', () => {
     let ticketDb: TicketDatabase;
 
@@ -13,9 +13,10 @@ describe('TicketDatabase - getAllCompleted', () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+        jest.useRealTimers();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should return tasks from fallback store when useFallback is true', async () => {
         const mockTasks = [
             { id: '1', status: 'completed', completed_at: '2023-01-01T00:00:00.000Z' },
@@ -31,7 +32,7 @@ describe('TicketDatabase - getAllCompleted', () => {
         expect(result).toEqual([mockTasks[0]]);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should filter tasks by minDaysAgo when useFallback is true', async () => {
         const mockDate = new Date('2023-01-10T00:00:00.000Z');
         jest.useFakeTimers().setSystemTime(mockDate);
@@ -50,7 +51,7 @@ describe('TicketDatabase - getAllCompleted', () => {
         expect(result).toEqual([mockTasks[1]]);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should query the database when useFallback is false', async () => {
         const mockRows = [
             { id: '1', status: 'completed', completed_at: '2023-01-01T00:00:00.000Z' },
@@ -74,7 +75,7 @@ describe('TicketDatabase - getAllCompleted', () => {
         expect(result).toEqual(mockRows);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should reject with an error if the database query fails', async () => {
         const mockDb = {
             all: jest.fn((query: string, params: unknown[], callback: (err: Error | null, rows: null) => void) =>
@@ -85,5 +86,35 @@ describe('TicketDatabase - getAllCompleted', () => {
         (ticketDb as unknown as { db: typeof mockDb }).db = mockDb;
 
         await expect(ticketDb.getAllCompleted()).rejects.toThrow('Query failed');
+    });
+
+    /** @aiContributed-2026-01-29 */
+    it('should return an empty array if fallback store is empty', async () => {
+        (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
+        (ticketDb as unknown as { fallbackCompletedTasks: Map<string, unknown> }).fallbackCompletedTasks = new Map();
+
+        const result = await ticketDb.getAllCompleted();
+
+        expect(result).toEqual([]);
+    });
+
+    /** @aiContributed-2026-01-29 */
+    it('should handle filters correctly when both status and minDaysAgo are provided', async () => {
+        const mockDate = new Date('2023-01-10T00:00:00.000Z');
+        jest.useFakeTimers().setSystemTime(mockDate);
+
+        const mockTasks = [
+            { id: '1', status: 'completed', completed_at: '2023-01-01T00:00:00.000Z' },
+            { id: '2', status: 'completed', completed_at: '2023-01-08T00:00:00.000Z' },
+            { id: '3', status: 'failed', completed_at: '2023-01-09T00:00:00.000Z' },
+        ];
+        (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
+        (ticketDb as unknown as { fallbackCompletedTasks: Map<string, typeof mockTasks[0]> }).fallbackCompletedTasks = new Map(
+            mockTasks.map(task => [task.id, task])
+        );
+
+        const result = await ticketDb.getAllCompleted({ status: 'completed', minDaysAgo: 5 });
+
+        expect(result).toEqual([mockTasks[1]]);
     });
 });

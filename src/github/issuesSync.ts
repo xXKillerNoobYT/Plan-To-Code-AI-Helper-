@@ -39,7 +39,7 @@ export class IssuesSync {
     /**
      * Perform a single sync operation
      */
-    private async performSync(githubAPI: GitHubAPI): Promise<void> {
+    private async performSync(_githubAPI: GitHubAPI): Promise<void> {
 
         try {
             // TODO: Fetch latest issues from GitHub

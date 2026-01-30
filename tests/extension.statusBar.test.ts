@@ -205,10 +205,10 @@ describe('COE Status Bar and Commands', () => {
         const fetchCalls = fetchMock.mock.calls;
         expect(fetchCalls.length).toBe(1);
         const [url, init] = fetchCalls[0] as [string, RequestInit];
-        expect(url).toBe('http://192.168.1.205:1234/v1/chat/completions');
+        expect(url).toBe('http://localhost:1234/v1/chat/completions');
 
         const body = JSON.parse((init.body as string) || '{}');
-        expect(body.model).toBe('mistralai/ministral-3-14b-reasoning');
+        expect(body.model).toBe('mistral-7b');
         expect(body.messages[1].content).toContain(task.title);
 
         // Check that response-related logs exist (new format uses separators and "Received response")

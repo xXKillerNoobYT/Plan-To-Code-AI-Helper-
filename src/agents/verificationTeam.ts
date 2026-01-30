@@ -7,7 +7,7 @@ export class VerificationTeam {
     /**
      * Verify task completion
      */
-    async verifyTask(taskId: string): Promise<{ passed: boolean; issues: string[] }> {
+    async verifyTask(_taskId: string): Promise<{ passed: boolean; issues: string[] }> {
 
         const issues: string[] = [];
 
@@ -25,7 +25,7 @@ export class VerificationTeam {
     /**
      * Run automated verification checks
      */
-    async runAutomatedChecks(taskId: string): Promise<boolean> {
+    async runAutomatedChecks(_taskId: string): Promise<boolean> {
 
         // TODO: Run unit tests
         // TODO: Run integration tests
@@ -38,7 +38,7 @@ export class VerificationTeam {
     /**
      * Generate visual verification checklist
      */
-    generateVisualChecklist(taskId: string): string[] {
+    generateVisualChecklist(_taskId: string): string[] {
         // TODO: Create checklist based on task type
         // TODO: Include UI verification items if applicable
         // TODO: Include manual test steps

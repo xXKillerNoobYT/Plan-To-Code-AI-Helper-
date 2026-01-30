@@ -247,12 +247,8 @@ export class FileConfigManager {
      * Update LLM config
      */
     static async updateLLMConfig(update: Partial<LLMConfig>): Promise<void> {
-        try {
-            this.instance.llm = { ...this.instance.llm, ...update };
-            await this.save();
-        } catch (error) {
-            throw error;
-        }
+        this.instance.llm = { ...this.instance.llm, ...update };
+        await this.save();
     }
 
     /**

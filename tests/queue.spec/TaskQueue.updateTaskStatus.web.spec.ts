@@ -1,5 +1,5 @@
 // ./queue.web.spec.ts
-import { TaskQueue, Task } from '../../src/tasks/queue.ts';
+import { TaskQueue, Task } from '../../src/tasks/queue';
 
 /** @aiContributed-2026-01-28 */
 describe('TaskQueue - updateTaskStatus', () => {
@@ -11,18 +11,16 @@ describe('TaskQueue - updateTaskStatus', () => {
 
   /** @aiContributed-2026-01-28 */
   it('should update the status and updatedAt of an existing task', () => {
-    const mockTask: Task = { id: '1', status: 'pending', updatedAt: new Date('2023-01-01T00:00:00Z') };
-    jest.spyOn(global, 'Date').mockImplementation(() => new Date('2023-10-01T12:00:00Z') as any);
+    const mockTask: Task = { taskId: '1', status: 'pending', updatedAt: new Date('2023-01-01T00:00:00Z'), title: 'Test Task', description: 'Test', priority: 'medium', dependencies: [], createdAt: new Date('2023-01-01T00:00:00Z') };
+    const beforeUpdate = new Date();
 
     taskQueue.addTask(mockTask);
-    taskQueue.updateTaskStatus('1', 'done');
+    taskQueue.updateTaskStatus(mockTask.taskId, 'done');
 
-    const updatedTask = taskQueue.getAllTasks().find((task) => task.id === '1');
+    const updatedTask = taskQueue.getAllTasks().find((task) => task.taskId === mockTask.taskId);
     expect(updatedTask).toBeDefined();
     expect(updatedTask?.status).toBe('done');
-    expect(updatedTask?.updatedAt).toEqual(new Date('2023-10-01T12:00:00Z'));
-
-    jest.restoreAllMocks();
+    expect(updatedTask?.updatedAt.getTime()).toBeGreaterThanOrEqual(beforeUpdate.getTime());
   });
 
   /** @aiContributed-2026-01-28 */

@@ -28,7 +28,7 @@ export function migrateSchema(db: any): void {
 		db.exec(`INSERT OR IGNORE INTO db_version (version) VALUES (0)`);
 
 		const currentVersion = getDbVersion(db);
-		const targetVersion = 1;
+		const _targetVersion = 1;
 
 		// Migration v0 -> v1: Add completed_tasks table
 		if (currentVersion < 1) {

@@ -7,7 +7,7 @@ export class PlanningTeam {
     /**
      * Generate tasks from a requirement or user story
      */
-    async generateTasks(requirement: string): Promise<any[]> {
+    async generateTasks(_requirement: string): Promise<any[]> {
         // TODO: Analyze requirement
         // TODO: Break down into atomic tasks
         // TODO: Identify dependencies
@@ -19,7 +19,7 @@ export class PlanningTeam {
     /**
      * Refine an existing task (make it more specific)
      */
-    async refineTask(taskId: string): Promise<any> {
+    async refineTask(_taskId: string): Promise<any> {
         // TODO: Analyze task complexity
         // TODO: Break into subtasks if needed
         // TODO: Add acceptance criteria
@@ -30,7 +30,7 @@ export class PlanningTeam {
     /**
      * Estimate task effort
      */
-    estimateEffort(taskDescription: string): { hours: number; confidence: number } {
+    estimateEffort(_taskDescription: string): { hours: number; confidence: number } {
         // TODO: Analyze task complexity
         // TODO: Compare with similar tasks
         // TODO: Return estimate with confidence level

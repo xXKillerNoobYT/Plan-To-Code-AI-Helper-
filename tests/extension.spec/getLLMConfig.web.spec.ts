@@ -3,15 +3,15 @@ import { getLLMConfig } from '../../src/extension';
 import { FileConfigManager } from '../../src/utils/fileConfig';
 
 jest.mock('../../src/utils/fileConfig', () => ({
-    ...jest.requireActual('../../src/utils/fileConfig'),
-    FileConfigManager: {
+  ...jest.requireActual('../../src/utils/fileConfig'),
+  FileConfigManager: {
     getLLMConfig: jest.fn(),
   },
 }));
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('getLLMConfig', () => {
-  /** @aiContributed-2026-01-28 */
+  /** @aiContributed-2026-01-29 */
     it('should return the LLM configuration from FileConfigManager', () => {
     const mockConfig = {
       url: 'http://localhost:3000',

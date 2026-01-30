@@ -55,7 +55,7 @@ export class GitHubAPI {
     /**
      * Get a single issue
      */
-    async getIssue(owner: string, repo: string, issueNumber: number): Promise<any> {
+    async getIssue(_owner: string, _repo: string, _issueNumber: number): Promise<any> {
         // TODO: Fetch issue from GitHub
         throw new Error('Not implemented');
     }
@@ -63,7 +63,7 @@ export class GitHubAPI {
     /**
      * Create a new issue
      */
-    async createIssue(owner: string, repo: string, title: string, body: string): Promise<any> {
+    async createIssue(_owner: string, _repo: string, _title: string, _body: string): Promise<any> {
         // TODO: Create issue on GitHub
         throw new Error('Not implemented');
     }
@@ -72,16 +72,35 @@ export class GitHubAPI {
      * Update an existing issue
      */
     async updateIssue(owner: string, repo: string, issueNumber: number, updates: any): Promise<any> {
-        // TODO: Update issue on GitHub
-        throw new Error('Not implemented');
+        if (!this.isAuthenticated || !this.octokit) {
+            throw new Error('Not authenticated');
+        }
+
+        const response = await this.octokit.issues.update({
+            owner,
+            repo,
+            issue_number: issueNumber,
+            ...updates,
+        });
+
+        return response.data;
     }
 
     /**
      * List all issues for a repository
      */
     async listIssues(owner: string, repo: string, filters?: any): Promise<any[]> {
-        // TODO: Fetch issues with filters
-        return [];
+        if (!this.isAuthenticated || !this.octokit) {
+            throw new Error('Not authenticated');
+        }
+
+        const response = await this.octokit.issues.listForRepo({
+            owner,
+            repo,
+            ...filters,
+        });
+
+        return response.data;
     }
 }
 

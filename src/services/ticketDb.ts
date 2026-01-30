@@ -91,13 +91,16 @@ export class TicketDb {
     private readonly maxTickets = 100;
     private readonly schemaVersion = 1;
     private retryConfig: RetryConfig = DEFAULT_RETRY_CONFIG;
+    private readonly isMemoryDb: boolean;
 
     // DEV_RESET_DB: Drop and recreate tables on init (set false in production)
     // TODO: Remove after dev, use config instead
     private readonly DEV_RESET_DB: boolean;
 
     constructor(dbDir: string = '.coe', resetOnInit: boolean = true) {
-        this.dbPath = path.join(dbDir, 'tickets.db');
+        // Support in-memory database for testing: pass ':memory:' as dbDir
+        this.isMemoryDb = dbDir === ':memory:';
+        this.dbPath = this.isMemoryDb ? ':memory:' : path.join(dbDir, 'tickets.db');
         this.DEV_RESET_DB = resetOnInit;
     }
 
@@ -123,15 +126,17 @@ export class TicketDb {
         }
 
         try {
-            const dbDir = path.dirname(this.dbPath);
-
-            // Ensure directory exists
-            if (!fs.existsSync(dbDir)) {
-                fs.mkdirSync(dbDir, { recursive: true });
-                logger.info(`[TicketDb] Created directory: ${dbDir}`);
+            // Only create directory for file-based databases
+            if (!this.isMemoryDb) {
+                const dbDir = path.dirname(this.dbPath);
+                if (!fs.existsSync(dbDir)) {
+                    fs.mkdirSync(dbDir, { recursive: true });
+                    logger.info(`[TicketDb] Created directory: ${dbDir}`);
+                }
+                logger.info(`[TicketDb] Opening database: ${this.dbPath}`);
+            } else {
+                logger.info('[TicketDb] Using in-memory SQLite database');
             }
-
-            logger.info(`[TicketDb] Opening database: ${this.dbPath}`);
 
             // Initialize SQLite connection
             this.db = await new Promise<sqlite3.Database>((resolve, reject) => {
@@ -616,8 +621,18 @@ export class TicketDb {
                 return existed;
             }
 
-            await this.runWithRetry(() => this.runAsync('DELETE FROM tickets WHERE id = ?', [id]));
-            return true;
+            const result = await this.runWithRetry(() =>
+                new Promise<number>((resolve, reject) => {
+                    this.db!.run('DELETE FROM tickets WHERE id = ?', [id], function (err) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(this.changes);
+                        }
+                    });
+                })
+            );
+            return result > 0;
         } catch (error) {
             logger.error(`🎫 Failed to delete ticket ${id}: ${error}`, { error });
             throw new TicketError(`Delete ticket failed: ${error}`);

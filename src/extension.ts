@@ -9,7 +9,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { ProgrammingOrchestrator, SimpleLogger, TaskPriority, TaskStatus, Task } from './orchestrator/programmingOrchestrator';
 import { loadTasksFromPlanFile } from './plans/planningStub';
-import { setupMissingFiles } from './utils/setupFiles';
 import { CoeTaskTreeProvider } from './tree/CoeTaskTreeProvider';
 import { CompletedTasksTreeProvider } from './ui/completedTasksTreeProvider';
 import { FileConfigManager, LLMConfig as FileLLMConfig } from './utils/fileConfig';
@@ -198,9 +197,9 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         // Subscribe to config changes - re-validate when file changes
-        const configUnsubscribe = FileConfigManager.onConfigChange((config) => {
+        const configUnsubscribe = FileConfigManager.onConfigChange((_config) => {
             LLMConfigManager.getConfig()
-                .then((validConfig) => {
+                .then((_validConfig) => {
                     orchestratorOutputChannel?.appendLine('📝 LLM config file changed and re-validated');
                 })
                 .catch((error) => {
@@ -372,7 +371,7 @@ export async function activate(context: vscode.ExtensionContext) {
         if (programmingOrchestrator) {
             const readyTasks = programmingOrchestrator.getReadyTasks();
             if (readyTasks.length > 0) {
-                readyTasks.forEach(t => {
+                readyTasks.forEach(_t => {
                     // eslint-disable-next-line no-empty
                 });
             } else {
@@ -1271,11 +1270,11 @@ export async function deactivate() {
 
         // Stop PRD watcher
         PlansFileWatcher.stopWatching();
-        console.log('✅ Plans Watcher stopped');
+        orchestratorOutputChannel?.appendLine('✅ Plans Watcher stopped');
 
         // Dispose File Config Manager
         FileConfigManager.dispose();
-        console.log('✅ File Config Manager disposed');
+        orchestratorOutputChannel?.appendLine('✅ File Config Manager disposed');
 
         // Close TicketDb if open
         if (globalTicketDb) {
@@ -1310,8 +1309,8 @@ export async function deactivate() {
         // Small delay for OneDrive sync if needed (non-blocking)
         await new Promise(resolve => setTimeout(resolve, 200));
 
-    } catch (error) {
-        const errorMsg = error instanceof Error ? error.message : String(error);
+    } catch (_error) {
+        const _errorMsg = _error instanceof Error ? _error.message : String(_error);
     }
 }
 

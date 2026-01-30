@@ -113,6 +113,7 @@ export class PlansFileWatcher {
 
         // Set new timer
         this.debounceTimer = setTimeout(() => {
+            this.debounceTimer = null; // Clear the timer reference
             this.triggerRegeneration(outputChannel);
         }, this.DEBOUNCE_MS);
     }

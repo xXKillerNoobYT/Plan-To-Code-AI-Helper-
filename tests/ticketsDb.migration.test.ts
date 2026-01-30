@@ -7,7 +7,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as sqlite3 from 'sqlite3';
+import sqlite3 from 'sqlite3';
 
 describe.skip('TicketDb - Schema Migrations', () => {
     const testDbPath = path.join(__dirname, 'test_migrations.db');

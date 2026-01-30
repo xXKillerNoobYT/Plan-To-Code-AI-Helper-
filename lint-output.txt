@@ -1,0 +1,267 @@
+
+> copilot-orchestration-extension@0.1.0 lint
+> eslint src --ext ts
+
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\agents\answerTeam.ts
+  23:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\agents\planningTeam.ts
+  10:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\db\migrations.ts
+   6:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  18:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\db\ticketsDb.ts
+   281:88  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   382:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   419:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   551:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   876:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   902:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   921:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   935:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  1031:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\diagnostics\coverageProvider.ts
+   79:63  warning  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+   84:69  warning  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+  138:23  warning  'fileUri' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\extension.ts
+    12:10   warning  'setupMissingFiles' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+    58:21   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   144:43   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   145:42   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   201:69   warning  'config' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+   203:24   warning  'validConfig' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+   304:57   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   375:36   warning  't' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+   951:76   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   960:95   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   961:103  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+  1207:59   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+  1208:56   warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+  1314:15   warning  'errorMsg' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\__tests__\issuesSync.test.ts
+   34:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+   48:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+   61:19   warning  'performSyncSpy' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   61:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  113:19   warning  'error' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  116:113  warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  135:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  167:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  182:61   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  198:35   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  205:58   warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\api.ts
+  58:20  warning  'owner' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  58:35  warning  'repo' is defined but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  58:49  warning  'issueNumber' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  58:79  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  66:23  warning  'owner' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  66:38  warning  'repo' is defined but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  66:52  warning  'title' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  66:67  warning  'body' is defined but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  66:90  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  74:82  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  74:96  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  92:61  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  92:75  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\issuesSync.ts
+  42:31  warning  'githubAPI' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\github\webhooks.ts
+   8:13  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+   9:20  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  10:17  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  11:13  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  36:28  warning  'event' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  40:28  warning  'event' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  44:28  warning  'event' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  48:29  warning  'event' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\server.ts
+  28:5  warning  'validateRequest' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools.ts
+  20:35  warning  'params' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  20:43  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  20:57  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  27:38  warning  'params' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  27:46  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  27:60  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  34:35  warning  'params' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  34:43  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  34:57  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\__tests__\getNextTask.test.ts
+  414:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  422:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  430:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  441:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  449:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  459:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  470:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  475:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\__tests__\reportTaskStatus.test.ts
+    7:53  warning  'Testing' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+    9:28  warning  'MCPErrorCode' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  376:27  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  556:27  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\mcpServer\tools\askQuestion.ts
+  130:5  warning  'context' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+  131:5  warning  'searchTerm' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\logger.ts
+   9:35  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  10:34  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  11:34  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  12:44  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  19:11  warning  'message' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  19:28  warning  'data' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+  19:35  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  22:34  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  26:10  warning  'message' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  26:27  warning  'data' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+  26:34  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  29:11  warning  'message' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  29:28  warning  'error' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  29:44  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\orchestrator\programmingOrchestrator.ts
+   200:23  warning  'planId' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+   200:39  warning  'filter' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+   204:64  warning  'output' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+   257:31  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   258:37  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   295:35  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   306:41  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   349:59  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+   445:35  warning  't' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+  1420:10  warning  'message' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  1420:30  warning  'args' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  1423:10  warning  'message' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  1423:30  warning  'args' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  1428:15  warning  'safeArgs' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  1436:11  warning  'message' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  1436:31  warning  'args' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\plans\planningStub.ts
+  67:15  warning  'errorMessage' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  98:15  warning  'errorMessage' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\plans\schemas.ts
+  57:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\scripts\update-prd.ts
+  213:18  warning  'error' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\__tests__\bossRouter.test.ts
+  264:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  268:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  272:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  278:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  284:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  403:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\__tests__\plansReader.test.ts
+  25:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\__tests__\prdGenerator.e2e.test.ts
+  115:23  warning  'msg' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  124:23  warning  'originalFolders' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  124:52  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  125:28  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\__tests__\prdGenerator.integration.test.ts
+  17:22  warning  'status' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  34:22  warning  'status' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\__tests__\ticketDb.test.ts
+    1:20  warning  'Ticket' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+    1:28  warning  'Reply' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+    2:13  warning  'fs' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+    3:8   warning  'path' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+    8:7   warning  'skipInBrowser' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   29:18  warning  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  653:13  warning  'ticket' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  665:13  warning  'ticket' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\plansReader.ts
+  123:31  warning  'errMsg' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\prdGenerator.ts
+  17:21  warning  'PRDMetadata' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\prdWriter.ts
+  177:19  warning  'errMsg' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\services\ticketDb.ts
+  472:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  830:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  844:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  844:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  858:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  858:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  872:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  887:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\tasks\taskManager.ts
+  49:32  warning  'updates' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  65:16  warning  'taskId' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\test\suite\setupFiles.test.ts
+  33:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\ui\completedTasksTreeProvider.ts
+  73:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\ui\plansPanel.ts
+  14:10  warning  'context' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  40:33  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\__tests__\config.test.ts
+    8:25  warning  'COEConfig' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   25:21  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+   26:22  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+   27:22  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+   33:27  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  126:31  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  147:46  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  178:38  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  189:31  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  193:38  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  199:31  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  204:38  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  266:19  warning  'result' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  352:31  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  355:38  warning  Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\config.ts
+   24:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  134:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\logger.ts
+  44:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\weird\OneDrive\Documents\GitHub\Plan-To-Code-AI-Helper-\src\utils\setupFiles.ts
+   92:23  warning  'errorMsg' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  115:35  warning  'errorMsg' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+Γ£û 186 problems (0 errors, 186 warnings)
+

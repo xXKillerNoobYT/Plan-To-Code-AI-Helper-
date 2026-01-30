@@ -6,32 +6,30 @@ import { FileConfigManager } from '../../src/utils/fileConfig';
 jest.mock('../../src/services/plansWatcher', () => ({
     ...jest.requireActual('../../src/services/plansWatcher'),
     PlansFileWatcher: {
-    stopWatching: jest.fn(),
-  },
+        stopWatching: jest.fn(),
+    },
 }));
 
 jest.mock('../../src/utils/fileConfig', () => ({
     ...jest.requireActual('../../src/utils/fileConfig'),
     FileConfigManager: {
-    dispose: jest.fn(),
-  },
+        dispose: jest.fn(),
+    },
 }));
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('deactivate', () => {
-  /** @aiContributed-2026-01-28 */
-    it('should stop the PlansFileWatcher, dispose FileConfigManager, and clean up resources', async () => {
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    /** @aiContributed-2026-01-29 */
+    it('should stop the PlansFileWatcher and dispose FileConfigManager', async () => {
+        const stopWatchingSpy = jest.spyOn(PlansFileWatcher, 'stopWatching').mockImplementation();
+        const disposeSpy = jest.spyOn(FileConfigManager, 'dispose').mockImplementation();
 
-    await deactivate();
+        await deactivate();
 
-    expect(PlansFileWatcher.stopWatching).toHaveBeenCalled();
-    expect(FileConfigManager.dispose).toHaveBeenCalled();
-    expect(consoleLogSpy).toHaveBeenCalledWith('✅ Plans Watcher stopped');
-    expect(consoleLogSpy).toHaveBeenCalledWith('✅ File Config Manager disposed');
+        expect(stopWatchingSpy).toHaveBeenCalledTimes(1);
+        expect(disposeSpy).toHaveBeenCalledTimes(1);
 
-    consoleLogSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
-  });
+        stopWatchingSpy.mockRestore();
+        disposeSpy.mockRestore();
+    });
 });

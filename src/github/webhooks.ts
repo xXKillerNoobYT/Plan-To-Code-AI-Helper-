@@ -33,19 +33,19 @@ export function handleWebhook(event: WebhookEvent): void {
     }
 }
 
-function handleIssueOpened(event: WebhookEvent): void {
+function handleIssueOpened(_event: WebhookEvent): void {
     // TODO: Add issue to task queue
 }
 
-function handleIssueClosed(event: WebhookEvent): void {
+function handleIssueClosed(_event: WebhookEvent): void {
     // TODO: Mark task as complete
 }
 
-function handleIssueEdited(event: WebhookEvent): void {
+function handleIssueEdited(_event: WebhookEvent): void {
     // TODO: Update task details
 }
 
-function handleIssueLabeled(event: WebhookEvent): void {
+function handleIssueLabeled(_event: WebhookEvent): void {
     // TODO: Update task priority/category
 }
 

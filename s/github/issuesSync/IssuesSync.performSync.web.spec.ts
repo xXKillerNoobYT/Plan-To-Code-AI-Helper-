@@ -24,25 +24,11 @@ describe('IssuesSync', () => {
     });
 
     /** @aiContributed-2026-01-24 */
-    it('should log "Issues Sync: Syncing..." and "Issues Sync: Completed" on successful sync', async () => {
-        const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    it('should complete without reporting an error when no exception occurs', async () => {
+        const showErrorMessage = jest.requireMock('vscode').window.showErrorMessage as jest.Mock;
 
         await issuesSync['performSync'](githubAPI);
 
-        expect(consoleLogSpy).toHaveBeenCalledWith('Issues Sync: Syncing...');
-        expect(consoleLogSpy).toHaveBeenCalledWith('Issues Sync: Completed');
-        consoleLogSpy.mockRestore();
+        expect(showErrorMessage).not.toHaveBeenCalled();
     });
-
-    /* it('should handle errors and show error message when sync fails', async () => {
-            const error = new Error('Test error');
-            githubAPI.listIssues.mockRejectedValue(error);
-            const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-            await issuesSync['performSync'](githubAPI);
-
-            expect(consoleErrorSpy).toHaveBeenCalledWith('Issues Sync: Error:', error);
-            expect(vscode.window.showErrorMessage).toHaveBeenCalledWith(`GitHub sync failed: ${error.message}`);
-            consoleErrorSpy.mockRestore();
-        }); */
 });

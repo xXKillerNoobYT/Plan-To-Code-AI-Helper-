@@ -197,11 +197,11 @@ export interface MCPToolInterface {
  * 🏗️ Mock MCP Tool Interface (for testing without real MCP server)
  */
 export class MockMCPTools implements MCPToolInterface {
-    async getNextTask(planId: string, filter?: string): Promise<MCPToolResponse> {
+    async getNextTask(_planId: string, _filter?: string): Promise<MCPToolResponse> {
         return { success: true, data: null };
     }
 
-    async reportTaskStatus(taskId: string, status: TaskStatus, output?: string): Promise<MCPToolResponse> {
+    async reportTaskStatus(taskId: string, status: TaskStatus, _output?: string): Promise<MCPToolResponse> {
         return { success: true, data: { taskId, status } };
     }
 
@@ -327,6 +327,9 @@ export class ProgrammingOrchestrator {
      * @param workspaceState - VS Code workspace state for persistence
      */
     async initializeWithPersistence(workspaceState: vscode.Memento): Promise<void> {
+        if (!workspaceState) {
+            return;
+        }
         this.workspaceState = workspaceState;
         await this.loadPersistedTasks();
         await this.reconcileTasks(); // Remove orphaned tasks after loading
@@ -351,7 +354,7 @@ export class ProgrammingOrchestrator {
 
             // Filter to only load active tasks (ready/inProgress/blocked)
             const activeTasks = persistedData.filter(t =>
-                ['ready', 'in-progress', 'blocked'].includes(t.status)
+                [TaskStatus.READY, TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED].includes(t.status)
             );
 
             // Restore tasks to queue with proper Date conversion
@@ -385,6 +388,8 @@ export class ProgrammingOrchestrator {
 
                 // Verify Date conversion
                 if (!(loadedTask.createdAt instanceof Date) || isNaN(loadedTask.createdAt.getTime())) {
+                    // Date validation - log if invalid
+                    void 0;
                 }
             });
 
@@ -437,12 +442,11 @@ export class ProgrammingOrchestrator {
             this.taskQueue = validTasks;
             await this.saveTaskQueue(); // Save cleaned queue
 
-            orphanedTasks.forEach(t => {
+            orphanedTasks.forEach(_t => {
             });
 
             // Trigger UI refresh
             this.notifyTreeViewUpdate();
-        } else {
         }
     }
 
@@ -496,6 +500,7 @@ export class ProgrammingOrchestrator {
                 const tasksToSave = persistedTasks.slice(-this.MAX_TASKS);
 
                 if (persistedTasks.length > this.MAX_TASKS) {
+                    // Tasks already sliced above
                 }
 
                 await this.workspaceState.update(this.STORAGE_KEY, tasksToSave);
@@ -558,7 +563,7 @@ export class ProgrammingOrchestrator {
             this.logger.info('Programming Orchestrator: Shutting down...');
 
             // Cancel all active sessions
-            for (const [sessionId, _] of this.activeSessions) {
+            for (const [sessionId, __] of this.activeSessions) {
                 this.logger.info(`Cancelling session: ${sessionId}`);
                 this.activeSessions.delete(sessionId);
             }
@@ -622,6 +627,7 @@ export class ProgrammingOrchestrator {
         this.taskQueue.push(task);
 
         if (task.metadata?.ticketId) {
+            // Ticket ID already set in metadata
         }
 
         // Save to storage and trigger UI refresh
@@ -675,9 +681,13 @@ export class ProgrammingOrchestrator {
             const dependenciesMet = this.areDependenciesMet(t);
 
             if (!isReady) {
+                // Task not ready
             } else if (!notBlocked) {
+                // Task is blocked
             } else if (!dependenciesMet) {
+                // Dependencies not met
             } else {
+                // All conditions met
             }
 
             return isReady && notBlocked && dependenciesMet;
@@ -765,12 +775,17 @@ export class ProgrammingOrchestrator {
     /**
      * 🔄 Check if orchestrator is busy processing a task
      * 
-     * Returns true if a task is currently in progress
+     * Returns true if a task is currently in progress or a current task is set and in-progress
      * 
      * @returns boolean True if actively processing a task
      */
     isBusy(): boolean {
-        return this.currentTask !== null && this.currentTask.status === TaskStatus.IN_PROGRESS;
+        // Check if current task exists and is in progress
+        if (this.currentTask && this.currentTask.status === TaskStatus.IN_PROGRESS) {
+            return true;
+        }
+        // Also check if any task in queue is currently in progress
+        return this.taskQueue.some((t) => t.status === TaskStatus.IN_PROGRESS);
     }
 
     /**
@@ -802,7 +817,7 @@ export class ProgrammingOrchestrator {
         }
 
         // Exact match only: metadata.ticketId MUST match AND task must be ACTIVE
-        const activeStatuses = ['ready', 'in-progress', 'blocked'];
+        const activeStatuses = [TaskStatus.READY, TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED];
         const existingTask = this.taskQueue.find((task: Task) =>
             task.metadata?.ticketId === ticketId &&
             activeStatuses.includes(task.status)
@@ -1402,15 +1417,15 @@ export class ProgrammingOrchestrator {
 export class SimpleLogger implements ILogger {
     constructor(private name: string) { }
 
-    info(message: string, ...args: unknown[]): void {
+    info(_message: string, ..._args: unknown[]): void {
     }
 
-    warn(message: string, ...args: unknown[]): void {
+    warn(_message: string, ..._args: unknown[]): void {
     }
 
-    error(message: string, ...args: unknown[]): void {
+    error(_message: string, ..._args: unknown[]): void {
         // Safely serialize error objects to avoid circular reference issues
-        const safeArgs = args.map(arg => {
+        const _safeArgs = _args.map(arg => {
             if (arg instanceof Error) {
                 return { name: arg.name, message: arg.message, stack: arg.stack };
             }
@@ -1418,7 +1433,7 @@ export class SimpleLogger implements ILogger {
         });
     }
 
-    debug(message: string, ...args: unknown[]): void {
+    debug(_message: string, ..._args: unknown[]): void {
     }
 }
 

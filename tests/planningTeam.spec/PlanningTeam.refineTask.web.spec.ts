@@ -1,7 +1,6 @@
-// ./planningTeam.PlanningTeam.refineTask.gptgen.web.spec.ts
 import { PlanningTeam } from '../../src/agents/planningTeam';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('PlanningTeam', () => {
   let planningTeam: PlanningTeam;
 
@@ -9,10 +8,10 @@ describe('PlanningTeam', () => {
     planningTeam = new PlanningTeam();
   });
 
-  /** @aiContributed-2026-01-28 */
+  /** @aiContributed-2026-01-29 */
     describe('refineTask', () => {
-    /** @aiContributed-2026-01-28 */
-        it('should process task refinement', async () => {
+    /** @aiContributed-2026-01-29 */
+        it('should process task refinement and return null', async () => {
       const taskId = '12345';
 
       const result = await planningTeam.refineTask(taskId);
@@ -20,11 +19,11 @@ describe('PlanningTeam', () => {
       expect(result).toBeNull();
     });
 
-    /** @aiContributed-2026-01-28 */
-        it('should return null after refining a task', async () => {
-      const taskId = '12345';
+    /** @aiContributed-2026-01-29 */
+        it('should handle invalid taskId gracefully', async () => {
+      const invalidTaskId = '';
 
-      const result = await planningTeam.refineTask(taskId);
+      const result = await planningTeam.refineTask(invalidTaskId);
 
       expect(result).toBeNull();
     });

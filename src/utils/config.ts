@@ -8,6 +8,7 @@ import * as vscode from 'vscode';
 export class ConfigManager {
     private static readonly CONFIG_SECTION = 'coe';
     private static tokenCache: string | null = null;
+    private static tokenPromise: Promise<string | undefined> | null = null;
 
     /**
      * Get configuration value
@@ -29,24 +30,48 @@ export class ConfigManager {
      * Get GitHub token from secure storage (with cache)
      */
     static async getGitHubToken(context: vscode.ExtensionContext): Promise<string | undefined> {
-        // Return cached token if available
-        if (this.tokenCache) {
+        // Return cached token if available (check for not null, not just truthy)
+        if (this.tokenCache !== null) {
             return this.tokenCache;
         }
 
-        // Retrieve from SecretStorage
-        const token = await context.secrets.get('github-token');
-        if (token) {
-            this.tokenCache = token;
+        // If a request is already in flight, return that promise
+        if (this.tokenPromise) {
+            return this.tokenPromise;
         }
-        return token;
+
+        const secrets = context.secrets;
+        if (!secrets) {
+            return undefined;
+        }
+
+        // Create and store the promise to handle concurrent calls
+        this.tokenPromise = (async () => {
+            try {
+                // Retrieve from SecretStorage
+                const token = await secrets.get('github-token');
+                // Always cache the result (even if undefined) to prevent repeated lookups
+                this.tokenCache = token || '';
+                return token;
+            } finally {
+                // Clear the promise after it resolves
+                this.tokenPromise = null;
+            }
+        })();
+
+        return this.tokenPromise;
     }
 
     /**
      * Set GitHub token in secure storage
      */
     static async setGitHubToken(context: vscode.ExtensionContext, token: string): Promise<void> {
-        await context.secrets.store('github-token', token);
+        const secrets = context.secrets;
+        if (!secrets) {
+            return;
+        }
+
+        await secrets.store('github-token', token);
         this.tokenCache = token; // Update cache
     }
 
@@ -54,8 +79,14 @@ export class ConfigManager {
      * Delete GitHub token from secure storage
      */
     static async deleteGitHubToken(context: vscode.ExtensionContext): Promise<void> {
-        await context.secrets.delete('github-token');
+        const secrets = context.secrets;
+        if (!secrets) {
+            return;
+        }
+
+        await secrets.delete('github-token');
         this.tokenCache = null; // Clear cache
+        this.tokenPromise = null; // Clear pending promise
     }
 
     /**
@@ -84,10 +115,13 @@ export class ConfigManager {
                 }
             });
 
-            // Store token if provided
-            if (token) {
+            // Validate and trim token - return undefined for empty/whitespace input
+            if (token && token.trim().length > 0) {
+                token = token.trim();
                 await this.setGitHubToken(context, token);
                 vscode.window.showInformationMessage('GitHub token saved securely');
+            } else {
+                return undefined;
             }
         }
 

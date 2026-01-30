@@ -26,6 +26,16 @@ export class TaskQueue {
     }
 
     /**
+     * Update an existing task in the queue
+     */
+    updateTask(task: Task): void {
+        if (this.tasks.has(task.taskId)) {
+            task.updatedAt = new Date();
+            this.tasks.set(task.taskId, task);
+        }
+    }
+
+    /**
      * Get the next available task based on priority and dependencies
      */
     getNextTask(): Task | null {

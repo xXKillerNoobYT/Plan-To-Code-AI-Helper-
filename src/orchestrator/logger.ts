@@ -16,17 +16,17 @@ export interface ILogger {
  * Default logger implementation using console
  */
 export class ConsoleLogger implements ILogger {
-    debug(message: string, data?: any): void {
+    debug(_message: string, _data?: any): void {
     }
 
     info(message: string, data?: any): void {
         console.info(`[INFO] ${message}`, data || '');
     }
 
-    warn(message: string, data?: any): void {
+    warn(_message: string, _data?: any): void {
     }
 
-    error(message: string, error?: Error | any): void {
+    error(_message: string, _error?: Error | any): void {
     }
 }
 

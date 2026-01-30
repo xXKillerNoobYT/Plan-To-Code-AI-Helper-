@@ -20,10 +20,11 @@ describe('IssuesSync - stopSync', () => {
         const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
         const mockInterval = setInterval(() => {}, 1000);
         (issuesSync as unknown as { syncInterval: NodeJS.Timeout }).syncInterval = mockInterval;
+        const currentInterval = (issuesSync as unknown as { syncInterval: NodeJS.Timeout }).syncInterval;
 
         issuesSync.stopSync();
 
-        expect(clearIntervalSpy).toHaveBeenCalledWith(mockInterval);
+        expect(clearIntervalSpy).toHaveBeenCalledWith(currentInterval);
         expect((issuesSync as unknown as { syncInterval: NodeJS.Timeout | null }).syncInterval).toBeNull();
     });
 

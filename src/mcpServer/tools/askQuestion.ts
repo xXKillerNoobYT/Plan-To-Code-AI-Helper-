@@ -127,8 +127,8 @@ function extractTopics(question: string): string[] {
  */
 function generateAnswerFromPlan(
     question: string,
-    context?: string,
-    searchTerm?: string
+    _context?: string,
+    _searchTerm?: string
 ): {
     answer?: string;
     confidence: number;
@@ -207,6 +207,31 @@ function generateAnswerFromPlan(
             relatedChoices: [
                 'Test coverage: ≥80% (≥90% for P1 tasks)',
                 'Jest for unit/integration tests',
+            ],
+        };
+    }
+
+    if (topics.includes('animation')) {
+        return {
+            answer: 'Use CSS transitions and animations for simple effects (200ms duration). For complex interactions, use animation libraries compatible with the design system. All animations should be smooth (60fps target) and respectful of motion preferences.',
+            confidence: 0.85,
+            evidence: {
+                source: 'PRD.md / Design System',
+                planVersion: '1.0.0',
+                section: 'Design Choices > Animation & Transitions',
+                exactQuote: 'Use CSS transitions for animations with 200ms timing function',
+            },
+            guidance: {
+                animation: 'Use CSS transition property for simple animations: transition: all 200ms ease-in-out; Consider prefers-reduced-motion for accessibility.',
+                examples: {
+                    'cssTransition': '.component { transition: all 200ms ease-in-out; } .component:hover { transform: scale(1.05); }',
+                    'accessibility': '@media (prefers-reduced-motion: reduce) { * { animation-duration: 0ms !important; } }',
+                },
+            },
+            relatedChoices: [
+                'Animation timing: 200ms standard duration',
+                'Must respect prefers-reduced-motion',
+                'Target 60fps performance',
             ],
         };
     }

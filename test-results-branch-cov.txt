@@ -1,0 +1,4049 @@
+
+> copilot-orchestration-extension@0.1.0 test:once
+> jest --coverage --forceExit
+
+  console.warn
+    
+    ΓÜá∩╕Å  QUALITY GATE WARNING: Skipped Tests Detected
+
+    [0m [90m 53 |[39m             [90m// Report findings as warnings (test still passes)[39m
+     [90m 54 |[39m             [36mif[39m (skippedTestsFound[33m.[39mlength [33m>[39m [35m0[39m) {
+    [31m[1m>[22m[39m[90m 55 |[39m                 console[33m.[39mwarn([32m'\nΓÜá∩╕Å  QUALITY GATE WARNING: Skipped Tests Detected\n'[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 56 |[39m                 console[33m.[39mwarn([32m`Found ${skippedTestsFound.length} skipped/focused test(s):\n`[39m)[33m;[39m
+     [90m 57 |[39m
+     [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:55:25)
+
+  console.warn
+    Found 2 skipped/focused test(s):
+
+    [0m [90m 54 |[39m             [36mif[39m (skippedTestsFound[33m.[39mlength [33m>[39m [35m0[39m) {
+     [90m 55 |[39m                 console[33m.[39mwarn([32m'\nΓÜá∩╕Å  QUALITY GATE WARNING: Skipped Tests Detected\n'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 56 |[39m                 console[33m.[39mwarn([32m`Found ${skippedTestsFound.length} skipped/focused test(s):\n`[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 57 |[39m
+     [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {
+     [90m 59 |[39m                     console[33m.[39mwarn([32m`  ${file}:${line} - ${pattern}`[39m)[33m;[39m[0m
+
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:56:25)
+
+  console.warn
+      tests\ticketsDb.migration.test.ts:12 - .skip
+
+    [0m [90m 57 |[39m
+     [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 59 |[39m                     console[33m.[39mwarn([32m`  ${file}:${line} - ${pattern}`[39m)[33m;[39m
+     [90m    |[39m                             [31m[1m^[22m[39m
+     [90m 60 |[39m                     console[33m.[39mwarn([32m`    ${match}`[39m)[33m;[39m
+     [90m 61 |[39m                 })[33m;[39m
+     [90m 62 |[39m[0m
+
+      at tests/__tests__/quality-gates.test.ts:59:29
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:58:35)
+
+  console.warn
+        describe.skip('TicketDb - Schema Migrations', () => {
+
+    [0m [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {
+     [90m 59 |[39m                     console[33m.[39mwarn([32m`  ${file}:${line} - ${pattern}`[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 60 |[39m                     console[33m.[39mwarn([32m`    ${match}`[39m)[33m;[39m
+     [90m    |[39m                             [31m[1m^[22m[39m
+     [90m 61 |[39m                 })[33m;[39m
+     [90m 62 |[39m
+     [90m 63 |[39m                 console[33m.[39mwarn([32m'\n≡ƒÆí Tip: Remove .skip/.only before committing to ensure all tests run in CI\n'[39m)[33m;[39m[0m
+
+      at tests/__tests__/quality-gates.test.ts:60:29
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:58:35)
+
+  console.warn
+      tests\getErrors.spec\getErrors.web.spec.ts:83 - .skip
+
+    [0m [90m 57 |[39m
+     [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 59 |[39m                     console[33m.[39mwarn([32m`  ${file}:${line} - ${pattern}`[39m)[33m;[39m
+     [90m    |[39m                             [31m[1m^[22m[39m
+     [90m 60 |[39m                     console[33m.[39mwarn([32m`    ${match}`[39m)[33m;[39m
+     [90m 61 |[39m                 })[33m;[39m
+     [90m 62 |[39m[0m
+
+      at tests/__tests__/quality-gates.test.ts:59:29
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:58:35)
+
+  console.warn
+        match: 'it.skip("example")',
+
+    [0m [90m 58 |[39m                 skippedTestsFound[33m.[39mforEach(({ file[33m,[39m line[33m,[39m pattern[33m,[39m match }) [33m=>[39m {
+     [90m 59 |[39m                     console[33m.[39mwarn([32m`  ${file}:${line} - ${pattern}`[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 60 |[39m                     console[33m.[39mwarn([32m`    ${match}`[39m)[33m;[39m
+     [90m    |[39m                             [31m[1m^[22m[39m
+     [90m 61 |[39m                 })[33m;[39m
+     [90m 62 |[39m
+     [90m 63 |[39m                 console[33m.[39mwarn([32m'\n≡ƒÆí Tip: Remove .skip/.only before committing to ensure all tests run in CI\n'[39m)[33m;[39m[0m
+
+      at tests/__tests__/quality-gates.test.ts:60:29
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:58:35)
+
+  console.warn
+    
+    ≡ƒÆí Tip: Remove .skip/.only before committing to ensure all tests run in CI
+
+    [0m [90m 61 |[39m                 })[33m;[39m
+     [90m 62 |[39m
+    [31m[1m>[22m[39m[90m 63 |[39m                 console[33m.[39mwarn([32m'\n≡ƒÆí Tip: Remove .skip/.only before committing to ensure all tests run in CI\n'[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 64 |[39m
+     [90m 65 |[39m                 [90m// Store for VS Code diagnostic provider to use[39m
+     [90m 66 |[39m                 [36mconst[39m diagnosticsPath [33m=[39m path[33m.[39mjoin(projectRoot[33m,[39m [32m'.vscode'[39m[33m,[39m [32m'quality-diagnostics.json'[39m)[33m;[39m[0m
+
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:63:25)
+
+  console.log
+    Γ£à All files meet 75% coverage threshold
+
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:148:25)
+
+FAIL tests/orchestrator.branchCoverage.test.ts
+  ΓùÅ Test suite failed to run
+
+    tests/orchestrator.branchCoverage.test.ts:38:65 - error TS2345: Argument of type 'null' is not assignable to parameter of type 'Memento'.
+
+    38             await expect(orchestrator.initializeWithPersistence(badContext.workspaceState))
+                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:98:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    98                     priority: 'P3',
+                           ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:99:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    99                     status: 'ready',
+                           ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:131:17 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    131                 priority: 'P1',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:132:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    132                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:153:21 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    153                     priority: 'P2',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:154:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    154                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:173:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    173                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:174:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    174                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:203:17 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    203                 priority: 'P1',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:204:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    204                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:227:17 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    227                 priority: 'P2',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:228:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    228                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:243:49 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                        ~~~~
+    tests/orchestrator.branchCoverage.test.ts:243:55 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                              ~~~~
+    tests/orchestrator.branchCoverage.test.ts:243:61 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                                    ~~~~
+    tests/orchestrator.branchCoverage.test.ts:251:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    251                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:268:45 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                    ~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:54 - error TS2322: Type '"in-progress"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                             ~~~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:69 - error TS2322: Type '"completed"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                            ~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:82 - error TS2322: Type '"blocked"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                                         ~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:93 - error TS2322: Type '"failed"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                                                    ~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:275:21 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    275                     priority: 'P2',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:307:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    307                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:308:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    308                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:322:25 - error TS2571: Object is of type 'unknown'.
+
+    322                 call => call[0].includes('taskQueue')
+                                ~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:335:17 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    335                 priority: 'P2',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:336:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    336                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:350:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    350                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:351:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    351                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:373:40 - error TS2551: Property 'getQueueStats' does not exist on type 'ProgrammingOrchestrator'. Did you mean 'getQueueStatus'?
+
+    373             const stats = orchestrator.getQueueStats();
+                                               ~~~~~~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:736:5
+        736     getQueueStatus(): {
+                ~~~~~~~~~~~~~~
+        'getQueueStatus' is declared here.
+
+FAIL tests/services.branchCoverage.test.ts
+  ΓùÅ Test suite failed to run
+
+    tests/services.branchCoverage.test.ts:14:18 - error TS2673: Constructor of class 'BossRouter' is private and only accessible within the class declaration.
+
+    14         router = new BossRouter();
+                        ~~~~~~~~~~~~~~~~
+
+PASS tests/ticketsDb.spec/TicketDatabase.close.web.spec.ts
+  TicketDatabase.close
+    ΓêÜ should close the database connection successfully (11 ms)
+    ΓêÜ should retry closing the database connection on EBUSY error and succeed (503 ms)
+    ΓêÜ should switch to fallback after max retries on persistent error (1055 ms)
+    ΓêÜ should do nothing if the database is already closed
+
+PASS tests/extension.integration.test.ts
+  COE Extension Integration
+    ΓêÜ should return null initially before activation (1 ms)
+    ΓêÜ should create "COE Orchestrator" output channel during activation (33 ms)
+    ΓêÜ should call setupMissingFiles to ensure workspace files exist (17 ms)
+    ΓêÜ should initialize ProgrammingOrchestrator during activation (4 ms)
+    ΓêÜ should show success message after initialization (2 ms)
+    ΓêÜ should register "coe.testOrchestrator" command (1 ms)
+    ΓêÜ should push command disposables to context subscriptions (2 ms)
+    ΓêÜ should shutdown orchestrator during deactivation (241 ms)
+    ΓêÜ should handle test command execution (fake task add/retrieve) (29 ms)
+    ΓêÜ should import TaskPriority correctly (14 ms)
+    ΓêÜ should import TaskStatus correctly
+  COE Status Bar Item
+    ΓêÜ should create status bar item with correct alignment and priority (2 ms)
+    ΓêÜ should set initial status bar text with sync icon (39 ms)
+    ΓêÜ should push status bar item to context subscriptions for disposal (2 ms)
+    ΓêÜ should display status bar when queue is empty (1 ms)
+    ΓêÜ should update status bar text when fake tasks are added via test command (3 ms)
+    ΓêÜ should dispose status bar item during deactivation (251 ms)
+    ΓêÜ should set command to "coe.testOrchestrator" for clickability (1 ms)
+  COE Test Command - Repeated Execution
+    ΓêÜ should successfully run test command on first execution (1 ms)
+    ΓêÜ should successfully run test command on second execution without errors (10 ms)
+    ΓêÜ should handle 3 sequential test command runs without throwing (4 ms)
+    ΓêÜ should support multiple sequential fake tasks without queue blocking (8 ms)
+    ΓêÜ should update status bar from active to waiting after task completion (3 ms)
+    ΓêÜ should not leave active task state after test completion (2 ms)
+    ΓêÜ should register coe.processNextTask command during activation (4 ms)
+    ΓêÜ should update status bar command to processNextTask (1 ms)
+    ΓêÜ should process next task and show working status (5 ms)
+    ΓêÜ should show message when no tasks available (1 ms)
+    ΓêÜ should display task title in status bar when processing (1 ms)
+    ΓêÜ should implement isBusy() method to prevent concurrent tasks (3 ms)
+    ΓêÜ should disable test command when real tasks are loaded (3 ms)
+    ΓêÜ should show info message when processing with no more tasks (1 ms)
+    ΓêÜ should update status bar after task completion with correct remaining count (5 ms)
+    ΓêÜ should show "All tasks complete" message when queue is empty (12 ms)
+    ΓêÜ should show disabled message for test command when real tasks loaded (5 ms)
+    ΓêÜ should activate successfully even when TicketDatabase initialization fails (30 ms)
+    ΓêÜ should activate successfully even when tree view initialization fails (57 ms)
+
+PASS src/mcpServer/tools/__tests__/reportTaskStatus.test.ts (6.312 s)
+  reportTaskStatus - Comprehensive Branch Coverage
+    Status Transitions
+      ΓêÜ should mark task as done with successful tests (28 ms)
+      ΓêÜ should mark task as failed with test failures (4 ms)
+      ΓêÜ should mark task as blocked with reason (27 ms)
+      ΓêÜ should mark task as partial with progress details (1 ms)
+    Verification Task Creation
+      ΓêÜ should create verification task only for done status with passed tests (3 ms)
+      ΓêÜ should not create verification task when tests failed (2 ms)
+      ΓêÜ should not create verification task for failed status (1 ms)
+      ΓêÜ should set automation level based on priority (2 ms)
+      ΓêÜ should set semi-automated level for high priority (16 ms)
+      ΓêÜ should set automated level for medium/low priority (1 ms)
+    Observation Processing
+      ΓêÜ should mark observations with critical issues as action-required (1 ms)
+      ΓêÜ should mark observations with follow-up keywords as follow-up-created (1 ms)
+      ΓêÜ should mark regular observations as noted
+      ΓêÜ should prioritize follow-up over critical issues (1 ms)
+    Follow-Up Task Creation
+      ΓêÜ should create follow-up tasks with correct dependencies (1 ms)
+      ΓêÜ should inherit priority from original task
+    Dashboard Statistics
+      ΓêÜ should calculate correct completion percentages (1 ms)
+      ΓêÜ should count blocked tasks correctly
+      ΓêÜ should identify verification pending tasks (1 ms)
+    Error Handling
+      ΓêÜ should return error for invalid parameters (148 ms)
+      ΓêÜ should return error for task not found (3 ms)
+      ΓêÜ should handle empty observations array (1 ms)
+      ΓêÜ should handle empty follow-up tasks array
+    Idempotent Operations
+      ΓêÜ should handle repeated done status updates (1 ms)
+    Complex Scenarios
+      ΓêÜ should handle complete task completion flow (1 ms)
+      ΓêÜ should find next available task excluding current
+    Testing Details Coverage
+      ΓêÜ should include test coverage percentage when provided (1 ms)
+      ΓêÜ should handle failed test names (1 ms)
+
+  console.log
+    ΓÜá∩╕Å  ESLint output not JSON format, attempting text parse...
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:32:21)
+
+  console.log
+    
+    Γ£à ESLint: All files pass linting checks
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:60:21)
+
+  console.log
+    
+    Γ£à No console statements in production code
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:102:21)
+
+  console.log
+    
+    ≡ƒƒí TODO/FIXME Without References: 16 file(s)
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:147:21)
+
+  console.log
+      src\agents\answerTeam.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 12: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 13: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 14: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 15: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 25: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 26: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 27: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 36: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 37: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 38: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\orchestrator.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 11: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 12: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 13: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 21: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 22: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 23: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 31: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 32: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\planningTeam.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 11: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 12: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 13: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 14: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 23: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 24: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 25: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 34: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 35: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 36: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\verificationTeam.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 14: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 15: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 16: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 17: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 30: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 31: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 32: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 33: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 42: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 43: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 44: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\github\api.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 59: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 67: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\github\issuesSync.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 45: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 46: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 47: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 48: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 49: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\github\webhooks.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 37: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 41: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 45: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 49: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\askQuestion.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 121: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\reportTaskStatus.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 247: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\__tests__\reportTaskStatus.test.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 220: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\plans\schemas.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 58: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\services\ticketDb.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 96: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\tasks\queue.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 42: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 43: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 44: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\tasks\taskManager.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 55: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 56: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 57: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 66: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 67: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\ui\tasksTreeView.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 107: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 108: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\utils\streamingLLM.ts
+
+      at tests/meta/code-quality.test.ts:149:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 10: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 142: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Line 320: TODO/FIXME without issue reference
+
+      at tests/meta/code-quality.test.ts:150:49
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+    ΓÜá∩╕Å  Consider adding issue references to all TODO/FIXME comments
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:152:21)
+
+  console.log
+    
+    ≡ƒƒí Large Files: 7 file(s) exceed 500 lines
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:190:21)
+
+  console.log
+      src\orchestrator\programmingOrchestrator.ts: 1432 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\extension.ts: 1319 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\db\ticketsDb.ts: 1075 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\services\ticketDb.ts: 922 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\services\__tests__\ticketDb.test.ts: 921 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\__tests__\reportTaskStatus.test.ts: 554 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\utils\__tests__\streamingLLM.test.ts: 527 lines
+
+      at tests/meta/code-quality.test.ts:193:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+    
+    ≡ƒÆí Consider refactoring large files into smaller modules
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:195:21)
+
+  console.log
+    
+    ≡ƒƒí Error Handling Issues: 4 file(s)
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:241:21)
+
+  console.log
+      src\agents\answerTeam.ts
+
+      at tests/meta/code-quality.test.ts:243:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  3 async function(s) without try-catch blocks
+
+      at tests/meta/code-quality.test.ts:244:47
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\orchestrator.ts
+
+      at tests/meta/code-quality.test.ts:243:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  3 async function(s) without try-catch blocks
+
+      at tests/meta/code-quality.test.ts:244:47
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\planningTeam.ts
+
+      at tests/meta/code-quality.test.ts:243:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  2 async function(s) without try-catch blocks
+
+      at tests/meta/code-quality.test.ts:244:47
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\agents\verificationTeam.ts
+
+      at tests/meta/code-quality.test.ts:243:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  2 async function(s) without try-catch blocks
+
+      at tests/meta/code-quality.test.ts:244:47
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+    
+    ≡ƒÆí Wrap async operations in try-catch blocks
+
+      at Object.<anonymous> (tests/meta/code-quality.test.ts:246:21)
+
+PASS tests/meta/code-quality.test.ts (13.332 s)
+  Code Quality Gates
+    ΓêÜ should pass ESLint checks on all source files (12678 ms)
+    ΓêÜ should have no console.log statements in production code (17 ms)
+    ΓêÜ should have no TODO or FIXME without issue references (421 ms)
+    ΓêÜ should identify files exceeding line count limits (49 ms)
+    ΓêÜ should check for missing error handling in async functions (65 ms)
+
+PASS tests/reportObservation.spec/reportObservation.web.spec.ts
+  reportObservation
+    ΓêÜ should throw an error if parameters are invalid (72 ms)
+    ΓêÜ should throw an error if the task is not found (3 ms)
+    ΓêÜ should log an observation successfully (1 ms)
+    ΓêÜ should create a new task if requested (4 ms)
+    ΓêÜ should generate a dashboard alert for critical severity (1 ms)
+
+PASS tests/tasks/taskManager.test.ts
+  TaskManager
+    Initialization
+      ΓêÜ should create a TaskManager instance (3 ms)
+      ΓêÜ should accept a TaskQueue in constructor (1 ms)
+    createTask
+      ΓêÜ should create a task with required fields (1 ms)
+      ΓêÜ should create a task with custom priority
+      ΓêÜ should support all priority levels (1 ms)
+      ΓêÜ should generate a unique taskId
+      ΓêÜ should set taskId with proper format (1 ms)
+      ΓêÜ should set created and updated timestamps (1 ms)
+      ΓêÜ should set initial status to pending (1 ms)
+      ΓêÜ should initialize empty dependencies array
+      ΓêÜ should add task to queue (1 ms)
+      ΓêÜ should add multiple tasks to queue
+    getTask
+      ΓêÜ should retrieve a task by ID (2 ms)
+      ΓêÜ should return null for non-existent task (3 ms)
+      ΓêÜ should retrieve correct task from multiple tasks
+    updateTask
+      ΓêÜ should return true for existing task (1 ms)
+      ΓêÜ should return false for non-existent task
+      ΓêÜ should support updating task properties (1 ms)
+      ΓêÜ should validate task existence before updating
+      ΓêÜ should support partial updates
+    deleteTask
+      ΓêÜ should return false for delete (not implemented) (1 ms)
+      ΓêÜ should handle delete attempt on non-existent task
+    Task Generation Uniqueness
+      ΓêÜ should generate unique IDs for rapid creations (1 ms)
+      ΓêÜ should generate IDs with minimal collision probability
+    Task Dependencies
+      ΓêÜ should create task with empty dependencies
+      ΓêÜ should support task dependencies workflow (1 ms)
+    Task Timestamps
+      ΓêÜ should set createdAt on task creation
+      ΓêÜ should set updatedAt on task creation
+      ΓêÜ should have createdAt equal to updatedAt initially (1 ms)
+      ΓêÜ should create tasks with recent timestamps
+    Integration with TaskQueue
+      ΓêÜ should add created tasks to the queue (2 ms)
+      ΓêÜ should retrieve tasks through getTask from queue
+    Error Handling
+      ΓêÜ should handle createTask with empty title gracefully
+      ΓêÜ should handle createTask with empty description gracefully
+      ΓêÜ should handle long task titles (1 ms)
+      ΓêÜ should handle special characters in task title
+
+PASS tests/api.spec/GitHubAPI.setContext.web.spec.ts
+  GitHubAPI - setContext
+    ΓêÜ should set the context correctly (2 ms)
+
+PASS src/mcpServer/tools/__tests__/getNextTask.test.ts
+  getNextTask - Complete Branch Coverage
+    Basic Task Retrieval
+      ΓêÜ should return highest priority task (critical) (2 ms)
+      ΓêÜ should return null when queue is empty (3 ms)
+      ΓêÜ should include queue length in response (1 ms)
+      ΓêÜ should provide next tasks preview (1 ms)
+    Status Filtering
+      ΓêÜ should exclude done and blocked tasks by default (1 ms)
+      ΓêÜ should filter for ready status only
+      ΓêÜ should filter for blocked status
+      ΓêÜ should include all tasks when filter is "all" (7 ms)
+    Priority Filtering
+      ΓêÜ should filter tasks by specific priority
+      ΓêÜ should return null if no tasks match priority filter
+      ΓêÜ should combine status and priority filters (1 ms)
+    Priority Sorting
+      ΓêÜ should return critical tasks before high priority (6 ms)
+      ΓêÜ should maintain creation time as tie-breaker
+    Super-Detailed Prompt Generation
+      ΓêÜ should include super detailed prompt by default (1 ms)
+      ΓêÜ should exclude prompt when includeDetailedPrompt is false (1 ms)
+      ΓêÜ should include plan reference by default (1 ms)
+      ΓêÜ should exclude context when includeContext is false
+    Next Tasks Preview
+      ΓêÜ should return up to 3 next tasks preview (1 ms)
+      ΓêÜ should not include current task in preview
+      ΓêÜ should preview tasks in priority order
+    Error Handling
+      ΓêÜ should throw error for invalid filter value (87 ms)
+      ΓêÜ should throw error for invalid priority value (2 ms)
+      ΓêÜ should throw error for invalid includeContext type (1 ms)
+      ΓêÜ should throw error when getAllTasks returns non-array (1 ms)
+    Complexity Detection
+      ΓêÜ should detect complex tasks and set complexity level (1 ms)
+    Edge Cases
+      ΓêÜ should handle tasks with no dependencies
+      ΓêÜ should handle tasks with multiple dependencies (1 ms)
+      ΓêÜ should handle skills requirements generation
+
+PASS tests/integration.spec/initializeMCPServer.web.spec.ts
+  initializeMCPServer
+    ΓêÜ should initialize the MCP server and register tools (6 ms)
+    ΓêÜ should add server stop to context subscriptions (1 ms)
+
+  console.log
+    Γ£à No TypeScript strict mode violations detected
+
+      at Object.<anonymous> (tests/__tests__/quality-gates.test.ts:168:25)
+
+PASS tests/__tests__/quality-gates.test.ts (23.287 s)
+  Quality Gates (Warning-Only)
+    Skipped Test Detector
+      ΓêÜ should detect and warn about skipped tests (.skip, .only, .pending) (478 ms)
+    Coverage Checker
+      ΓêÜ should detect and warn about files below coverage threshold (8 ms)
+    TypeScript Strict Mode Checker
+      ΓêÜ should detect and warn about TypeScript strict mode violations (18299 ms)
+
+PASS tests/reportTestFailure.spec/reportTestFailure.web.spec.ts
+  reportTestFailure
+    ΓêÜ should throw an error if parameters are invalid (56 ms)
+    ΓêÜ should throw an error if the task is not found (1 ms)
+    ΓêÜ should create an investigation task if needed (1 ms)
+    ΓêÜ should return a response with suspected root cause analysis (1 ms)
+    ΓêÜ should include a blocking task if the failure blocks other tasks (1 ms)
+
+  console.log
+    
+    ≡ƒôï Test Discovery Report:
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:46:17)
+
+  console.log
+    Found 107 test files:
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:47:17)
+
+  console.log
+      1. tests\answerTeam.spec\AnswerTeam.answerQuestion.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      2. tests\answerTeam.spec\AnswerTeam.findContext.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      3. tests\answerTeam.spec\AnswerTeam.searchPlan.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      4. tests\api.spec\GitHubAPI.getIssue.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      5. tests\api.spec\GitHubAPI.setContext.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      6. tests\askQuestion.spec\askQuestion.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      7. tests\bossRouter.spec\BossRouter.addRule.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      8. tests\bossRouter.spec\BossRouter.containsImplementationKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      9. tests\bossRouter.spec\BossRouter.containsKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      10. tests\bossRouter.spec\BossRouter.containsPlanningKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      11. tests\bossRouter.spec\BossRouter.containsQuestionKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      12. tests\bossRouter.spec\BossRouter.containsResearchKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      13. tests\bossRouter.spec\BossRouter.containsVerificationKeywords.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      14. tests\coeTaskTreeProvider.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      15. tests\completedTasksTreeProvider.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      16. tests\dependencies.spec\DependencyManager.areDependenciesMet.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      17. tests\dependencies.spec\DependencyManager.getDependents.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      18. tests\dependencies.spec\DependencyManager.hasCircularDependency.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      19. tests\example.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      20. tests\extension.integration.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      21. tests\extension.llmConfig.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      22. tests\extension.responseStreaming.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      23. tests\extension.setupFiles.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      24. tests\extension.spec\activate.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      25. tests\extension.spec\deactivate.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      26. tests\extension.spec\getLLMConfig.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      27. tests\extension.statusBar.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      28. tests\getErrors.spec\getErrors.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      29. tests\github\api.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      30. tests\github\webhooks.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      31. tests\hello-world.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      32. tests\integration.spec\exampleUsage.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      33. tests\integration.spec\initializeMCPServer.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      34. tests\issuesSync.spec\IssuesSync.startSync.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      35. tests\issuesSync.spec\IssuesSync.syncNow.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      36. tests\meta\code-quality.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      37. tests\meta\common-issues.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      38. tests\meta\test-discovery.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      39. tests\meta\typescript-compilation.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      40. tests\migrations.spec\getDbVersion.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      41. tests\migrations.spec\migrateSchema.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      42. tests\orchestrator.branchCoverage.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      43. tests\orchestrator.spec\ProgrammingOrchestrator.executeTask.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      44. tests\orchestrator.spec\ProgrammingOrchestrator.initialize.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      45. tests\planningTeam.spec\PlanningTeam.estimateEffort.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      46. tests\planningTeam.spec\PlanningTeam.generateTasks.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      47. tests\planningTeam.spec\PlanningTeam.refineTask.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      48. tests\plans\fileWatcher.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      49. tests\plans\planManager.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      50. tests\plans\schemas.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      51. tests\programmingOrchestrator.spec\MockMCPTools.askQuestion.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      52. tests\programmingOrchestrator.spec\MockMCPTools.getNextTask.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      53. tests\programmingOrchestrator.spec\MockMCPTools.reportObservation.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      54. tests\programmingOrchestrator.spec\MockMCPTools.reportTaskStatus.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      55. tests\programmingOrchestrator.spec\MockMCPTools.reportVerificationResult.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      56. tests\programmingOrchestrator.spec\ProgrammingOrchestrator.init.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      57. tests\programmingOrchestrator.spec\ProgrammingOrchestrator.initializeWithPersistence.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      58. tests\programmingOrchestrator.spec\ProgrammingOrchestrator.loadPersistedTasks.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      59. tests\programmingOrchestrator.spec\ProgrammingOrchestrator.setCompletedTasksProvider.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      60. tests\programmingOrchestrator.spec\ProgrammingOrchestrator.shutdown.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      61. tests\programmingOrchestrator.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      62. tests\protocol.spec\createErrorResponse.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      63. tests\protocol.spec\createSuccessResponse.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      64. tests\protocol.spec\errorToResponse.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      65. tests\protocol.spec\formatStdioResponse.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      66. tests\protocol.spec\parseStdioMessage.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      67. tests\queue.spec\TaskQueue.updateTaskStatus.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      68. tests\reportObservation.spec\reportObservation.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      69. tests\reportTaskStatus.spec\reportTaskStatus.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      70. tests\reportTestFailure.spec\reportTestFailure.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      71. tests\reportVerificationResult.spec\reportVerificationResult.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      72. tests\server.spec\MCPServer.getDiagnostics.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      73. tests\server.spec\MCPServer.getRegisteredTools.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      74. tests\server.spec\MCPServer.handleRequest.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      75. tests\server.spec\MCPServer.processMessage.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      76. tests\server.spec\MCPServer.unregisterTool.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      77. tests\services.branchCoverage.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      78. tests\tasks\taskManager.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      79. tests\ticketsDb.migration.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      80. tests\ticketsDb.spec\TicketDatabase.close.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      81. tests\ticketsDb.spec\TicketDatabase.createTicket.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      82. tests\ticketsDb.spec\TicketDatabase.doesTicketExist.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      83. tests\ticketsDb.spec\TicketDatabase.generateTicketId.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      84. tests\ticketsDb.spec\TicketDatabase.getAllCompleted.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      85. tests\ticketsDb.spec\TicketDatabase.getAllTickets.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      86. tests\ticketsDb.spec\TicketDatabase.getInstance.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      87. tests\ticketsDb.spec\TicketDatabase.getStats.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      88. tests\ticketsDb.spec\TicketDatabase.getTicket.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      89. tests\ticketsDb.spec\TicketDatabase.initialize.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      90. tests\ticketsDb.spec\TicketDatabase.initializeSqlite.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      91. tests\ticketsDb.spec\TicketDatabase.resetInstance.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      92. tests\ticketsDb.spec\TicketDatabase.runMigrations.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      93. tests\tools.spec\askQuestion.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      94. tests\tools.spec\getNextTask.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      95. tests\tools.spec\reportTaskDone.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      96. tests\ui\plansPanel.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      97. tests\ui\statusBar.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      98. tests\ui\tasksTreeView.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      99. tests\update-prd.spec\fetchOpenIssues.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      100. tests\update-prd.spec\run.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      101. tests\utils\config.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      102. tests\utils\logger.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      103. tests\verificationTeam.spec\VerificationTeam.generateVisualChecklist.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      104. tests\verificationTeam.spec\VerificationTeam.runAutomatedChecks.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      105. tests\verificationTeam.spec\VerificationTeam.verifyTask.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      106. tests\webhooks.spec\handleWebhook.web.spec.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+      107. tests\__tests__\quality-gates.test.ts
+
+      at tests/meta/test-discovery.test.ts:50:21
+          at Array.forEach (<anonymous>)
+
+  console.log
+    
+    Γ£à Test discovery successful: 107 test files ready
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:75:17)
+
+  console.log
+    
+    Γ£à All 107 test files contain valid test blocks
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:166:17)
+
+PASS tests/programmingOrchestrator.test.ts
+  ProgrammingOrchestrator
+    Task Persistence - Date Conversion
+      ΓêÜ should convert valid ISO date strings to Date objects on load (3 ms)
+      ΓêÜ should handle invalid date strings and fallback to current date (1 ms)
+      ΓêÜ should handle missing createdAt field
+      ΓêÜ should log conversion summary after loading tasks
+    Duplicate Detection
+      ΓêÜ should prevent duplicate tasks by exact ticketId match (2 ms)
+      ΓêÜ should log DEBUG message when duplicate ticketId is detected (1 ms)
+      ΓêÜ should reload without false positives on removed tasks (Strategy C) (1 ms)
+      ΓêÜ should allow tasks with same title but different priority
+      ΓêÜ should handle hasTaskForTicket when queue is empty
+    Task Persistence Across Reloads
+      ΓêÜ should persist and reload tasks correctly (304 ms)
+      ΓêÜ should handle empty storage gracefully (1 ms)
+      ΓêÜ should handle corrupted storage data
+    Queue Management
+      ΓêÜ should maintain max 50 tasks limit (306 ms)
+    Orphan Detection & Reconciliation
+      ΓêÜ should remove orphaned tasks (no matching ticket) on init (1 ms)
+      ΓêÜ should retain tasks with valid tickets (1 ms)
+      ΓêÜ should keep tasks without ticketId (from plan file) (11 ms)
+
+  console.log
+    
+    ≡ƒôè Overall Test Count: 746 total test cases across 107 files
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:205:17)
+
+  console.log
+    
+    ≡ƒôï Test Failure Detection Report:
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:212:17)
+
+  console.log
+    This test runs alongside full test suite to identify failing tests
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:213:17)
+
+  console.log
+    Γ£à Failure tracking enabled for full test suite
+
+      at Object.<anonymous> (tests/meta/test-discovery.test.ts:217:17)
+
+PASS tests/meta/test-discovery.test.ts
+  Test Discovery & Runner Verification
+    ΓêÜ should discover all test files (excluding temp* files) (361 ms)
+    ΓêÜ should have no temp* test files in the suite (7 ms)
+    ΓêÜ should verify test files contain describe or it blocks (39 ms)
+    ΓêÜ should report total test count (45 ms)
+    ΓêÜ should identify and report test files with failures during execution (3 ms)
+
+PASS tests/example.test.ts
+  COE Extension Activation
+    ΓêÜ should export an activate function (253 ms)
+    ΓêÜ should export a deactivate function (1 ms)
+    ΓêÜ should register commands when activated (9 ms)
+  Basic Jest Examples
+    ΓêÜ should pass simple math tests
+    ΓêÜ should pass simple string tests (1 ms)
+    ΓêÜ should pass simple array tests (1 ms)
+    ΓêÜ should pass simple object tests (4 ms)
+
+  console.log
+    ΓÜá∩╕Å Orchestrator not available in test setup
+
+      at Object.<anonymous> (tests/extension.responseStreaming.test.ts:20:21)
+
+PASS tests/extension.responseStreaming.test.ts
+  Extension Response Streaming & Task Completion
+    ΓêÜ handles plain text model responses without JSON parse errors (54 ms)
+    ΓêÜ maintains task queue priority ordering after streamed responses (1 ms)
+    ΓêÜ validates task completion requires non-empty content (1 ms)
+    ΓêÜ preserves task metadata during queue operations
+    ΓêÜ handles task status transitions correctly
+    ΓêÜ queue handles stream response without crashing (3 ms)
+
+  console.log
+    
+    Γ£à TypeScript: All files compile successfully
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:54:21)
+
+PASS tests/extension.spec/activate.web.spec.ts
+  activate
+    ΓêÜ should initialize the extension without errors (20 ms)
+    ΓêÜ should register the status bar item (8 ms)
+    ΓêÜ should initialize the TicketDatabase (7 ms)
+    ΓêÜ should handle errors during activation gracefully (4 ms)
+
+PASS tests/reportVerificationResult.spec/reportVerificationResult.web.spec.ts
+  reportVerificationResult
+    ΓêÜ should throw an error if parameters are invalid (27 ms)
+    ΓêÜ should throw an error if verification task is not found (2 ms)
+    ΓêÜ should return a successful response for valid input (2 ms)
+    ΓêÜ should create follow-up tasks for failed verifications (1 ms)
+
+PASS tests/extension.statusBar.test.ts
+  COE Status Bar and Commands
+    ΓêÜ shows correct remaining count in status bar after task completion (28 ms)
+    ΓêÜ sends LM Studio request (stream) with prompt body and logs response (5 ms)
+    ΓêÜ filters streaming metadata and only logs clean model text (4 ms)
+    ΓêÜ ignores malformed streaming chunks but keeps prior good content (4 ms)
+    ΓêÜ does not complete task and shows error when LM Studio is unreachable (7 ms)
+    ΓêÜ shows "No tasks" in status bar when queue is empty (7 ms)
+    ΓêÜ displays disabled message for test command when real tasks exist (2 ms)
+
+PASS tests/issuesSync.spec/IssuesSync.syncNow.web.spec.ts
+  IssuesSync
+    ΓêÜ should call performSync when syncNow is invoked (2 ms)
+
+PASS src/github/__tests__/issuesSync.test.ts
+  IssuesSync
+    startSync
+      ΓêÜ should start the sync process and schedule periodic syncs (3 ms)
+      ΓêÜ should call performSync with the GitHub API instance (1 ms)
+      ΓêÜ should set up an interval for periodic sync (1 ms)
+    stopSync
+      ΓêÜ should clear the sync interval
+      ΓêÜ should set syncInterval to null after stopping (1 ms)
+      ΓêÜ should handle stopSync when no sync is running (1 ms)
+      ΓêÜ should be safe to call stopSync multiple times
+    performSync (private)
+      ΓêÜ should handle sync errors gracefully (1 ms)
+      ΓêÜ should execute without throwing errors
+    syncNow
+      ΓêÜ should trigger an immediate sync operation (1 ms)
+      ΓêÜ should call performSync without starting a periodic timer (1 ms)
+      ΓêÜ should work independently of startSync
+      ΓêÜ should handle multiple consecutive syncNow calls (7 ms)
+    integration
+      ΓêÜ should handle full sync lifecycle: start -> sync -> stop (1 ms)
+      ΓêÜ should allow restarting sync after stopping (1 ms)
+      ΓêÜ should use correct sync interval constant
+    error scenarios
+      ΓêÜ should not crash if GitHub API is undefined (1 ms)
+      ΓêÜ should show error message on sync failure
+    edge cases
+      ΓêÜ should handle rapid start/stop cycles (3 ms)
+      ΓêÜ should maintain state correctly across multiple operations (1 ms)
+
+PASS tests/dependencies.spec/DependencyManager.getDependents.web.spec.ts
+  DependencyManager - getDependents
+    ΓêÜ should return an empty array when no tasks depend on the given taskId (1 ms)
+    ΓêÜ should return tasks that depend on the given taskId (18 ms)
+    ΓêÜ should handle tasks with no dependencies (11 ms)
+
+PASS tests/dependencies.spec/DependencyManager.areDependenciesMet.web.spec.ts
+  DependencyManager.areDependenciesMet
+    ΓêÜ should return true if the task has no dependencies (1 ms)
+    ΓêÜ should return false if any dependency task is not done
+    ΓêÜ should return true if all dependency tasks are done (1 ms)
+    ΓêÜ should return false if a dependency task does not exist (1 ms)
+
+PASS tests/extension.spec/deactivate.web.spec.ts
+  deactivate
+    ΓêÜ should stop the PlansFileWatcher and dispose FileConfigManager (221 ms)
+
+PASS tests/ui/tasksTreeView.test.ts
+  TasksTreeDataProvider
+    Initialization
+      ΓêÜ should create TasksTreeDataProvider instance (2 ms)
+      ΓêÜ should initialize with tasks array (2 ms)
+      ΓêÜ should handle empty tasks array
+    onDidChangeTreeData
+      ΓêÜ should have onDidChangeTreeData event (1 ms)
+      ΓêÜ should support event subscription
+    refresh
+      ΓêÜ should trigger onDidChangeTreeData event (1 ms)
+      ΓêÜ should allow multiple refreshes
+    updateTasks
+      ΓêÜ should update tasks and refresh (2 ms)
+      ΓêÜ should replace existing tasks (1 ms)
+    getTreeItem
+      ΓêÜ should return tree item (1 ms)
+      ΓêÜ should return same object
+    getChildren - Root Level
+      ΓêÜ should return priority categories at root (1 ms)
+      ΓêÜ should have correct collapsible states
+      ΓêÜ should include emoji icons for priorities (1 ms)
+    getChildren - Priority Level
+      ΓêÜ should return tasks for critical priority (1 ms)
+      ΓêÜ should return tasks for high priority
+      ΓêÜ should return empty array for priorities with no tasks (1 ms)
+      ΓêÜ should include status icons in task labels
+      ΓêÜ should set task items as non-collapsible (1 ms)
+    Task Status Icons
+      ΓêÜ should show pending icon for pending tasks
+      ΓêÜ should show ready icon for ready tasks (1 ms)
+      ΓêÜ should show in-progress icon for active tasks
+      ΓêÜ should show done icon for completed tasks
+      ΓêÜ should show blocked icon for blocked tasks (1 ms)
+  TaskTreeItem
+    ΓêÜ should create task tree item without task
+    ΓêÜ should create category item with expanded state (1 ms)
+    ΓêÜ should create task item with description tooltip (1 ms)
+    ΓêÜ should include task ID in description
+    ΓêÜ should extend vscode.TreeItem (1 ms)
+  Priority Sorting
+    ΓêÜ should order priorities correctly
+  Task Filtering
+    ΓêÜ should filter tasks by priority (1 ms)
+
+PASS tests/api.spec/GitHubAPI.getIssue.web.spec.ts
+  GitHubAPI - getIssue
+    ΓêÜ should throw an error if octokit is not initialized (17 ms)
+    ΓêÜ should throw an error if not authenticated (1 ms)
+
+  console.log
+    
+    ≡ƒƒí Files Without Tests: 54 file(s)
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:63:21)
+
+  console.log
+      - CoeTaskTreeProvider
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - agentTeam
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - answerTeam
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - bossRouter
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - bossRouter.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - config.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - contextBundler
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - contextBundler.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - coverageProvider
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - dependencies
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - extension
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - extension.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - fileConfig
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - getNextTask.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - hello-world.test
+
+      at tests/meta/common-issues.test.ts:65:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      ... and 39 more
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:68:25)
+
+  console.log
+    ≡ƒÆí Consider adding tests for critical source files
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:70:21)
+
+  console.log
+    
+    ≡ƒƒí Large Files (>400 lines): 11 file(s)
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:110:21)
+
+  console.log
+      src\orchestrator\programmingOrchestrator.ts: 1432 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\extension.ts: 1319 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\db\ticketsDb.ts: 1075 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\services\ticketDb.ts: 922 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\services\__tests__\ticketDb.test.ts: 921 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\__tests__\reportTaskStatus.test.ts: 554 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\utils\__tests__\streamingLLM.test.ts: 527 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\reportTaskStatus.ts: 461 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\mcpServer\tools\__tests__\getNextTask.test.ts: 445 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\utils\streamingLLM.ts: 435 lines
+
+      at tests/meta/common-issues.test.ts:112:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+      ... and 1 more
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:115:25)
+
+  console.log
+    ≡ƒÆí Consider refactoring large files into smaller modules
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:117:21)
+
+  console.log
+    
+    ≡ƒƒí Potential Hardcoded Configuration: 4 file(s)
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:162:21)
+
+  console.log
+      src\extension.ts
+
+      at tests/meta/common-issues.test.ts:165:25
+          at Array.forEach (<anonymous>)
+
+PASS tests/ticketsDb.migration.test.ts
+  TicketDb - Schema Migrations
+    Γùï skipped should handle migration from old DB schema (no version table)
+    Γùï skipped should correctly track database schema version
+    Γùï skipped should preserve existing data during migrations
+    Γùï skipped should not crash on migration errors
+    Γùï skipped should create completed_tasks table on v0 ΓåÆ v1 migration
+    Γùï skipped should correctly compare versions for migration decisions
+  TicketDb - Completed Tasks Archive (P1.1)
+    ΓêÜ should archive a task to completed_tasks table (45 ms)
+    ΓêÜ should retrieve all completed tasks from history (32 ms)
+    ΓêÜ should filter tasks older than specified days (34 ms)
+    ΓêÜ should preserve all task data during archiving (18 ms)
+    ΓêÜ should cleanup completed tasks older than retention period (26 ms)
+    ΓêÜ should use 30-day default retention when not configured (1 ms)
+    ΓêÜ should handle cleanup errors gracefully without crashing (9 ms)
+    cleanupOldTasks() - Dual-mode cleanup integration
+      ΓêÜ should delete tasks older than maxAgeHours (age-based only) (26 ms)
+      ΓêÜ should keep only last N tasks (count-based only) (32 ms)
+      ΓêÜ should apply both age and count limits (combined mode) (48 ms)
+      ΓêÜ should not delete anything when both limits are 0 (unlimited) (28 ms)
+
+  console.log
+        ΓÜá∩╕Å  Hardcoded localhost
+
+      at tests/meta/common-issues.test.ts:168:29
+          at Array.forEach (<anonymous>)
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\services\llmConfigManager.ts
+
+      at tests/meta/common-issues.test.ts:165:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  Hardcoded localhost
+
+      at tests/meta/common-issues.test.ts:168:29
+          at Array.forEach (<anonymous>)
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\test\suite\llmConfigManager.test.ts
+
+      at tests/meta/common-issues.test.ts:165:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  Hardcoded localhost
+
+      at tests/meta/common-issues.test.ts:168:29
+          at Array.forEach (<anonymous>)
+          at Array.forEach (<anonymous>)
+
+  console.log
+      src\utils\fileConfig.ts
+
+      at tests/meta/common-issues.test.ts:165:25
+          at Array.forEach (<anonymous>)
+
+  console.log
+        ΓÜá∩╕Å  Hardcoded localhost
+
+      at tests/meta/common-issues.test.ts:168:29
+          at Array.forEach (<anonymous>)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    ≡ƒÆí Move hardcoded values to configuration files or constants
+
+      at Object.<anonymous> (tests/meta/common-issues.test.ts:174:21)
+
+PASS tests/meta/common-issues.test.ts
+  Common Coding Issues Detection
+    ΓêÜ should identify files with insufficient test coverage (47 ms)
+    ΓêÜ should report on large files that need refactoring (39 ms)
+    ΓêÜ should detect hardcoded configuration strings (43 ms)
+
+PASS src/utils/__tests__/config.test.ts
+  ConfigManager
+    get
+      ΓêÜ should retrieve configuration value (1 ms)
+      ΓêÜ should return default value when key not found (1 ms)
+      ΓêÜ should handle typed configuration values
+      ΓêÜ should handle numeric configuration values
+      ΓêÜ should handle object configuration values
+    set
+      ΓêÜ should set configuration value with default target (1 ms)
+      ΓêÜ should set configuration value with custom target (1 ms)
+      ΓêÜ should handle setting null value
+      ΓêÜ should handle setting object values (1 ms)
+    getGitHubToken
+      ΓêÜ should return cached token if available
+      ΓêÜ should retrieve token from SecretStorage if not cached (1 ms)
+      ΓêÜ should cache retrieved token for future calls
+      ΓêÜ should return undefined when no secrets available (1 ms)
+      ΓêÜ should return undefined when token not found in SecretStorage
+    setGitHubToken
+      ΓêÜ should store token in SecretStorage and update cache (1 ms)
+      ΓêÜ should handle missing secrets gracefully
+      ΓêÜ should update cache with new token
+    deleteGitHubToken
+      ΓêÜ should delete token from SecretStorage and clear cache (1 ms)
+      ΓêÜ should handle missing secrets gracefully
+    getGitHubTokenWithPrompt
+      ΓêÜ should return existing token without prompting (1 ms)
+      ΓêÜ should prompt user when token not found (1 ms)
+      ΓêÜ should validate token format (ghp_ prefix)
+      ΓêÜ should validate token format (github_pat_ prefix) (1 ms)
+      ΓêÜ should reject empty tokens from user input
+      ΓêÜ should reject invalid token format (1 ms)
+      ΓêÜ should save token when user provides valid token (1 ms)
+      ΓêÜ should show success message after saving token
+      ΓêÜ should return undefined when user cancels input (1 ms)
+      ΓêÜ should handle whitespace-only tokens as empty (1 ms)
+    getAll
+      ΓêÜ should return all COE configuration (1 ms)
+      ΓêÜ should return configuration object for accessing nested properties (3 ms)
+    Edge Cases
+      ΓêÜ should handle rapid successive token requests with caching (1 ms)
+      ΓêÜ should handle token deletion followed by retrieval (1 ms)
+
+PASS tests/reportTaskStatus.spec/reportTaskStatus.web.spec.ts
+  reportTaskStatus
+    ΓêÜ should throw an error if taskId is not found (34 ms)
+    ΓêÜ should update task status and return success response (2 ms)
+    ΓêÜ should create a verification task for completed tasks with tests passed (2 ms)
+    ΓêÜ should process observations and return processed observations (1 ms)
+    ΓêÜ should calculate and return dashboard statistics (1 ms)
+
+PASS src/mcpServer/tools/index.web.spec.ts
+  Exports
+    ΓêÜ should be defined (1 ms)
+
+PASS tests/integration.spec/exampleUsage.web.spec.ts
+  exampleUsage
+    ΓêÜ should initialize MCPServer, register tools, process a request, and stop the server (2 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsImplementationKeywords.web.spec.ts
+  BossRouter.containsImplementationKeywords
+    ΓêÜ should return true if the text contains implementation-related keywords (2 ms)
+    ΓêÜ should return false if the text does not contain implementation-related keywords (1 ms)
+    ΓêÜ should return true for partial matches of implementation-related keywords (1 ms)
+    ΓêÜ should return false for an empty string
+    ΓêÜ should handle case-insensitive matches
+
+PASS tests/update-prd.spec/run.web.spec.ts
+  run
+    ΓêÜ should fetch issues, update PRD.md, and append to status-log.md (6 ms)
+    ΓêÜ should not update files if no issues are categorized (1 ms)
+    ΓêÜ should throw an error if GITHUB_TOKEN is missing (18 ms)
+
+PASS tests/ui/plansPanel.test.ts
+  PlansPanel
+    Initialization
+      ΓêÜ should create a PlansPanel instance (5 ms)
+      ΓêÜ should not create panel on instantiation (1 ms)
+    show
+      ΓêÜ should create a webview panel (1 ms)
+      ΓêÜ should create panel with correct view type (1 ms)
+      ΓêÜ should create panel with correct title
+      ΓêÜ should create panel in ViewColumn.Two (1 ms)
+      ΓêÜ should enable scripts in webview (1 ms)
+      ΓêÜ should retain context when hidden
+      ΓêÜ should set webview content (1 ms)
+      ΓêÜ should register dispose handler (1 ms)
+      ΓêÜ should reveal panel if already open (1 ms)
+      ΓêÜ should not create multiple panels (1 ms)
+    HTML Content
+      ΓêÜ should generate valid HTML (1 ms)
+      ΓêÜ should include head section (1 ms)
+      ΓêÜ should include body section (3 ms)
+      ΓêÜ should include proper meta tags
+      ΓêÜ should have page title (1 ms)
+      ΓêÜ should include CSS styling
+      ΓêÜ should use VS Code color variables (1 ms)
+      ΓêÜ should include heading element (1 ms)
+      ΓêÜ should have content container
+      ΓêÜ should include script section (1 ms)
+      ΓêÜ should acquire VS Code API
+      ΓêÜ should listen for messages (1 ms)
+    updatePlanContent
+      ΓêÜ should post message to webview (1 ms)
+      ΓêÜ should include updatePlan command
+      ΓêÜ should pass plan data correctly (1 ms)
+      ΓêÜ should not update if panel not shown (1 ms)
+      ΓêÜ should handle complex plan objects (1 ms)
+      ΓêÜ should handle null data
+      ΓêÜ should handle empty object
+    Panel Lifecycle
+      ΓêÜ should handle panel disposal (1 ms)
+      ΓêÜ should be able to show panel again after disposal
+    Message Communication
+      ΓêÜ should support bidirectional communication through message passing
+      ΓêÜ should handle multiple updates (1 ms)
+    Edge Cases
+      ΓêÜ should handle very large plan objects (1 ms)
+      ΓêÜ should handle special characters in plan data (1 ms)
+      ΓêÜ should handle unicode in plan data
+      ΓêÜ should handle circular references in plan data gracefully (1 ms)
+      ΓêÜ should handle rapid show/update calls
+    Context Integration
+      ΓêÜ should accept extension context (1 ms)
+
+PASS tests/utils/config.test.ts
+  ConfigManager - SecretStorage Integration
+    ΓêÜ should store and retrieve GitHub token from SecretStorage (5 ms)
+    ΓêÜ should cache token in memory to reduce SecretStorage calls (1 ms)
+    ΓêÜ should clear cache when token is deleted
+    ΓêÜ should return undefined when no token is stored (1 ms)
+    ΓêÜ should prompt user for token when missing
+    ΓêÜ should return existing token without prompting
+    ΓêÜ should handle user cancelling token prompt
+    ΓêÜ should validate token format during prompt
+    ΓêÜ should update cache when token is changed (1 ms)
+    ΓêÜ should handle SecretStorage failures gracefully (11 ms)
+
+PASS tests/programmingOrchestrator.spec/ProgrammingOrchestrator.loadPersistedTasks.web.spec.ts
+  ProgrammingOrchestrator - loadPersistedTasks
+    ΓêÜ should skip loading tasks if workspaceState is not available
+    ΓêÜ should start fresh if no persisted tasks are found (1 ms)
+    ΓêÜ should filter and load only active tasks (1 ms)
+    ΓêÜ should handle errors and start with an empty queue (1 ms)
+    ΓêÜ should trigger a UI refresh after loading tasks (1 ms)
+
+PASS tests/extension.spec/getLLMConfig.web.spec.ts
+  getLLMConfig
+    ΓêÜ should return the LLM configuration from FileConfigManager (1 ms)
+
+PASS tests/programmingOrchestrator.spec/ProgrammingOrchestrator.init.web.spec.ts
+  ProgrammingOrchestrator
+    ΓêÜ should initialize successfully with valid configuration (2 ms)
+    ΓêÜ should throw an error if maxConcurrentSessions is less than 1 (90 ms)
+
+PASS tests/coeTaskTreeProvider.test.ts
+  CoeTaskTreeProvider
+    ΓêÜ returns tree items for ready tasks with priority label and command (2 ms)
+    ΓêÜ sorts by priority then title (28 ms)
+    ΓêÜ returns empty list when orchestrator is null (1 ms)
+    ΓêÜ fires change event on refresh (1 ms)
+
+PASS tests/programmingOrchestrator.spec/MockMCPTools.reportObservation.web.spec.ts
+  MockMCPTools - reportObservation
+    ΓêÜ should return success with the correct taskId and observation (3 ms)
+
+PASS src/services/__tests__/bossRouter.test.ts
+  BossRouter
+    Singleton Pattern
+      ΓêÜ should return the same instance on multiple calls (3 ms)
+    AI to Human Routing (Rule 1)
+      ΓêÜ should route ai_to_human tickets to Answer Team (2 ms)
+      ΓêÜ should route ai_to_human with any priority to Answer Team (2 ms)
+    P1 Planning Routing (Rule 2)
+      ΓêÜ should route P1 tickets with "plan" keyword to Planning Team (1 ms)
+      ΓêÜ should route P1 tickets with "define" keyword to Planning Team
+      ΓêÜ should route P1 tickets with planning keywords in description (1 ms)
+      ΓêÜ should NOT route P2/P3 planning keywords to Planning Team unless it matches another rule (6 ms)
+    Verification Routing (Rule 3)
+      ΓêÜ should route tickets with "verify" keyword to Verification Team (1 ms)
+      ΓêÜ should route tickets with "test" keyword to Verification Team (1 ms)
+      ΓêÜ should route tickets with "check" keyword to Verification Team
+    Research Routing (Rule 4)
+      ΓêÜ should route tickets with "research" keyword to Research Team (1 ms)
+      ΓêÜ should route tickets with "investigate" keyword to Research Team (1 ms)
+      ΓêÜ should route tickets with "explore" keyword to Research Team (2 ms)
+    Question Routing (Rule 5)
+      ΓêÜ should route human questions to Answer Team (2 ms)
+      ΓêÜ should route tickets with "how" keyword to Answer Team (2 ms)
+      ΓêÜ should route tickets with "?" to Answer Team (2 ms)
+    P1 Default Routing (Rule 6)
+      ΓêÜ should route P1 tickets without specific keywords to Planning Team (1 ms)
+    Implementation Routing (Rule 7)
+      ΓêÜ should route tickets with "implement" keyword to Planning Team (1 ms)
+      ΓêÜ should route tickets with "build" keyword to Planning Team (1 ms)
+      ΓêÜ should route tickets with "fix" keyword to Planning Team (1 ms)
+    Edge Cases
+      ΓêÜ should throw error for null ticket (58 ms)
+      ΓêÜ should throw error for undefined ticket (1 ms)
+      ΓêÜ should escalate ticket with missing ticket_id
+      ΓêÜ should escalate ticket with missing type (1 ms)
+      ΓêÜ should escalate ticket with missing priority
+      ΓêÜ should escalate ticket with no matching rules (1 ms)
+    Rule Priority
+      ΓêÜ should prioritize ai_to_human over planning keywords
+      ΓêÜ should prioritize verification over implementation (1 ms)
+    Extensibility
+      ΓêÜ should allow adding custom rules
+      ΓêÜ should allow resetting rules to default (1 ms)
+      ΓêÜ should expose rules for inspection (1 ms)
+    Logging
+      ΓêÜ should route ticket successfully (1 ms)
+      ΓêÜ should handle invalid ticket data (1 ms)
+      ΓêÜ should handle when no rule matches (1 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsKeywords.web.spec.ts
+  BossRouter.containsKeywords
+    ΓêÜ should return true if the text contains any of the keywords (3 ms)
+    ΓêÜ should return false if the text does not contain any of the keywords (1 ms)
+    ΓêÜ should handle special characters in keywords correctly (1 ms)
+    ΓêÜ should return true for standalone "?" keyword in the text
+    ΓêÜ should return false for empty keywords array (3 ms)
+    ΓêÜ should return false for empty text (1 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.resetInstance.web.spec.ts
+  TicketDatabase.resetInstance
+    ΓêÜ should set the instance to null (1 ms)
+
+PASS tests/plans/planManager.test.ts
+  PlanManager
+    Initialization
+      ΓêÜ should create a PlanManager instance (5 ms)
+      ΓêÜ should initialize with null current plan (1 ms)
+      ΓêÜ should determine plan path from workspace root (1 ms)
+    loadPlan
+      ΓêÜ should load plan from file (1 ms)
+      ΓêÜ should set currentPlan when loading successfully (1 ms)
+      ΓêÜ should return null on file read error
+      ΓêÜ should handle JSON parse errors (1 ms)
+      ΓêÜ should load plan with complex structure
+      ΓêÜ should maintain plan state after loading
+    savePlan
+      ΓêÜ should save plan to file
+      ΓêÜ should save plan with proper formatting (1 ms)
+      ΓêÜ should update currentPlan after saving
+      ΓêÜ should return false on write error (2 ms)
+      ΓêÜ should handle save errors gracefully
+      ΓêÜ should save plan with complex task structure (1 ms)
+    getCurrentPlan
+      ΓêÜ should return null when no plan is loaded
+      ΓêÜ should return loaded plan (1 ms)
+      ΓêÜ should return saved plan
+    setPlanPath
+      ΓêÜ should update plan path
+      ΓêÜ should allow changing path before load
+      ΓêÜ should use new path for subsequent saves (1 ms)
+      ΓêÜ should support multiple path changes
+    Load/Save Cycle
+      ΓêÜ should load plan, modify, and save (1 ms)
+      ΓêÜ should handle multiple load/save cycles
+    Error States
+      ΓêÜ should not modify currentPlan on failed load
+      ΓêÜ should not modify currentPlan on failed save
+
+PASS tests/ui/statusBar.test.ts
+  StatusBarManager
+    Initialization
+      ΓêÜ should create StatusBarManager instance (4 ms)
+      ΓêÜ should create status bar items on initialization
+      ΓêÜ should set command for task count item (1 ms)
+      ΓêÜ should set command for sync status item
+      ΓêÜ should use correct alignment (Left) (1 ms)
+      ΓêÜ should use correct priorities
+    show
+      ΓêÜ should show both status bar items
+      ΓêÜ should call show method on each item
+    hide
+      ΓêÜ should hide both status bar items
+      ΓêÜ should call hide method on each item
+    updateTaskCount
+      ΓêÜ should update task count display (1 ms)
+      ΓêÜ should set tooltip with pending count
+      ΓêÜ should handle zero pending tasks (2 ms)
+      ΓêÜ should handle all tasks pending (1 ms)
+      ΓêÜ should handle large numbers
+      ΓêÜ should update text dynamically
+    updateSyncStatus - Idle
+      ΓêÜ should display idle status
+      ΓêÜ should show synced message for idle status
+      ΓêÜ should set tooltip to not synced yet when no lastSync (1 ms)
+      ΓêÜ should show last sync time when provided (50 ms)
+      ΓêÜ should format last sync time correctly (4 ms)
+    updateSyncStatus - Syncing
+      ΓêÜ should display syncing status (1 ms)
+      ΓêÜ should show syncing tooltip
+      ΓêÜ should use spinning sync icon
+    updateSyncStatus - Error
+      ΓêÜ should display error status (1 ms)
+      ΓêÜ should show error tooltip
+      ΓêÜ should use error icon
+    Status Transitions
+      ΓêÜ should transition from idle to syncing
+      ΓêÜ should transition from syncing to idle (1 ms)
+      ΓêÜ should transition from syncing to error (1 ms)
+      ΓêÜ should transition from error to idle
+    dispose
+      ΓêÜ should dispose both status bar items (1 ms)
+      ΓêÜ should call dispose method on each item
+      ΓêÜ should be safe to call multiple times
+    Integration
+      ΓêÜ should update both items independently (1 ms)
+      ΓêÜ should show and hide both items
+      ΓêÜ should handle full lifecycle
+    Edge Cases
+      ΓêÜ should handle status update with same values (1 ms)
+      ΓêÜ should handle task count with same values
+      ΓêÜ should handle rapid status changes (1 ms)
+
+PASS tests/migrations.spec/getDbVersion.web.spec.ts
+  getDbVersion
+    ΓêÜ should return the version number if the version exists in the db_version table (2 ms)
+    ΓêÜ should return 0 if the db_version table does not exist (1 ms)
+    ΓêÜ should return 0 if the version is undefined
+  migrateSchema
+    ΓêÜ should create db_version table and set initial version if it does not exist (1 ms)
+    ΓêÜ should migrate schema from version 0 to 1 (1 ms)
+    ΓêÜ should not apply migrations if the current version is up-to-date (1 ms)
+    ΓêÜ should throw an error if migration fails (7 ms)
+
+PASS tests/askQuestion.spec/askQuestion.web.spec.ts
+  askQuestion
+    ΓêÜ should return a valid response for a well-formed question (4 ms)
+    ΓêÜ should throw an error for invalid parameters (45 ms)
+    ΓêÜ should include related decisions when requested (2 ms)
+    ΓêÜ should not include related decisions when explicitly disabled (1 ms)
+    ΓêÜ should return low confidence for unrecognized questions
+    ΓêÜ should validate optional parameters correctly (3 ms)
+    ΓêÜ should handle questions with no matching topics gracefully
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+  console.log
+    ≡ƒöº Resetting mocks before test...
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:34:17)
+
+PASS tests/protocol.spec/createSuccessResponse.web.spec.ts
+  createSuccessResponse
+    ΓêÜ should create a valid JSON-RPC 2.0 success response (2 ms)
+    ΓêÜ should handle string IDs correctly
+    ΓêÜ should handle undefined result
+    ΓêÜ should handle null result
+    ΓêÜ should handle numeric results correctly (1 ms)
+
+  console.log
+    Γ£à All 13 LLM Configuration tests completed successfully
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:314:17)
+
+  console.log
+    ≡ƒôè Test Coverage: 100% of config paths
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:315:17)
+
+  console.log
+    Γ£ô All mocks properly isolated
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:316:17)
+
+  console.log
+    Γ£ô All async operations resolved
+
+      at Object.<anonymous> (tests/extension.llmConfig.test.ts:317:17)
+
+PASS tests/extension.llmConfig.test.ts
+  LLM Configuration Settings with VS Code Priority
+    ΓêÜ should read default LLM configuration values from VS Code settings (6 ms)
+    ΓêÜ should prioritize VS Code settings over file config (4 ms)
+    ΓêÜ should use custom LLM URL when configured (2 ms)
+    ΓêÜ should use custom model name when configured (2 ms)
+    ΓêÜ should fallback to defaults when config is invalid (1 ms)
+    ΓêÜ should estimate input tokens correctly (1 token Γëê 4 chars) (1 ms)
+    ΓêÜ should truncate prompt when exceeding input token limit (2 ms)
+    ΓêÜ should convert timeout from seconds to milliseconds (1 ms)
+    ΓêÜ should apply max output tokens to request body (2 ms)
+    ΓêÜ should leave 10% buffer when truncating to token limit (4 ms)
+    ΓêÜ should reflect configuration changes when settings are updated (3 ms)
+    ΓêÜ should define minimum and maximum bounds for config values (3 ms)
+    ΓêÜ should properly mock terminal output retrieval (1 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsVerificationKeywords.web.spec.ts
+  BossRouter.containsVerificationKeywords
+    ΓêÜ should return true if the text contains verification keywords (1 ms)
+    ΓêÜ should return false if the text does not contain verification keywords
+    ΓêÜ should return true for text containing multiple verification keywords
+    ΓêÜ should return false for an empty string (1 ms)
+    ΓêÜ should be case insensitive when checking for keywords
+
+PASS tests/server.spec/MCPServer.processMessage.web.spec.ts
+  MCPServer - processMessage
+    ΓêÜ should process a valid message and return a formatted response (2 ms)
+    ΓêÜ should handle MCPProtocolError and return an error response (37 ms)
+    ΓêÜ should handle unexpected errors and return an internal error response (1 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.getAllCompleted.web.spec.ts
+  TicketDatabase - getAllCompleted
+    ΓêÜ should return tasks from fallback store when useFallback is true (2 ms)
+    ΓêÜ should filter tasks by minDaysAgo when useFallback is true (2 ms)
+    ΓêÜ should query the database when useFallback is false (1 ms)
+    ΓêÜ should reject with an error if the database query fails (22 ms)
+    ΓêÜ should return an empty array if fallback store is empty
+    ΓêÜ should handle filters correctly when both status and minDaysAgo are provided (1 ms)
+
+PASS tests/dependencies.spec/DependencyManager.hasCircularDependency.web.spec.ts
+  DependencyManager - hasCircularDependency
+    ΓêÜ should return false when there are no circular dependencies (1 ms)
+    ΓêÜ should return true when there is a circular dependency
+    ΓêÜ should return false for a task with no dependencies
+    ΓêÜ should handle complex dependency graphs without circular dependencies
+
+PASS tests/server.spec/MCPServer.unregisterTool.web.spec.ts
+  MCPServer.unregisterTool
+    ΓêÜ should unregister a tool and return true if the tool exists (9 ms)
+    ΓêÜ should return false if the tool does not exist
+
+PASS tests/server.spec/MCPServer.handleRequest.web.spec.ts
+  MCPServer.handleRequest
+    ΓêÜ should return error response if server is not running (1 ms)
+    ΓêÜ should return error response if method is not found
+    ΓêÜ should execute the handler and return success response (1 ms)
+    ΓêÜ should return error response for MCPProtocolError (1 ms)
+    ΓêÜ should return error response for unknown errors (1 ms)
+
+PASS tests/completedTasksTreeProvider.test.ts
+  CompletedTasksTreeProvider
+    getChildren()
+      ΓêÜ should return completed tasks from database (3 ms)
+      ΓêÜ should show placeholder when history is empty (1 ms)
+      ΓêÜ should show error placeholder on DB error (1 ms)
+      ΓêÜ should apply retention filter when configured (1 ms)
+      ΓêÜ should not apply filter when retention is 0 (unlimited)
+      ΓêÜ should format time ago correctly (2 ms)
+    refresh()
+      ΓêÜ should trigger tree refresh event
+      ΓêÜ should update tree data when updateRetention() is called
+    getTreeItem()
+      ΓêÜ should return the same tree item passed in (1 ms)
+
+PASS tests/issuesSync.spec/IssuesSync.startSync.web.spec.ts
+  IssuesSync - startSync
+    ΓêÜ should call performSync immediately and schedule periodic sync (4 ms)
+    ΓêÜ should set syncInterval when startSync is called (1 ms)
+
+PASS tests/update-prd.spec/fetchOpenIssues.web.spec.ts
+  fetchOpenIssues
+    ΓêÜ should fetch open issues from the specified repository (3 ms)
+    ΓêÜ should return an empty array if no issues are found (1 ms)
+    ΓêÜ should throw an error if the API call fails (11 ms)
+
+PASS tests/github/api.test.ts
+  GitHubAPI - SecretStorage Integration
+    ΓêÜ should authenticate using token from SecretStorage (2 ms)
+    ΓêÜ should use provided token over SecretStorage (1 ms)
+    ΓêÜ should return false when no token is available
+    ΓêÜ should handle authentication failure gracefully
+    ΓêÜ should work without context if token is provided (1 ms)
+
+PASS tests/programmingOrchestrator.spec/ProgrammingOrchestrator.shutdown.web.spec.ts
+  ProgrammingOrchestrator - shutdown
+    ΓêÜ should log shutdown start and completion (2 ms)
+    ΓêÜ should cancel all active sessions (1 ms)
+    ΓêÜ should clear the task queue and reset current task (1 ms)
+    ΓêÜ should set isInitialized to false
+    ΓêÜ should handle exceptions during shutdown (1 ms)
+
+PASS tests/protocol.spec/errorToResponse.web.spec.ts
+  errorToResponse
+    ΓêÜ should convert MCPProtocolError to an error response (8 ms)
+    ΓêÜ should convert a generic Error to an internal error response (2 ms)
+    ΓêÜ should handle an Error with an empty message (1 ms)
+    ΓêÜ should handle MCPProtocolError without data
+
+PASS tests/getErrors.spec/getErrors.web.spec.ts
+  getErrors
+    ΓêÜ throws MCPProtocolError for invalid parameters (8 ms)
+    ΓêÜ returns empty arrays when diagnostics file is missing (5 ms)
+    ΓêÜ returns diagnostics from quality-diagnostics.json (5 ms)
+    ΓêÜ returns empty arrays when diagnostics JSON is invalid (4 ms)
+    ΓêÜ handles diagnostics JSON with missing optional fields (6 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.createTicket.web.spec.ts
+  TicketDatabase - createTicket
+    ΓêÜ should create a ticket and store it in fallback when useFallback is true (2 ms)
+    ΓêÜ should create a ticket and store it in SQLite when useFallback is false (1 ms)
+    ΓêÜ should fallback to in-memory storage if SQLite insertion fails (1 ms)
+
+PASS tests/protocol.spec/createErrorResponse.web.spec.ts
+  createErrorResponse
+    ΓêÜ should create a valid error response with all fields (1 ms)
+    ΓêÜ should create a valid error response without optional data (1 ms)
+    ΓêÜ should handle numeric IDs correctly
+    ΓêÜ should handle string IDs correctly
+
+PASS tests/programmingOrchestrator.spec/MockMCPTools.reportTaskStatus.web.spec.ts
+  MockMCPTools - reportTaskStatus
+    ΓêÜ should return success with taskId and status when called with valid inputs (1 ms)
+    ΓêÜ should return success with taskId and status when output is not provided
+
+PASS tests/github/webhooks.test.ts
+  Webhook Handler
+    WebhookEvent Interface
+      ΓêÜ should create valid webhook event (7 ms)
+      ΓêÜ should support optional pull_request field (1 ms)
+    handleWebhook
+      ΓêÜ should not throw on valid webhook (1 ms)
+      ΓêÜ should handle unknown action gracefully
+    Issue Opened Event
+      ΓêÜ should handle issue opened action
+      ΓêÜ should handle issue opened with labels (1 ms)
+      ΓêÜ should handle issue opened with assignee (1 ms)
+    Issue Closed Event
+      ΓêÜ should handle issue closed action (1 ms)
+      ΓêÜ should handle issue closed with reason (1 ms)
+    Issue Edited Event
+      ΓêÜ should handle issue edited action
+      ΓêÜ should handle issue edited with description change (1 ms)
+    Issue Labeled Event
+      ΓêÜ should handle issue labeled action
+      ΓêÜ should handle issue labeled with multiple labels (1 ms)
+    Repository Information
+      ΓêÜ should handle repository data in webhook (1 ms)
+    Sender Information
+      ΓêÜ should handle sender data in webhook
+    Complex Event Payloads
+      ΓêÜ should handle full featured webhook payload
+    Edge Cases
+      ΓêÜ should handle event with minimal data
+      ΓêÜ should handle empty string action
+      ΓêÜ should handle issue with empty title (1 ms)
+      ΓêÜ should handle issue with very long title
+      ΓêÜ should handle special characters in title
+
+PASS tests/planningTeam.spec/PlanningTeam.refineTask.web.spec.ts
+  PlanningTeam
+    refineTask
+      ΓêÜ should process task refinement and return null (1 ms)
+      ΓêÜ should handle invalid taskId gracefully (1 ms)
+
+PASS tests/planningTeam.spec/PlanningTeam.generateTasks.web.spec.ts
+  PlanningTeam
+    ΓêÜ should return an empty array when generateTasks is called with a requirement (3 ms)
+    ΓêÜ should handle empty requirement gracefully (3 ms)
+    ΓêÜ should handle null requirement gracefully
+
+PASS tests/utils/logger.test.ts
+  Logger Utility
+    LogLevel Enum
+      ΓêÜ should have correct log level values (2 ms)
+      ΓêÜ should maintain proper log level hierarchy (1 ms)
+    Logger Singleton Pattern
+      ΓêÜ should create only one instance (2 ms)
+      ΓêÜ should create output channel on first instantiation (1 ms)
+      ΓêÜ should not create multiple output channels (1 ms)
+    Log Level Management
+      ΓêÜ should set log level (1 ms)
+      ΓêÜ should filter logs based on level (1 ms)
+      ΓêÜ should log ERROR when level is WARN (1 ms)
+      ΓêÜ should log all levels when set to DEBUG (2 ms)
+      ΓêÜ should only log errors when level is ERROR
+    Debug Logging
+      ΓêÜ should log debug messages with DEBUG level
+      ΓêÜ should not log debug messages when level is higher (2 ms)
+      ΓêÜ should include timestamp in debug messages (1 ms)
+    Info Logging
+      ΓêÜ should log info messages with INFO level (1 ms)
+      ΓêÜ should not log info when level is WARN or higher
+      ΓêÜ should log info by default (initial level is INFO) (1 ms)
+    Warning Logging
+      ΓêÜ should log warning messages with WARN level
+      ΓêÜ should not log warnings when level is ERROR
+    Error Logging
+      ΓêÜ should log error messages with ERROR level (1 ms)
+      ΓêÜ should always log errors regardless of level
+    Logging with Arguments
+      ΓêÜ should log additional arguments as JSON (1 ms)
+      ΓêÜ should format multiple arguments as JSON
+      ΓêÜ should handle complex nested objects (1 ms)
+      ΓêÜ should handle primitive type arguments
+      ΓêÜ should handle null and undefined in arguments (1 ms)
+    Output Channel Management
+      ΓêÜ should show output channel (1 ms)
+      ΓêÜ should dispose output channel
+      ΓêÜ should show channel after logging (1 ms)
+    Message Formatting
+      ΓêÜ should include timestamp in ISO format
+      ΓêÜ should include log level in brackets (1 ms)
+      ΓêÜ should include message content
+    Exported Singleton Instance
+      ΓêÜ should export a logger instance
+      ΓêÜ should be usable for logging immediately (1 ms)
+    Edge Cases
+      ΓêÜ should handle very long messages
+      ΓêÜ should handle special characters in messages
+      ΓêÜ should handle empty string messages (1 ms)
+      ΓêÜ should handle rapid sequential logging calls (1 ms)
+      ΓêÜ should handle circular references in objects gracefully
+    Level Transitions
+      ΓêÜ should allow changing log level multiple times (1 ms)
+      ΓêÜ should respect level changes between different log methods
+
+PASS tests/verificationTeam.spec/VerificationTeam.runAutomatedChecks.web.spec.ts
+  VerificationTeam - runAutomatedChecks
+    ΓêÜ should run all checks and return true if all pass (2 ms)
+    ΓêÜ should return false if any check fails (1 ms)
+    ΓêÜ should handle errors gracefully (6 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.getStats.web.spec.ts
+  TicketDatabase.getStats
+    ΓêÜ should return correct stats when tickets have various statuses (1 ms)
+    ΓêÜ should return zero stats when no tickets are available (1 ms)
+
+PASS tests/queue.spec/TaskQueue.updateTaskStatus.web.spec.ts
+  TaskQueue - updateTaskStatus
+    ΓêÜ should update the status and updatedAt of an existing task (3 ms)
+    ΓêÜ should not update anything if the task does not exist (1 ms)
+
+PASS tests/verificationTeam.spec/VerificationTeam.verifyTask.web.spec.ts
+  VerificationTeam
+    ΓêÜ should return passed as false and an empty issues array when verifyTask is called (1 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.getTicket.web.spec.ts
+  TicketDatabase - getTicket
+    ΓêÜ should return a ticket from the fallback store if useFallback is true (2 ms)
+    ΓêÜ should return null if the ticket is not found in the fallback store when useFallback is true (1 ms)
+    ΓêÜ should return a ticket from the database if useFallback is false and the ticket exists (1 ms)
+    ΓêÜ should return null if the ticket does not exist in the database
+    ΓêÜ should return a ticket from the fallback store if the database query fails
+    ΓêÜ should reject with an error if the database is not initialized (24 ms)
+
+PASS src/services/__tests__/prdGenerator.integration.test.ts
+  PRDGenerator Integration
+    generate
+      ΓêÜ should handle missing Plans folder gracefully (2 ms)
+      ΓêÜ should respect token limit setting (1 ms)
+      ΓêÜ should call status callback during generation (1 ms)
+    LLM response parsing
+      ΓêÜ should handle streaming response format
+
+PASS tests/answerTeam.spec/AnswerTeam.findContext.web.spec.ts
+  AnswerTeam - findContext
+    ΓêÜ should return null when findContext is called with a valid taskId (16 ms)
+    ΓêÜ should handle empty taskId gracefully and return null (7 ms)
+    ΓêÜ should handle undefined taskId gracefully and return null (1 ms)
+
+PASS src/utils/__tests__/streamingLLM.test.ts
+  streamingLLM.ts
+    callLLMWithStreaming
+      ΓêÜ should successfully stream tokens and call onToken callback (3 ms)
+      ΓêÜ should handle HTTP errors and fall back to non-streaming (4 ms)
+      ΓêÜ should use default timeoutSeconds if not provided in config (1 ms)
+      ΓêÜ should handle response body not readable (2 ms)
+      ΓêÜ should process partial lines correctly (1 ms)
+      ΓêÜ should handle malformed JSON chunks gracefully (1 ms)
+      ΓêÜ should call onComplete callback on successful completion (1 ms)
+      ΓêÜ should handle fetch errors (1 ms)
+      ΓêÜ should handle stream-related errors and fall back (2 ms)
+      ΓêÜ should skip empty lines in stream (1 ms)
+      ΓêÜ should handle temperature parameter (1 ms)
+      ΓêÜ should use default temperature if not provided (1 ms)
+      ΓêÜ should handle maxTokens parameter (1 ms)
+    callLLMFallback
+      ΓêÜ should successfully call LLM without streaming (1 ms)
+      ΓêÜ should handle HTTP errors in fallback (1 ms)
+      ΓêÜ should handle JSON parse errors in fallback
+      ΓêÜ should use default timeoutSeconds in fallback (1 ms)
+      ΓêÜ should call onComplete callback on successful fallback
+      ΓêÜ should handle fetch errors in fallback (1 ms)
+      ΓêÜ should use default maxTokens if not in config (2 ms)
+    Edge cases
+      ΓêÜ should handle tokens with special characters (1 ms)
+      ΓêÜ should handle empty token content (2 ms)
+      ΓêÜ should handle multiple DONE signals gracefully (1 ms)
+
+PASS tests/programmingOrchestrator.spec/MockMCPTools.askQuestion.web.spec.ts
+  MockMCPTools - askQuestion
+    ΓêÜ should return a successful response with the provided question and context (2 ms)
+    ΓêÜ should include the provided context in the response
+
+PASS tests/ticketsDb.spec/TicketDatabase.initialize.web.spec.ts
+  TicketDatabase.initialize
+    ΓêÜ should initialize the database and create necessary directories (6 ms)
+    ΓêÜ should handle existing database without creating placeholder ticket (1 ms)
+    ΓêÜ should fallback to in-memory store on error (1 ms)
+
+PASS tests/plans/schemas.test.ts
+  Plan Schema Validation
+    PlanSchema Interface
+      ΓêÜ should create a valid basic plan schema (1 ms)
+      ΓêÜ should include all required fields (1 ms)
+    ProjectInfo Interface
+      ΓêÜ should create valid project info without optional fields (1 ms)
+      ΓêÜ should create valid project info with optional repository (1 ms)
+      ΓêÜ should have timestamps in ISO format (1 ms)
+    Phase Interface
+      ΓêÜ should create a valid phase with pending status (1 ms)
+      ΓêÜ should support all phase status values (1 ms)
+      ΓêÜ should track task IDs in a phase
+    TaskDefinition Interface
+      ΓêÜ should create a valid task with required fields only (1 ms)
+      ΓêÜ should support all priority levels
+      ΓêÜ should support all status values (2 ms)
+      ΓêÜ should include optional fields when provided (1 ms)
+      ΓêÜ should handle task dependencies
+      ΓêÜ should calculate hours correctly (1 ms)
+    Metadata Interface
+      ΓêÜ should track task progress correctly
+      ΓêÜ should handle multiple authors
+      ΓêÜ should track last modification time
+    validatePlan Function
+      ΓêÜ should validate a complete valid plan (1 ms)
+      ΓêÜ should reject null or undefined (1 ms)
+      ΓêÜ should reject plans with missing version
+      ΓêÜ should reject plans with missing project
+      ΓêÜ should reject plans with non-array phases (1 ms)
+      ΓêÜ should reject plans with non-array tasks
+      ΓêÜ should reject completely invalid objects (1 ms)
+      ΓêÜ should handle empty arrays validly
+    Schema Integration
+      ΓêÜ should create a complete project lifecycle schema (1 ms)
+
+PASS tests/server.spec/MCPServer.getDiagnostics.web.spec.ts
+  MCPServer - getDiagnostics
+    ΓêÜ should return correct diagnostics when the server is not running and no tools are registered (2 ms)
+    ΓêÜ should return correct diagnostics when the server is running and tools are registered
+
+PASS tests/bossRouter.spec/BossRouter.addRule.web.spec.ts
+  BossRouter - addRule
+    ΓêÜ should add a new rule to the rules list (6 ms)
+    ΓêÜ should not modify existing rules when adding a new rule (2 ms)
+
+PASS tests/plans/fileWatcher.test.ts
+  FileWatcher
+    Initialization
+      ΓêÜ should create a new FileWatcher instance (1 ms)
+      ΓêÜ should not create a watcher on instantiation
+    startWatching
+      ΓêÜ should create a file system watcher with default pattern
+      ΓêÜ should create a file system watcher with custom pattern (1 ms)
+      ΓêÜ should register onDidChange handler
+      ΓêÜ should register onDidCreate handler (1 ms)
+      ΓêÜ should register onDidDelete handler
+    stopWatching
+      ΓêÜ should dispose the watcher (1 ms)
+      ΓêÜ should not throw error when stopping without starting
+      ΓêÜ should allow restarting after stopping
+    onFileChange
+      ΓêÜ should register a change handler (1 ms)
+      ΓêÜ should support multiple change handlers (1 ms)
+      ΓêÜ should handle handler errors gracefully
+    File Change Events
+      ΓêÜ should trigger handlers on file change (1 ms)
+      ΓêÜ should trigger handlers on file create
+      ΓêÜ should trigger handlers on file delete (1 ms)
+      ΓêÜ should pass correct URI to handlers (2 ms)
+      ΓêÜ should handle multiple file changes sequentially (1 ms)
+    Dispose
+      ΓêÜ should dispose the watcher (1 ms)
+      ΓêÜ should clean up resources on dispose
+      ΓêÜ should handle dispose when not watching (1 ms)
+    Edge Cases
+      ΓêÜ should handle watching with empty pattern
+      ΓêÜ should handle registering handlers before watching (1 ms)
+      ΓêÜ should handle multiple start/stop cycles
+    Handler Error Resilience
+      ΓêÜ should continue calling other handlers if one throws (1 ms)
+
+PASS tests/orchestrator.spec/ProgrammingOrchestrator.initialize.web.spec.ts
+  ProgrammingOrchestrator
+    ΓêÜ should initialize successfully (2 ms)
+    ΓêÜ should have executeTask method
+    ΓêÜ should have shutdown method
+
+PASS tests/tools.spec/reportTaskDone.web.spec.ts
+  reportTaskDone
+    ΓêÜ should throw an error indicating the function is deprecated (7 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.doesTicketExist.web.spec.ts
+  TicketDatabase - doesTicketExist
+    ΓêÜ should return true if the ticket exists in the database (2 ms)
+    ΓêÜ should return false if the ticket does not exist in the database
+    ΓêÜ should return false if there is a database error
+    ΓêÜ should return false if the database is not initialized (1 ms)
+    ΓêÜ should return true if the ticket exists in the fallback store when useFallback is true
+    ΓêÜ should return false if the ticket does not exist in the fallback store when useFallback is true (2 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsQuestionKeywords.web.spec.ts
+  BossRouter.containsQuestionKeywords
+    ΓêÜ should return true if the text contains question keywords (2 ms)
+    ΓêÜ should return false if the text does not contain question keywords
+    ΓêÜ should return true if the text contains a question mark (2 ms)
+    ΓêÜ should return false for an empty string (1 ms)
+    ΓêÜ should be case insensitive when checking for keywords
+
+PASS src/services/__tests__/prdWriter.test.ts
+  PRDWriter
+    createMetadata
+      ΓêÜ should create metadata with all fields (2 ms)
+      ΓêÜ should use ISO 8601 timestamp format
+    getContentPreview
+      ΓêÜ should return full content if shorter than max (1 ms)
+      ΓêÜ should truncate content if longer than max (1 ms)
+      ΓêÜ should use default max characters
+    writePRD
+      ΓêÜ should handle missing workspace gracefully (10 ms)
+    PRD JSON structure
+      ΓêÜ should have required metadata fields (1 ms)
+
+PASS src/services/__tests__/hello-world.test.ts
+  helloWorld
+    ΓêÜ should return "Hello, World!" (2 ms)
+
+PASS tests/programmingOrchestrator.spec/ProgrammingOrchestrator.initializeWithPersistence.web.spec.ts
+  ProgrammingOrchestrator - initializeWithPersistence
+    ΓêÜ should set workspaceState and call loadPersistedTasks and reconcileTasks (1 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.runMigrations.web.spec.ts
+  TicketDatabase - runMigrations
+    ΓêÜ should skip migrations if no database connection exists (2 ms)
+    ΓêÜ should create version tracking table and initialize version (10 ms)
+    ΓêÜ should create tickets table (1 ms)
+    ΓêÜ should create completed_tasks table and update version if version is 0 (2 ms)
+    ΓêÜ should complete migrations successfully (1 ms)
+
+PASS src/services/__tests__/contextBundler.test.ts
+  ContextBundler
+    bundle
+      ΓêÜ should bundle files within token limit (2 ms)
+      ΓêÜ should respect token limit
+      ΓêÜ should prioritize files by priority field (1 ms)
+      ΓêÜ should truncate files if needed (1 ms)
+      ΓêÜ should set warning when files are truncated or excluded (2 ms)
+      ΓêÜ should handle empty file list (1 ms)
+      ΓêÜ should format paths correctly (1 ms)
+    formatBundleInfo
+      ΓêÜ should format bundle information for display (1 ms)
+      ΓêÜ should include warning in formatted output
+
+PASS tests/protocol.spec/parseStdioMessage.web.spec.ts
+  parseStdioMessage
+    ΓêÜ should parse a valid JSON-RPC 2.0 request (3 ms)
+    ΓêÜ should throw MCPProtocolError for invalid JSON (59 ms)
+    ΓêÜ should throw MCPProtocolError for invalid JSON-RPC request structure (2 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsPlanningKeywords.web.spec.ts
+  BossRouter.containsPlanningKeywords
+    ΓêÜ should return true if the text contains planning-related keywords (1 ms)
+    ΓêÜ should return false if the text does not contain any planning-related keywords (1 ms)
+    ΓêÜ should return true for text containing multiple planning-related keywords
+    ΓêÜ should be case insensitive when checking for planning-related keywords (1 ms)
+    ΓêÜ should return false for empty text (1 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.getAllTickets.web.spec.ts
+  TicketDatabase.getAllTickets
+    ΓêÜ should return tickets from fallbackStore when useFallback is true (2 ms)
+    ΓêÜ should query the database when useFallback is false (2 ms)
+    ΓêÜ should return fallbackStore tickets if database query fails (1 ms)
+    ΓêÜ should reject with an error if the database is not initialized (22 ms)
+
+PASS src/services/__tests__/prdGenerator.e2e.test.ts
+  Phase 0: PRD Generation E2E
+    PlansReader ΓåÆ ContextBundler ΓåÆ Validation ΓåÆ Writer
+      ΓêÜ should read plans and bundle them correctly (10 ms)
+      ΓêÜ should handle missing Plans folder gracefully (1 ms)
+      ΓêÜ should validate bad PRD output
+
+PASS tests/server.spec/MCPServer.getRegisteredTools.web.spec.ts
+  MCPServer - getRegisteredTools
+    ΓêÜ should return an empty array when no tools are registered (2 ms)
+    ΓêÜ should return an array of registered tool names
+    ΓêÜ should not include unregistered tools in the returned array
+
+PASS tests/programmingOrchestrator.spec/ProgrammingOrchestrator.setCompletedTasksProvider.web.spec.ts
+  ProgrammingOrchestrator - setCompletedTasksProvider
+    ΓêÜ should set the completedTasksProvider (2 ms)
+
+PASS tests/verificationTeam.spec/VerificationTeam.generateVisualChecklist.web.spec.ts
+  VerificationTeam - generateVisualChecklist
+    ΓêÜ should return the correct checklist items (2 ms)
+    ΓêÜ should generate checklist for different task IDs
+
+PASS tests/migrations.spec/migrateSchema.web.spec.ts
+  migrateSchema
+    ΓêÜ should create the db_version table if it does not exist (4 ms)
+    ΓêÜ should migrate schema from version 0 to version 1 (3 ms)
+    ΓêÜ should not apply migrations if the current version is up-to-date (1 ms)
+    ΓêÜ should throw an error if a database operation fails (7 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.generateTicketId.web.spec.ts
+  TicketDatabase - generateTicketId
+    ΓêÜ should generate a ticket ID with the correct format (2 ms)
+    ΓêÜ should include the last 6 digits of the current timestamp in the ticket ID (1 ms)
+    ΓêÜ should include a 3-digit random number in the ticket ID (1 ms)
+
+PASS tests/tools.spec/getNextTask.web.spec.ts
+  getNextTask
+    ΓêÜ should throw an error indicating the function is deprecated (12 ms)
+
+PASS tests/ticketsDb.spec/TicketDatabase.getInstance.web.spec.ts
+  TicketDatabase.getInstance
+    ΓêÜ should return the same instance on multiple calls (2 ms)
+    ΓêÜ should create a new instance if none exists (2 ms)
+    ΓêÜ should not create a new instance if one already exists (1 ms)
+
+PASS tests/protocol.spec/formatStdioResponse.web.spec.ts
+  formatStdioResponse
+    ΓêÜ should format a valid MCPResponse object as a newline-delimited JSON string (1 ms)
+    ΓêÜ should handle an MCPResponse object with an error field correctly
+    ΓêÜ should handle an MCPResponse object with optional fields omitted
+    ΓêÜ should handle an MCPResponse object with a complex result field (1 ms)
+    ΓêÜ should handle an MCPResponse object with an error containing additional data
+
+PASS tests/orchestrator.spec/ProgrammingOrchestrator.executeTask.web.spec.ts
+  ProgrammingOrchestrator - executeTask
+    ΓêÜ should execute task successfully (1 ms)
+    ΓêÜ should handle task execution errors (7 ms)
+
+PASS tests/programmingOrchestrator.spec/MockMCPTools.reportVerificationResult.web.spec.ts
+  MockMCPTools - reportVerificationResult
+    ΓêÜ should return success with correct data when passed is true (1 ms)
+    ΓêÜ should return success with correct data when passed is false (1 ms)
+    ΓêÜ should return success with undefined details when details are not provided (1 ms)
+
+PASS src/services/__tests__/plansReader.test.ts
+  PlansReader
+    readAllPlans
+      ΓêÜ should read all markdown files from Plans folder (1 ms)
+      ΓêÜ should filter out backup and temp files (1 ms)
+      ΓêÜ should prioritize CONSOLIDATED-MASTER-PLAN.md first
+    estimateTokens
+      ΓêÜ should estimate tokens for content (1 ms)
+      ΓêÜ should return 0 for empty content
+      ΓêÜ should handle large content (1 ms)
+    getCategoryLabel
+      ΓêÜ should return correct labels for categories (2 ms)
+      ΓêÜ should return Unknown for unrecognized category
+
+PASS tests/ticketsDb.spec/TicketDatabase.initializeSqlite.web.spec.ts
+  TicketDatabase.initializeSqlite
+    ΓêÜ should initialize instance successfully (1 ms)
+    ΓêÜ should handle initialization gracefully
+
+PASS tests/tools.spec/askQuestion.web.spec.ts
+  askQuestion
+    ΓêÜ should throw an error indicating the tool is not yet implemented (9 ms)
+
+PASS tests/bossRouter.spec/BossRouter.containsResearchKeywords.web.spec.ts
+  BossRouter - containsResearchKeywords
+    ΓêÜ should return true if the text contains research-related keywords (1 ms)
+    ΓêÜ should return false if the text does not contain research-related keywords
+    ΓêÜ should return true for text with mixed case research-related keywords (1 ms)
+    ΓêÜ should return false for an empty string
+    ΓêÜ should return true if the text contains multiple research-related keywords (1 ms)
+
+PASS tests/answerTeam.spec/AnswerTeam.answerQuestion.web.spec.ts
+  AnswerTeam
+    ΓêÜ should return "Not implemented yet" when answerQuestion is called (2 ms)
+
+PASS tests/extension.setupFiles.test.ts
+  setupMissingFiles - Unit Tests
+    ΓêÜ should export setupMissingFiles as a function (1 ms)
+    ΓêÜ should return a Promise when called (1 ms)
+    ΓêÜ should be importable from utils/setupFiles (1 ms)
+    ΓêÜ should have correct function name
+    ΓêÜ should not require any parameters
+    ΓêÜ should have async function signature
+
+PASS tests/webhooks.spec/handleWebhook.web.spec.ts
+  handleWebhook
+    ΓêÜ should call handleIssueOpened when action is "opened" (1 ms)
+    ΓêÜ should call handleIssueClosed when action is "closed" (1 ms)
+    ΓêÜ should call handleIssueEdited when action is "edited"
+    ΓêÜ should call handleIssueLabeled when action is "labeled" (1 ms)
+    ΓêÜ should not call any handler for an unknown action
+
+PASS tests/planningTeam.spec/PlanningTeam.estimateEffort.web.spec.ts
+  PlanningTeam - estimateEffort
+    ΓêÜ should return an estimate with hours and confidence as numbers (9 ms)
+    ΓêÜ should return default values for an empty task description
+    ΓêÜ should handle a complex task description and return a valid estimate (1 ms)
+
+PASS tests/programmingOrchestrator.spec/MockMCPTools.getNextTask.web.spec.ts
+  MockMCPTools - getNextTask
+    ΓêÜ should return success with null data when called with valid planId (3 ms)
+    ΓêÜ should return success with null data when called with valid planId and filter (2 ms)
+
+PASS tests/hello-world.test.ts
+  sum
+    ΓêÜ adds 1 + 2 to equal 3 (1 ms)
+    ΓêÜ adds 0 + 0 to equal 0
+    ΓêÜ adds negative and positive numbers
+    ΓêÜ adds two negative numbers
+    ΓêÜ adds floating point numbers (1 ms)
+
+PASS tests/answerTeam.spec/AnswerTeam.searchPlan.web.spec.ts
+  AnswerTeam - searchPlan
+    ΓêÜ should return empty array as searchPlan is not yet implemented (1 ms)
+    ΓêÜ should handle query input without errors
+
+  console.log
+    
+    Γ£à No implicit any types detected
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:102:21)
+
+  console.log
+    
+    ≡ƒƒí Potentially Unused Variables: 9 file(s)
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:154:21)
+
+  console.log
+      src\db\migrations.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: targetVersion
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\db\ticketsDb.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: isEBUSY
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\diagnostics\skippedTestsProvider.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: fileUri
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\orchestrator\logger.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: defaultLogger
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\orchestrator\programmingOrchestrator.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: safeArgs
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\services\plansReader.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: errMsg
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\services\__tests__\prdGenerator.e2e.test.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: msg
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: originalFolders
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\services\__tests__\ticketDb.test.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: skipInBrowser
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+      src\utils\fileConfig.ts
+
+      at tests/meta/typescript-compilation.test.ts:156:25
+          at Map.forEach (<anonymous>)
+
+  console.log
+        - Possibly unused variable: COEFileConfigSchema
+
+      at tests/meta/typescript-compilation.test.ts:157:61
+          at Array.forEach (<anonymous>)
+          at Map.forEach (<anonymous>)
+
+  console.log
+    
+    ≡ƒÆí Review and remove unused variables
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:162:21)
+
+  console.log
+    
+    ΓÜá∩╕Å  Missing TypeScript Strict Mode Rules: 3
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:187:25)
+
+  console.log
+      - noImplicitAny: not enabled
+
+      at tests/meta/typescript-compilation.test.ts:189:29
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - strictNullChecks: not enabled
+
+      at tests/meta/typescript-compilation.test.ts:189:29
+          at Array.forEach (<anonymous>)
+
+  console.log
+      - strictFunctionTypes: not enabled
+
+      at tests/meta/typescript-compilation.test.ts:189:29
+          at Array.forEach (<anonymous>)
+
+  console.log
+    ≡ƒÆí Recommended (optional): noUnusedLocals, noUnusedParameters
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:198:25)
+
+  console.log
+    ΓÜá∩╕Å  Could not read tsconfig.json
+
+      at Object.<anonymous> (tests/meta/typescript-compilation.test.ts:203:21)
+
+PASS tests/meta/typescript-compilation.test.ts (31.455 s)
+  TypeScript Compilation & Type Safety
+    ΓêÜ should compile all TypeScript files without errors (17598 ms)
+    ΓêÜ should have no implicit any types (6746 ms)
+    ΓêÜ should have no unused variables in compiled output (53 ms)
+    ΓêÜ should verify strict type checking rules are enabled (8 ms)
+
+PASS src/services/__tests__/ticketDb.test.ts (56.669 s)
+  TicketDb
+    init()
+      ΓêÜ should initialize SQLite database successfully (1359 ms)
+      ΓêÜ should create required tables (1287 ms)
+      ΓêÜ should enable foreign key constraints (1076 ms)
+      ΓêÜ creates tickets table with id column as PRIMARY KEY (1153 ms)
+      ΓêÜ persists ticket after mock reload (1976 ms)
+      ΓêÜ falls back to Map if schema creation fails (708 ms)
+      ΓêÜ returns existing instance if already initialized (singleton check) (1606 ms)
+    createTicket()
+      ΓêÜ should create a ticket with required fields (1100 ms)
+      ΓêÜ should use defaults for optional fields (1170 ms)
+      ΓêÜ should throw error if title is missing (1766 ms)
+      ΓêÜ should enforce max ticket limit (6289 ms)
+    getTicket()
+      ΓêÜ should retrieve a ticket by ID (1268 ms)
+      ΓêÜ should return null for non-existent ticket (1071 ms)
+    updateTicket()
+      ΓêÜ should update ticket fields (1177 ms)
+      ΓêÜ should update the updatedAt timestamp (1465 ms)
+      ΓêÜ should throw error if ticket not found (1158 ms)
+    deleteTicket()
+      ΓêÜ should delete a ticket (1078 ms)
+      ΓêÜ should return false for non-existent ticket (1049 ms)
+      ΓêÜ should cascade delete replies (1069 ms)
+    addReply()
+      ΓêÜ should add a reply to a ticket (1052 ms)
+      ΓêÜ should throw error if ticket not found (1055 ms)
+      ΓêÜ should support multiple replies to one ticket (1057 ms)
+    getReplies()
+      ΓêÜ should retrieve replies in chronological order (1080 ms)
+      ΓêÜ should return empty array for ticket with no replies (1050 ms)
+    Fallback Mode (SQLite Disabled)
+      ΓêÜ should use Map fallback when SQLite fails (1066 ms)
+      ΓêÜ should maintain CRUD in fallback mode (1086 ms)
+      ΓêÜ should thread replies in fallback mode (1061 ms)
+    Persistence
+      ΓêÜ should persist tickets across close/reopen (1578 ms)
+      ΓêÜ should persist replies across close/reopen (1556 ms)
+    close()
+      ΓêÜ closes database without errors (1042 ms)
+      ΓêÜ handles close when no database is open (509 ms)
+      ΓêÜ releases file lock after close (1561 ms)
+      ΓêÜ prevents operations after close (1037 ms)
+    Ticket ΓåÆ Task Queue Integration
+      ΓêÜ should route ticket with skipRouting=false (default) (1047 ms)
+      ΓêÜ should skip routing when options.skipRouting=true (1050 ms)
+      ΓêÜ should persist ticket and retrieve it correctly (1055 ms)
+      ΓêÜ should handle routing failures gracefully (1030 ms)
+      ΓêÜ should handle createTicket with various priority levels (1066 ms)
+      ΓêÜ should create valid tickets with all optional fields (1050 ms)
+      ΓêÜ should reject ticket creation without title (1034 ms)
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+-------------------------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+File                                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                                                               
+-------------------------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+All files                                  |   80.31 |    68.71 |   85.79 |   80.65 |                                                                                                                                                                                                                 
+ src                                       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  sum.ts                                   |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+ src/agents                                |   92.85 |      100 |      75 |   92.85 |                                                                                                                                                                                                                 
+  answerTeam.ts                            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  orchestrator.ts                          |     100 |      100 |   33.33 |     100 |                                                                                                                                                                                                                 
+  planningTeam.ts                          |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  verificationTeam.ts                      |      80 |      100 |   66.66 |      80 | 35                                                                                                                                                                                                              
+ src/github                                |   80.76 |     62.5 |   83.33 |   80.76 |                                                                                                                                                                                                                 
+  api.ts                                   |   68.96 |       40 |   57.14 |   68.96 | 68-103                                                                                                                                                                                                          
+  issuesSync.ts                            |    92.3 |      100 |     100 |    92.3 | 52                                                                                                                                                                                                              
+  webhooks.ts                              |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+ src/mcpServer                             |   76.19 |    77.77 |      80 |   76.19 |                                                                                                                                                                                                                 
+  protocol.ts                              |   97.67 |      100 |     100 |   97.67 | 87                                                                                                                                                                                                              
+  tmp.protocol.validateRequest.web.spec.ts |       0 |        0 |       0 |       0 | 2-33                                                                                                                                                                                                            
+  tools.ts                                 |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+ src/mcpServer/tools                       |   93.45 |    84.74 |   90.76 |   93.24 |                                                                                                                                                                                                                 
+  askQuestion.ts                           |   94.33 |    86.36 |     100 |   94.33 | 169,193,306                                                                                                                                                                                                     
+  getErrors.ts                             |   92.59 |    76.92 |     100 |   92.59 | 89,111                                                                                                                                                                                                          
+  getNextTask.ts                           |      98 |       80 |     100 |   97.87 | 247                                                                                                                                                                                                             
+  index.ts                                 |     100 |      100 |       0 |     100 |                                                                                                                                                                                                                 
+  reportObservation.ts                     |   90.69 |    78.57 |     100 |   90.47 | 142-143,178,217                                                                                                                                                                                                 
+  reportTaskStatus.ts                      |   97.43 |    95.91 |     100 |    97.4 | 162,396                                                                                                                                                                                                         
+  reportTestFailure.ts                     |   84.12 |    77.41 |     100 |   83.87 | 133-134,140-141,147-148,154-155,171,278                                                                                                                                                                         
+  reportVerificationResult.ts              |   94.36 |     82.6 |     100 |   94.36 | 135-136,284,304                                                                                                                                                                                                 
+ src/orchestrator                          |   65.72 |    51.96 |   71.76 |   66.84 |                                                                                                                                                                                                                 
+  programmingOrchestrator.ts               |   65.72 |    51.96 |   71.76 |   66.84 | 432,467,506-511,573,616-617,661-662,702-726,801,855-945,983,988,996,1004,1012,1023,1067-1068,1094,1099,1125-1218,1278-1282,1287-1291,1302-1306,1311-1313,1332,1352-1383,1413-1417                               
+ src/services                              |   69.26 |    52.59 |    92.4 |   69.39 |                                                                                                                                                                                                                 
+  bossRouter.ts                            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  contextBundler.ts                        |   97.67 |    84.61 |     100 |   97.56 | 82                                                                                                                                                                                                              
+  hello-world.ts                           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  ticketDb.ts                              |   60.45 |    44.53 |   88.46 |   60.48 | 140,153-158,175,188,196,204,214,238-241,260-263,278-281,292-294,349-363,395,430-431,441-510,526,532-533,563-564,587-588,604-607,618-619,658-662,674-675,693,703-704,729,742-765,796-814,825-842,854-855,882-883 
+ src/tasks                                 |   97.56 |     92.3 |     100 |   97.29 |                                                                                                                                                                                                                 
+  dependencies.ts                          |   96.29 |    88.88 |     100 |   95.83 | 59                                                                                                                                                                                                              
+  taskManager.ts                           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+ src/tree                                  |   89.74 |    66.66 |   88.88 |   89.74 |                                                                                                                                                                                                                 
+  CoeTaskTreeProvider.ts                   |   89.74 |    66.66 |   88.88 |   89.74 | 19,24,34,60                                                                                                                                                                                                     
+ src/types                                 |    87.5 |      100 |      50 |    87.5 |                                                                                                                                                                                                                 
+  agentTeam.ts                             |    87.5 |      100 |      50 |    87.5 | 47                                                                                                                                                                                                              
+ src/ui                                    |   91.24 |       75 |   96.55 |   91.24 |                                                                                                                                                                                                                 
+  completedTasksTreeProvider.ts            |   87.87 |     62.5 |     100 |   87.87 | 68,129-131,154-155,186,190                                                                                                                                                                                      
+  plansPanel.ts                            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  statusBar.ts                             |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  tasksTreeView.ts                         |   88.57 |    88.88 |      90 |   88.57 | 74,99-105                                                                                                                                                                                                       
+ src/utils                                 |   91.45 |    83.75 |      90 |   91.41 |                                                                                                                                                                                                                 
+  config.ts                                |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  logger.ts                                |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                 
+  streamingLLM.ts                          |   85.95 |    75.47 |      70 |   85.83 | 82,115-117,177-178,229-233,357-358,383-386                                                                                                                                                                      
+-------------------------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Jest: "global" coverage threshold for branches (80%) not met: 68.71%
+Summary of all failing tests
+FAIL tests/orchestrator.branchCoverage.test.ts
+  ΓùÅ Test suite failed to run
+
+    tests/orchestrator.branchCoverage.test.ts:38:65 - error TS2345: Argument of type 'null' is not assignable to parameter of type 'Memento'.
+
+    38             await expect(orchestrator.initializeWithPersistence(badContext.workspaceState))
+                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:98:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    98                     priority: 'P3',
+                           ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:99:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    99                     status: 'ready',
+                           ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:131:17 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    131                 priority: 'P1',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:132:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    132                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:153:21 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    153                     priority: 'P2',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:154:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    154                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:173:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    173                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:174:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    174                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:203:17 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    203                 priority: 'P1',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:204:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    204                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:227:17 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    227                 priority: 'P2',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:228:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    228                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:243:49 - error TS2322: Type '"P1"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                        ~~~~
+    tests/orchestrator.branchCoverage.test.ts:243:55 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                              ~~~~
+    tests/orchestrator.branchCoverage.test.ts:243:61 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    243             const priorities: TaskPriority[] = ['P1', 'P2', 'P3'];
+                                                                    ~~~~
+    tests/orchestrator.branchCoverage.test.ts:251:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    251                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:268:45 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                    ~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:54 - error TS2322: Type '"in-progress"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                             ~~~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:69 - error TS2322: Type '"completed"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                            ~~~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:82 - error TS2322: Type '"blocked"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                                         ~~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:268:93 - error TS2322: Type '"failed"' is not assignable to type 'TaskStatus'.
+
+    268             const statuses: TaskStatus[] = ['ready', 'in-progress', 'completed', 'blocked', 'failed'];
+                                                                                                    ~~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:275:21 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    275                     priority: 'P2',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:307:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    307                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:308:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    308                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:322:25 - error TS2571: Object is of type 'unknown'.
+
+    322                 call => call[0].includes('taskQueue')
+                                ~~~~~~~
+    tests/orchestrator.branchCoverage.test.ts:335:17 - error TS2322: Type '"P2"' is not assignable to type 'TaskPriority'.
+
+    335                 priority: 'P2',
+                        ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:336:17 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    336                 status: 'ready',
+                        ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:350:21 - error TS2322: Type '"P3"' is not assignable to type 'TaskPriority'.
+
+    350                     priority: 'P3',
+                            ~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:80:5
+        80     priority: z.nativeEnum(TaskPriority),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'priority' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:351:21 - error TS2322: Type '"ready"' is not assignable to type 'TaskStatus'.
+
+    351                     status: 'ready',
+                            ~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:81:5
+        81     status: z.nativeEnum(TaskStatus),
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        The expected type comes from property 'status' which is declared here on type '{ taskId: string; title: string; description: string; priority: TaskPriority; status: TaskStatus; dependencies: string[]; blockedBy: string[]; estimatedHours: number; ... 7 more ...; metadata?: { ...; } | undefined; }'
+    tests/orchestrator.branchCoverage.test.ts:373:40 - error TS2551: Property 'getQueueStats' does not exist on type 'ProgrammingOrchestrator'. Did you mean 'getQueueStatus'?
+
+    373             const stats = orchestrator.getQueueStats();
+                                               ~~~~~~~~~~~~~
+
+      src/orchestrator/programmingOrchestrator.ts:736:5
+        736     getQueueStatus(): {
+                ~~~~~~~~~~~~~~
+        'getQueueStatus' is declared here.
+
+FAIL tests/services.branchCoverage.test.ts
+  ΓùÅ Test suite failed to run
+
+    tests/services.branchCoverage.test.ts:14:18 - error TS2673: Constructor of class 'BossRouter' is private and only accessible within the class declaration.
+
+    14         router = new BossRouter();
+                        ~~~~~~~~~~~~~~~~
+
+
+Test Suites: 2 failed, 119 passed, 121 total
+Tests:       6 skipped, 931 passed, 937 total
+Snapshots:   1 passed, 1 total
+Time:        61.719 s, estimated 65 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?

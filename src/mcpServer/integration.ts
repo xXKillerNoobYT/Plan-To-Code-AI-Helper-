@@ -18,6 +18,7 @@
 import * as vscode from 'vscode';
 import { MCPServer } from './server';
 import { getNextTask } from './tools/getNextTask';
+import { getErrors } from './tools/getErrors';
 import { reportTaskStatus } from './tools/reportTaskStatus';
 import { askQuestion } from './tools/askQuestion';
 import { reportTestFailure } from './tools/reportTestFailure';
@@ -49,6 +50,11 @@ export async function initializeMCPServer(
     // Register getNextTask tool
     server.registerTool('getNextTask', async (params) => {
         return await getNextTask(params, taskQueue);
+    });
+
+    // Register getErrors tool
+    server.registerTool('getErrors', async (params) => {
+        return await getErrors(params);
     });
 
     // Register reportTaskStatus tool
@@ -110,6 +116,10 @@ export async function exampleUsage(): Promise<void> {
     // Register tool
     server.registerTool('getNextTask', async (params) => {
         return await getNextTask(params, taskQueue);
+    });
+
+    server.registerTool('getErrors', async (params) => {
+        return await getErrors(params);
     });
 
     await server.start();

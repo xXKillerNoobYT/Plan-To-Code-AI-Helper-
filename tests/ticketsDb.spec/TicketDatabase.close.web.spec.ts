@@ -2,7 +2,7 @@
 import { TicketDatabase } from '../../src/db/ticketsDb';
 import { jest } from '@jest/globals';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase.close', () => {
     let ticketDb: TicketDatabase;
 
@@ -15,7 +15,7 @@ describe('TicketDatabase.close', () => {
         jest.restoreAllMocks();
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should close the database connection successfully', async () => {
         const closeAsyncMock = jest.spyOn(ticketDb as unknown as { closeAsync: () => Promise<void> }, 'closeAsync').mockResolvedValueOnce(undefined);
 
@@ -28,7 +28,7 @@ describe('TicketDatabase.close', () => {
         expect((ticketDb as unknown as { useFallback: boolean }).useFallback).toBe(true);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should retry closing the database connection on EBUSY error and succeed', async () => {
         const closeAsyncMock = jest
             .spyOn(ticketDb as unknown as { closeAsync: () => Promise<void> }, 'closeAsync')
@@ -44,7 +44,7 @@ describe('TicketDatabase.close', () => {
         expect((ticketDb as unknown as { useFallback: boolean }).useFallback).toBe(true);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should switch to fallback after max retries on persistent error', async () => {
         const closeAsyncMock = jest
             .spyOn(ticketDb as unknown as { closeAsync: () => Promise<void> }, 'closeAsync')
@@ -59,16 +59,14 @@ describe('TicketDatabase.close', () => {
         expect((ticketDb as unknown as { useFallback: boolean }).useFallback).toBe(true);
     });
 
-    /** @aiContributed-2026-01-28 */
+    /** @aiContributed-2026-01-29 */
     it('should do nothing if the database is already closed', async () => {
         const closeAsyncMock = jest.spyOn(ticketDb as unknown as { closeAsync: () => Promise<void> }, 'closeAsync');
-        const consoleLogMock = jest.spyOn(console, 'log').mockImplementation(() => {});
 
         (ticketDb as unknown as { db: object | null }).db = null; // Simulate a closed database connection
 
         await ticketDb.close();
 
         expect(closeAsyncMock).not.toHaveBeenCalled();
-        expect(consoleLogMock).not.toHaveBeenCalled();
     });
 });

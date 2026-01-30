@@ -1,5 +1,6 @@
 // ./dependencies.web.spec.ts
-import { DependencyManager } from '../../src/tasks/dependencies.ts';
+import { DependencyManager } from '../../src/tasks/dependencies';
+import { Task } from '../../src/tasks/queue';
 
 /** @aiContributed-2026-01-28 */
 describe('DependencyManager.areDependenciesMet', () => {
@@ -10,8 +11,8 @@ describe('DependencyManager.areDependenciesMet', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-    it('should return true if the task has no dependencies', () => {
-    const task = {
+  it('should return true if the task has no dependencies', () => {
+    const task: Task = {
       taskId: '1',
       title: 'Task 1',
       description: 'Description 1',
@@ -21,7 +22,7 @@ describe('DependencyManager.areDependenciesMet', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
     };
-    const allTasks = [task];
+    const allTasks: Task[] = [task];
 
     const result = dependencyManager.areDependenciesMet(task, allTasks);
 
@@ -29,8 +30,8 @@ describe('DependencyManager.areDependenciesMet', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-    it('should return false if any dependency task is not done', () => {
-    const task = {
+  it('should return false if any dependency task is not done', () => {
+    const task: Task = {
       taskId: '1',
       title: 'Task 1',
       description: 'Description 1',
@@ -40,7 +41,7 @@ describe('DependencyManager.areDependenciesMet', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
     };
-    const allTasks = [
+    const allTasks: Task[] = [
       task,
       {
         taskId: '2',
@@ -60,8 +61,8 @@ describe('DependencyManager.areDependenciesMet', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-    it('should return true if all dependency tasks are done', () => {
-    const task = {
+  it('should return true if all dependency tasks are done', () => {
+    const task: Task = {
       taskId: '1',
       title: 'Task 1',
       description: 'Description 1',
@@ -71,7 +72,7 @@ describe('DependencyManager.areDependenciesMet', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
     };
-    const allTasks = [
+    const allTasks: Task[] = [
       task,
       {
         taskId: '2',
@@ -91,8 +92,8 @@ describe('DependencyManager.areDependenciesMet', () => {
   });
 
   /** @aiContributed-2026-01-28 */
-    it('should return false if a dependency task does not exist', () => {
-    const task = {
+  it('should return false if a dependency task does not exist', () => {
+    const task: Task = {
       taskId: '1',
       title: 'Task 1',
       description: 'Description 1',
@@ -102,7 +103,7 @@ describe('DependencyManager.areDependenciesMet', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
     };
-    const allTasks = [task];
+    const allTasks: Task[] = [task];
 
     const result = dependencyManager.areDependenciesMet(task, allTasks);
 

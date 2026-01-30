@@ -2,7 +2,7 @@
 import { TicketDatabase } from '../../src/db/ticketsDb';
 import { jest } from '@jest/globals';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase.getAllTickets', () => {
   let ticketDb: TicketDatabase;
 
@@ -15,8 +15,8 @@ describe('TicketDatabase.getAllTickets', () => {
     jest.restoreAllMocks();
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should return tickets from fallbackStore when useFallback is true', async () => {
+  /** @aiContributed-2026-01-29 */
+  it('should return tickets from fallbackStore when useFallback is true', async () => {
     const mockTickets = [
       { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
       { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date('2023-01-02T00:00:00Z'), updated_at: new Date('2023-01-02T00:00:00Z') },
@@ -31,8 +31,8 @@ describe('TicketDatabase.getAllTickets', () => {
     expect(result).toEqual([mockTickets[0]]);
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should query the database when useFallback is false', async () => {
+  /** @aiContributed-2026-01-29 */
+  it('should query the database when useFallback is false', async () => {
     const mockRows = [
       { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
       { ticket_id: '2', status: 'resolved', priority: 2, created_at: new Date('2023-01-02T00:00:00Z'), updated_at: new Date('2023-01-02T00:00:00Z') },
@@ -56,8 +56,8 @@ describe('TicketDatabase.getAllTickets', () => {
     expect(result).toEqual(mockRows);
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should return fallbackStore tickets if database query fails', async () => {
+  /** @aiContributed-2026-01-29 */
+  it('should return fallbackStore tickets if database query fails', async () => {
     const mockTickets = [
       { ticket_id: '1', status: 'open', priority: 1, created_at: new Date('2023-01-01T00:00:00Z'), updated_at: new Date('2023-01-01T00:00:00Z') },
     ];
@@ -77,8 +77,8 @@ describe('TicketDatabase.getAllTickets', () => {
     expect(result).toEqual(mockTickets);
   });
 
-  /** @aiContributed-2026-01-28 */
-    it('should reject with an error if the database is not initialized', async () => {
+  /** @aiContributed-2026-01-29 */
+  it('should reject with an error if the database is not initialized', async () => {
     (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
     (ticketDb as unknown as { db: null }).db = null;
 

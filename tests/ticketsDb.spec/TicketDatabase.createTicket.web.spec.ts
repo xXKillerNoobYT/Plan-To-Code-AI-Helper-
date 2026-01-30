@@ -1,8 +1,8 @@
-// ./ticketsDb.TicketDatabase.createTicket.gptgen.web.spec.ts
+// ./ticketsDb.web.spec.ts
 import { TicketDatabase } from '../../src/db/ticketsDb';
 import { jest } from '@jest/globals';
 
-/** @aiContributed-2026-01-28 */
+/** @aiContributed-2026-01-29 */
 describe('TicketDatabase - createTicket', () => {
   let ticketDb: TicketDatabase;
 
@@ -16,17 +16,17 @@ describe('TicketDatabase - createTicket', () => {
     jest.useRealTimers();
   });
 
-  /** @aiContributed-2026-01-28 */
-  it('should create a ticket and store it in fallback when useFallback is true', async () => {
-    const mockGenerateTicketId = jest.spyOn(ticketDb as unknown as { generateTicketId: () => string }, 'generateTicketId').mockReturnValue('mock-ticket-id');
+  /** @aiContributed-2026-01-29 */
+    it('should create a ticket and store it in fallback when useFallback is true', async () => {
+    const mockGenerateTicketId = jest.spyOn(ticketDb as any, 'generateTicketId').mockReturnValue('mock-ticket-id');
     const mockDate = new Date('2023-01-01T00:00:00Z');
     jest.useFakeTimers().setSystemTime(mockDate);
 
-    (ticketDb as unknown as { useFallback: boolean }).useFallback = true;
+    (ticketDb as any).useFallback = true;
 
-    const params = {
+    const params: any = {
       type: 'ai_to_human' as const,
-      priority: 1 as const,
+      priority: 1,
       creator: 'creator1',
       assignee: 'assignee1',
       title: 'Test Ticket',
@@ -50,23 +50,23 @@ describe('TicketDatabase - createTicket', () => {
       updated_at: mockDate,
     });
 
-    expect((ticketDb as unknown as { fallbackStore: Map<string, unknown> }).fallbackStore.get('mock-ticket-id')).toEqual(result);
+    expect((ticketDb as any).fallbackStore.get('mock-ticket-id')).toEqual(result);
     expect(mockGenerateTicketId).toHaveBeenCalledTimes(1);
   });
 
-  /** @aiContributed-2026-01-28 */
-  it('should create a ticket and store it in SQLite when useFallback is false', async () => {
-    const mockGenerateTicketId = jest.spyOn(ticketDb as unknown as { generateTicketId: () => string }, 'generateTicketId').mockReturnValue('mock-ticket-id');
+  /** @aiContributed-2026-01-29 */
+    it('should create a ticket and store it in SQLite when useFallback is false', async () => {
+    const mockGenerateTicketId = jest.spyOn(ticketDb as any, 'generateTicketId').mockReturnValue('mock-ticket-id');
     const mockDate = new Date('2023-01-01T00:00:00Z');
     jest.useFakeTimers().setSystemTime(mockDate);
 
     const mockDbRun = jest.fn((sql: string, values: unknown[], callback: (err: Error | null) => void) => callback(null));
-    (ticketDb as unknown as { db: { run: typeof mockDbRun } }).db = { run: mockDbRun };
-    (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
+    (ticketDb as any).db = { run: mockDbRun };
+    (ticketDb as any).useFallback = false;
 
-    const params = {
+    const params: any = {
       type: 'human_to_ai' as const,
-      priority: 2 as const,
+      priority: 2,
       creator: 'creator2',
       assignee: 'assignee2',
       title: 'Feature Ticket',
@@ -111,21 +111,21 @@ describe('TicketDatabase - createTicket', () => {
     expect(mockGenerateTicketId).toHaveBeenCalledTimes(1);
   });
 
-  /** @aiContributed-2026-01-28 */
-  it('should fallback to in-memory storage if SQLite insertion fails', async () => {
-    const mockGenerateTicketId = jest.spyOn(ticketDb as unknown as { generateTicketId: () => string }, 'generateTicketId').mockReturnValue('mock-ticket-id');
+  /** @aiContributed-2026-01-29 */
+    it('should fallback to in-memory storage if SQLite insertion fails', async () => {
+    const mockGenerateTicketId = jest.spyOn(ticketDb as any, 'generateTicketId').mockReturnValue('mock-ticket-id');
     const mockDate = new Date('2023-01-01T00:00:00Z');
     jest.useFakeTimers().setSystemTime(mockDate);
 
     const mockDbRun = jest.fn((sql: string, values: unknown[], callback: (err: Error | null) => void) =>
       callback(new Error('SQLite error'))
     );
-    (ticketDb as unknown as { db: { run: typeof mockDbRun } }).db = { run: mockDbRun };
-    (ticketDb as unknown as { useFallback: boolean }).useFallback = false;
+    (ticketDb as any).db = { run: mockDbRun };
+    (ticketDb as any).useFallback = false;
 
-    const params = {
+    const params: any = {
       type: 'ai_to_human' as const,
-      priority: 3 as const,
+      priority: 3,
       creator: 'creator3',
       assignee: 'assignee3',
       title: 'Task Ticket',
@@ -149,7 +149,7 @@ describe('TicketDatabase - createTicket', () => {
       updated_at: mockDate,
     });
 
-    expect((ticketDb as unknown as { fallbackStore: Map<string, unknown> }).fallbackStore.get('mock-ticket-id')).toEqual(result);
+    expect((ticketDb as any).fallbackStore.get('mock-ticket-id')).toEqual(result);
     expect(mockDbRun).toHaveBeenCalledTimes(1);
     expect(mockGenerateTicketId).toHaveBeenCalledTimes(1);
   });
