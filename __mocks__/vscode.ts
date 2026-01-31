@@ -61,6 +61,9 @@ export const workspace = {
     })),
     onDidChangeConfiguration: jest.fn(() => ({ dispose: noop })),
     onDidSaveTextDocument: jest.fn(() => ({ dispose: noop })),
+    onDidChangeTextDocument: jest.fn(() => ({ dispose: noop })),
+    onDidOpenTextDocument: jest.fn(() => ({ dispose: noop })),
+    textDocuments: [] as unknown[],
     workspaceFolders: [] as unknown[],
     createFileSystemWatcher: jest.fn(() => ({
         onDidChange: jest.fn(),
@@ -170,9 +173,72 @@ export const languages = {
     createDiagnosticCollection: jest.fn(() => ({
         set: jest.fn(),
         clear: jest.fn(),
+        delete: jest.fn(),
         dispose: jest.fn(),
     })),
 };
+
+export const DiagnosticSeverity = {
+    Error: 0,
+    Warning: 1,
+    Information: 2,
+    Hint: 3,
+} as const;
+
+export class Diagnostic {
+    range: Range;
+    message: string;
+    severity: number;
+    source?: string;
+    code?: string;
+
+    constructor(range: Range, message: string, severity: number = 0) {
+        this.range = range;
+        this.message = message;
+        this.severity = severity;
+    }
+}
+
+export class Range {
+    start: Position;
+    end: Position;
+
+    constructor(startLineOrPos: any, startColOrEnd?: any, endLine?: any, endCol?: any) {
+        if (typeof startLineOrPos === 'number') {
+            // Called as Range(startLine, startCol, endLine, endCol)
+            this.start = new Position(startLineOrPos, startColOrEnd);
+            this.end = new Position(endLine, endCol);
+        } else if (startLineOrPos instanceof Position) {
+            // Called as Range(startPos, endPos)
+            this.start = startLineOrPos;
+            this.end = startColOrEnd;
+        } else {
+            // Fallback
+            this.start = new Position(0, 0);
+            this.end = new Position(0, 0);
+        }
+    }
+}
+
+export class Position {
+    line: number;
+    character: number;
+
+    constructor(line: number, character: number) {
+        this.line = line;
+        this.character = character;
+    }
+}
+
+export class RelativePattern {
+    base: string;
+    pattern: string;
+
+    constructor(base: string | { uri: { fsPath: string } }, pattern: string) {
+        this.base = typeof base === 'string' ? base : base.uri.fsPath;
+        this.pattern = pattern;
+    }
+}
 
 export class Disposable {
     dispose(): void { }
@@ -187,6 +253,11 @@ export default {
     ProgressLocation,
     Disposable,
     languages,
+    DiagnosticSeverity,
+    Diagnostic,
+    Range,
+    Position,
+    RelativePattern,
     StatusBarAlignment,
     ExtensionMode,
     ExtensionKind,

@@ -431,4 +431,112 @@ export async function callLLMFallback(
     }
 }
 
+/**
+ * 📦 StreamingLLM Class
+ * 
+ * Wrapper class for streaming LLM operations with token tracking
+ */
+export class StreamingLLM {
+    private tokensConsumed: number = 0;
+    private tokenLimit: number = 4096;
+    private toolsCalled: number = 0;
+    private isComplete: boolean = false;
+    private logger?: {
+        info?: (msg: string) => void;
+        warn?: (msg: string) => void;
+        error?: (msg: string) => void;
+        debug?: (msg: string) => void;
+    };
+
+    constructor(config?: { tokenLimit?: number; logger?: { info?: (msg: string) => void; warn?: (msg: string) => void; error?: (msg: string) => void; debug?: (msg: string) => void } }) {
+        if (config?.tokenLimit) {
+            this.tokenLimit = config.tokenLimit;
+        }
+        this.logger = config?.logger;
+    }
+
+    /**
+     * Track tokens consumed by a chunk
+     * Estimates tokens as roughly 1 token per 4 characters
+     */
+    onTokenConsume(chunk: string): void {
+        if (typeof chunk !== 'string' || chunk.length === 0) {
+            return;
+        }
+        const estimatedTokens = Math.ceil(chunk.length / 4);
+        this.tokensConsumed += estimatedTokens;
+
+        if (this.tokensConsumed > this.tokenLimit * 0.8) {
+            this.logger?.warn?.(`⚠️ Approaching token limit: ${this.tokensConsumed}/${this.tokenLimit}`);
+        }
+
+        if (this.tokensConsumed > this.tokenLimit) {
+            this.logger?.error?.(`❌ Token limit exceeded: ${this.tokensConsumed}/${this.tokenLimit}`);
+        }
+    }
+
+    /**
+     * Handle text chunks from a stream
+     */
+    onTextChunk(chunk: string): void {
+        this.onTokenConsume(chunk);
+    }
+
+    /**
+     * Track tool calls during a stream
+     */
+    onToolCall(_toolCall: { toolName: string; params: Record<string, unknown> }): void {
+        this.toolsCalled += 1;
+        this.logger?.debug?.(`🔧 Tool called (${this.toolsCalled})`);
+    }
+
+    /**
+     * Log stream errors
+     */
+    onStreamError(error: Error): void {
+        this.logger?.error?.(`❌ Stream error: ${error.message}`);
+    }
+
+    /**
+     * Mark stream as complete
+     */
+    onStreamComplete(): void {
+        this.isComplete = true;
+        this.logger?.info?.('✅ Stream complete');
+    }
+
+    /**
+     * Get current token statistics
+     */
+    getTokenStats(): {
+        tokensConsumed: number;
+        tokenLimit: number;
+        percentUsed: number;
+        remaining: number;
+        toolsCalled: number;
+        isComplete: boolean;
+    } {
+        const percentUsed = this.tokenLimit > 0
+            ? Math.round((this.tokensConsumed / this.tokenLimit) * 100)
+            : 0;
+        return {
+            tokensConsumed: this.tokensConsumed,
+            tokenLimit: this.tokenLimit,
+            percentUsed,
+            remaining: Math.max(0, this.tokenLimit - this.tokensConsumed),
+            toolsCalled: this.toolsCalled,
+            isComplete: this.isComplete,
+        };
+    }
+
+    /**
+     * Reset token counter
+     */
+    reset(): void {
+        this.tokensConsumed = 0;
+        this.toolsCalled = 0;
+        this.isComplete = false;
+    }
+}
+
 

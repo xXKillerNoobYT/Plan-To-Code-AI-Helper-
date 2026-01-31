@@ -446,7 +446,7 @@ describe('getNextTask - Comprehensive Branch Coverage (10% → 50%+)', () => {
             });
             const dep2 = createTask({
                 taskId: 'dep-2',
-                status: TaskStatus.READY, // Not completed
+                status: TaskStatus.IN_PROGRESS, // Not completed - in progress
             });
             const task = createTask({
                 taskId: 'task-1',

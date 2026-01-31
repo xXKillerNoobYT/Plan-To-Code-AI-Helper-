@@ -12,7 +12,7 @@ describe('GitHubAPI - setContext', () => {
   });
 
   /** @aiContributed-2026-01-29 */
-    it('should set the context correctly', () => {
+  it('should set the context correctly', () => {
     const scopedEnvironmentCollection = {
       persistent: true,
       description: 'mocked env collection',
@@ -24,7 +24,7 @@ describe('GitHubAPI - setContext', () => {
       clear: jest.fn(),
       forEach: jest.fn(),
       [Symbol.iterator]: jest.fn(() => {
-        return [][Symbol.iterator]() as IterableIterator<[string, unknown]>;
+        return new Map<string, vscode.EnvironmentVariableMutator>()[Symbol.iterator]();
       }),
     } as vscode.EnvironmentVariableCollection;
 
@@ -73,7 +73,7 @@ describe('GitHubAPI - setContext', () => {
         clear: jest.fn(),
         forEach: jest.fn(),
         [Symbol.iterator]: jest.fn(() => {
-          return [][Symbol.iterator]() as IterableIterator<[string, unknown]>;
+          return new Map<string, vscode.EnvironmentVariableMutator>()[Symbol.iterator]();
         }),
         getScoped: jest.fn(() => scopedEnvironmentCollection),
       },

@@ -20,6 +20,7 @@ import { TicketDatabase } from './db/ticketsDb';
 import { CoverageDiagnosticProvider } from './diagnostics/coverageProvider';
 import { SkippedTestsDiagnosticProvider } from './diagnostics/skippedTestsProvider';
 import { ConfigManager } from './utils/config';
+import { LogLevel } from './utils/logger';
 
 // ============================================================================
 // Global State
@@ -80,6 +81,36 @@ export function getLLMConfig(): FileLLMConfig {
     return FileConfigManager.getLLMConfig();
 }
 
+/**
+ * 📝 Log message to output channel with level filtering
+ * Respects coe.logLevel setting to reduce noise
+ * @internal Reserved for future use in consolidated logging
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function logToOutput(message: string, level: LogLevel = LogLevel.INFO): void {
+    if (!orchestratorOutputChannel) {
+        return;
+    }
+
+    // Get configured log level from settings (default: INFO)
+    const config = vscode.workspace.getConfiguration('coe');
+    const configuredLevelStr = config.get<string>('logLevel', 'info').toLowerCase();
+
+    // Map string to LogLevel enum
+    const levelMap: Record<string, LogLevel> = {
+        'debug': LogLevel.DEBUG,
+        'info': LogLevel.INFO,
+        'warn': LogLevel.WARN,
+        'error': LogLevel.ERROR
+    };
+    const configuredLevel = levelMap[configuredLevelStr] ?? LogLevel.INFO;
+
+    // Only log if message level >= configured level
+    if (level >= configuredLevel) {
+        orchestratorOutputChannel.appendLine(message);
+    }
+}
+
 // ============================================================================
 // Helper Functions
 // ============================================================================
@@ -135,12 +166,20 @@ function updateStatusBar(): void {
  * @param context - VS Code provides this to help manage the extension's lifecycle
  */
 export async function activate(context: vscode.ExtensionContext) {
+    // ====================================================================
+    // 0. Suppress Node.js deprecation warnings (punycode, SQLite experimental)
+    // ====================================================================
+    // Suppress deprecation warnings (e.g., punycode) to reduce log noise for users
+    process.env.NODE_NO_WARNINGS = '1';
+
+    // Alternative: suppress all warnings via NODE_OPTIONS (commented out for fine-grained control)
+    // process.env.NODE_OPTIONS = '--no-warnings';
 
     try {
         let treeDataProvider: CoeTaskTreeProvider | null = null;
         let completedTasksProvider: CompletedTasksTreeProvider | null = null;
         let planWatcher: vscode.FileSystemWatcher | null = null;
-        let explorerTree: vscode.TreeView<any> | undefined = undefined;
+        let taskQueueTree: vscode.TreeView<any> | undefined = undefined;
         let sidebarTree: vscode.TreeView<any> | undefined = undefined;
 
         // ====================================================================
@@ -270,9 +309,9 @@ export async function activate(context: vscode.ExtensionContext) {
         // ====================================================================
         try {
             treeDataProvider = new CoeTaskTreeProvider(programmingOrchestrator);
-            explorerTree = vscode.window.createTreeView('coe.tasksQueue', { treeDataProvider });
+            taskQueueTree = vscode.window.createTreeView('coe-task-queue', { treeDataProvider });
             sidebarTree = vscode.window.createTreeView('coe-tasks', { treeDataProvider });
-            context.subscriptions.push(explorerTree, sidebarTree);
+            context.subscriptions.push(taskQueueTree, sidebarTree);
 
             // Link TreeView provider to orchestrator for auto-refresh on queue changes
             programmingOrchestrator.setTreeDataProvider(treeDataProvider);
@@ -288,7 +327,7 @@ export async function activate(context: vscode.ExtensionContext) {
         try {
             const ticketDb = TicketDatabase.getInstance();
             completedTasksProvider = new CompletedTasksTreeProvider(ticketDb);
-            const completedTree = vscode.window.createTreeView('coe.completedTasks', {
+            const completedTree = vscode.window.createTreeView('coe-completed-history', {
                 treeDataProvider: completedTasksProvider
             });
             context.subscriptions.push(completedTree);

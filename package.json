@@ -52,6 +52,11 @@
                     "id": "coe-sidebar",
                     "title": "COE Orchestration",
                     "icon": "resources/coe-icon.svg"
+                },
+                {
+                    "id": "coe-views",
+                    "title": "COE",
+                    "icon": "media/coe-icon.svg"
                 }
             ]
         },
@@ -66,13 +71,13 @@
                     "name": "Plans & Status"
                 }
             ],
-            "explorer": [
+            "coe-views": [
                 {
-                    "id": "coe.tasksQueue",
-                    "name": "COE Tasks Queue"
+                    "id": "coe-task-queue",
+                    "name": "Task Queue"
                 },
                 {
-                    "id": "coe.completedTasks",
+                    "id": "coe-completed-history",
                     "name": "Completed History"
                 }
             ]
@@ -156,6 +161,17 @@
                 "type": "boolean",
                 "default": true,
                 "description": "Show COE status in status bar"
+            },
+            "coe.logLevel": {
+                "type": "string",
+                "enum": [
+                    "debug",
+                    "info",
+                    "warn",
+                    "error"
+                ],
+                "default": "info",
+                "description": "Minimum log level to display in COE Orchestrator output channel. 'debug' shows all logs, 'error' shows only errors."
             },
             "coe.llm.url": {
                 "type": "string",

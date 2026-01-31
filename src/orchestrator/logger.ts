@@ -34,10 +34,10 @@ export class ConsoleLogger implements ILogger {
  * No-op logger for testing/mocking
  */
 export class NullLogger implements ILogger {
-    debug(): void { }
-    info(): void { }
-    warn(): void { }
-    error(): void { }
+    debug(_message: string, _data?: any): void { }
+    info(_message: string, _data?: any): void { }
+    warn(_message: string, _data?: any): void { }
+    error(_message: string, _error?: Error | any): void { }
 }
 
 // Default instance

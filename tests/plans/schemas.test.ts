@@ -442,12 +442,657 @@ describe('Plan Schema Validation', () => {
         },
         phases: [],
         tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
       };
 
       expect(validatePlan(plan)).toBe(true);
     });
   });
 
+  describe('validatePlan Function - Advanced Validation', () => {
+    it('should validate complex nested structures', () => {
+      const complexPlan: PlanSchema = {
+        version: '2.1.0',
+        project: {
+          name: 'Complex Project',
+          description: 'Multi-phase, multi-task project',
+          repository: 'https://github.com/example/complex',
+          createdAt: '2026-01-20T10:00:00Z',
+          updatedAt: '2026-01-30T15:30:00Z',
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Phase 1',
+            description: 'First phase',
+            status: 'completed',
+            tasks: ['task-1', 'task-2', 'task-3'],
+          },
+          {
+            phaseId: 'phase-2',
+            name: 'Phase 2',
+            description: 'Second phase',
+            status: 'in-progress',
+            tasks: ['task-4', 'task-5'],
+          },
+          {
+            phaseId: 'phase-3',
+            name: 'Phase 3',
+            description: 'Third phase',
+            status: 'not-started',
+            tasks: [],
+          },
+        ],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Setup',
+            description: 'Initial setup',
+            phase: 'phase-1',
+            priority: 'critical',
+            status: 'done',
+            dependencies: [],
+            acceptanceCriteria: ['Setup complete', 'All tools installed'],
+          },
+          {
+            taskId: 'task-2',
+            title: 'Design',
+            description: 'System design',
+            phase: 'phase-1',
+            priority: 'critical',
+            status: 'done',
+            dependencies: ['task-1'],
+            tags: ['architecture', 'critical'],
+          },
+          {
+            taskId: 'task-3',
+            title: 'Review',
+            description: 'Design review',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'done',
+            dependencies: ['task-2'],
+          },
+          {
+            taskId: 'task-4',
+            title: 'Backend Dev',
+            description: 'Backend implementation',
+            phase: 'phase-2',
+            priority: 'high',
+            status: 'in-progress',
+            dependencies: ['task-2'],
+            assignee: 'backend-dev@example.com',
+            estimatedHours: 40,
+            actualHours: 20,
+            tags: ['backend', 'api'],
+            githubIssue: 101,
+          },
+          {
+            taskId: 'task-5',
+            title: 'Frontend Dev',
+            description: 'Frontend implementation',
+            phase: 'phase-2',
+            priority: 'high',
+            status: 'pending',
+            dependencies: ['task-2', 'task-4'],
+            assignee: 'frontend-dev@example.com',
+            estimatedHours: 35,
+            tags: ['frontend', 'ui'],
+            githubIssue: 102,
+            acceptanceCriteria: [
+              'Responsive design',
+              'Accessibility WCAG AA',
+              'Performance <3s',
+            ],
+          },
+        ],
+        metadata: {
+          totalTasks: 5,
+          completedTasks: 3,
+          progressPercentage: 60,
+          lastModified: '2026-01-30T15:30:00Z',
+          authors: ['lead-engineer', 'architect', 'qa-lead'],
+        },
+      };
+
+      expect(validatePlan(complexPlan)).toBe(true);
+    });
+
+    it('should reject plan with invalid ISO dates', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: 'not-a-date',
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with invalid priority', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'ultra-critical', // Invalid
+            status: 'pending',
+            dependencies: [],
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with invalid task status', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'invalid-status', // Invalid
+            dependencies: [],
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with invalid phase status', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Phase',
+            description: 'Test',
+            status: 'half-completed', // Invalid
+            tasks: [],
+          },
+        ],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject metadata with invalid progress percentage', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 100,
+          completedTasks: 50,
+          progressPercentage: 150, // Invalid (>100)
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject metadata with more completed than total tasks', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 5,
+          completedTasks: 10, // Invalid
+          progressPercentage: 50,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with non-numeric task hours', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: [],
+            estimatedHours: 'not-a-number',
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with invalid github issue number', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: [],
+            githubIssue: 'issue-123', // Should be a number
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject tasks with non-array dependencies', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: 'task-0', // Should be array
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject tasks with non-array tags', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: [],
+            tags: 'important', // Should be array
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject tasks with non-array acceptance criteria', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: [],
+            acceptanceCriteria: 'should work', // Should be array
+          },
+        ],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with negative task count in metadata', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: -5, // Invalid
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with non-array authors in metadata', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: 'single-author', // Should be array
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with empty string version', () => {
+      const invalidPlan = {
+        version: '', // Invalid - empty string
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should reject plan with empty project name', () => {
+      const invalidPlan = {
+        version: '1.0.0',
+        project: {
+          name: '', // Invalid - empty string
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(invalidPlan)).toBe(false);
+    });
+
+    it('should handle plans with all valid optional fields', () => {
+      const plan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          repository: 'https://github.com/test/repo',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Test',
+            description: 'Test',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'pending',
+            dependencies: [],
+            assignee: 'user@example.com',
+            estimatedHours: 8,
+            actualHours: 6,
+            tags: ['tag1', 'tag2'],
+            githubIssue: 123,
+            acceptanceCriteria: ['criterion1', 'criterion2'],
+          },
+        ],
+        metadata: {
+          totalTasks: 1,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: ['user1', 'user2'],
+        },
+      };
+
+      expect(validatePlan(plan)).toBe(true);
+    });
+
+    it('should validate phase with all valid task IDs', () => {
+      const plan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Phase 1',
+            description: 'Test',
+            status: 'not-started',
+            tasks: ['task-1', 'task-2', 'task-3', 'task-4', 'task-5'],
+          },
+        ],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(plan)).toBe(true);
+    });
+
+    it('should reject phase with non-string task IDs', () => {
+      const plan = {
+        version: '1.0.0',
+        project: {
+          name: 'Test',
+          description: 'Test',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Phase 1',
+            description: 'Test',
+            status: 'not-started',
+            tasks: ['task-1', 123, 'task-3'], // 123 is not a string
+          },
+        ],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      expect(validatePlan(plan)).toBe(false);
+    });
+  });
   describe('Schema Integration', () => {
     it('should create a complete project lifecycle schema', () => {
       const completePlan: PlanSchema = {
@@ -530,6 +1175,165 @@ describe('Plan Schema Validation', () => {
       expect(completePlan.tasks).toHaveLength(4);
       expect(completePlan.phases).toHaveLength(2);
       expect(completePlan.metadata.progressPercentage).toBe(50);
+    });
+
+    it('should support large scale plans with many tasks', () => {
+      const tasks: TaskDefinition[] = [];
+      for (let i = 1; i <= 100; i++) {
+        tasks.push({
+          taskId: `task-${i}`,
+          title: `Task ${i}`,
+          description: `Description for task ${i}`,
+          phase: `phase-${Math.ceil(i / 25)}`,
+          priority: ['critical', 'high', 'medium', 'low'][i % 4] as any,
+          status: (['pending', 'ready', 'in-progress', 'done', 'blocked'] as const)[i % 5],
+          dependencies: i > 1 ? [`task-${i - 1}`] : [],
+        });
+      }
+
+      const largePlan: PlanSchema = {
+        version: '1.0.0',
+        project: {
+          name: 'Large Project',
+          description: 'Project with many tasks',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Phase 1',
+            description: 'First 25 tasks',
+            status: 'completed',
+            tasks: tasks.slice(0, 25).map((t) => t.taskId),
+          },
+          {
+            phaseId: 'phase-2',
+            name: 'Phase 2',
+            description: 'Next 25 tasks',
+            status: 'in-progress',
+            tasks: tasks.slice(25, 50).map((t) => t.taskId),
+          },
+          {
+            phaseId: 'phase-3',
+            name: 'Phase 3',
+            description: 'Next 25 tasks',
+            status: 'not-started',
+            tasks: tasks.slice(50, 75).map((t) => t.taskId),
+          },
+          {
+            phaseId: 'phase-4',
+            name: 'Phase 4',
+            description: 'Final 25 tasks',
+            status: 'not-started',
+            tasks: tasks.slice(75, 100).map((t) => t.taskId),
+          },
+        ],
+        tasks: tasks,
+        metadata: {
+          totalTasks: 100,
+          completedTasks: 25,
+          progressPercentage: 25,
+          lastModified: new Date().toISOString(),
+          authors: ['team-lead'],
+        },
+      };
+
+      expect(validatePlan(largePlan)).toBe(true);
+      expect(largePlan.tasks).toHaveLength(100);
+      expect(largePlan.phases).toHaveLength(4);
+    });
+
+    it('should preserve type safety throughout validation', () => {
+      const plan: PlanSchema = {
+        version: '1.0.0',
+        project: {
+          name: 'Type Safe',
+          description: 'Test type safety',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [],
+        tasks: [],
+        metadata: {
+          totalTasks: 0,
+          completedTasks: 0,
+          progressPercentage: 0,
+          lastModified: new Date().toISOString(),
+          authors: [],
+        },
+      };
+
+      if (validatePlan(plan)) {
+        // After validation, TypeScript knows this is PlanSchema
+        expect(plan.version).toHaveLength(5);
+        expect(plan.project.name).toBeDefined();
+        expect(Array.isArray(plan.phases)).toBe(true);
+      }
+    });
+
+    it('should validate deeply nested task relationships', () => {
+      const plan: PlanSchema = {
+        version: '1.0.0',
+        project: {
+          name: 'Complex Dependencies',
+          description: 'Test complex task dependencies',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        phases: [
+          {
+            phaseId: 'phase-1',
+            name: 'Foundation',
+            description: 'Base tasks',
+            status: 'in-progress',
+            tasks: ['task-1', 'task-2'],
+          },
+        ],
+        tasks: [
+          {
+            taskId: 'task-1',
+            title: 'Base Task',
+            description: 'No dependencies',
+            phase: 'phase-1',
+            priority: 'critical',
+            status: 'done',
+            dependencies: [],
+          },
+          {
+            taskId: 'task-2',
+            title: 'Dependent Task',
+            description: 'Depends on task-1',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'in-progress',
+            dependencies: ['task-1'],
+          },
+          {
+            taskId: 'task-3',
+            title: 'Multi-dep Task',
+            description: 'Depends on multiple tasks',
+            phase: 'phase-1',
+            priority: 'high',
+            status: 'blocked',
+            dependencies: ['task-1', 'task-2'],
+          },
+        ],
+        metadata: {
+          totalTasks: 3,
+          completedTasks: 1,
+          progressPercentage: 33.33,
+          lastModified: new Date().toISOString(),
+          authors: ['dev-team'],
+        },
+      };
+
+      expect(validatePlan(plan)).toBe(true);
+      const task3 = plan.tasks[2];
+      if (task3) {
+        expect(task3.dependencies).toHaveLength(2);
+        expect(task3.status).toBe('blocked');
+      }
     });
   });
 });
