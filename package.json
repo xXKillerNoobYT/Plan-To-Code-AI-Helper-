@@ -122,7 +122,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.25.2",
+        "@modelcontextprotocol/sdk": "^1.26.0",
         "@octokit/rest": "^20.0.2",
         "json-rpc-2.0": "^1.6.0",
         "sqlite3": "^5.1.7",
